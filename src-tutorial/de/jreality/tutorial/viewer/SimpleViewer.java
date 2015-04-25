@@ -6,7 +6,6 @@ import java.awt.Component;
 
 import javax.swing.JFrame;
 
-import org.sunflow.core.primitive.Sphere;
 
 import de.jreality.geometry.Primitives;
 import de.jreality.plugin.JRViewer;
@@ -26,7 +25,7 @@ public class SimpleViewer {
 	static boolean local = true;
 	public static void main(String[] args)	{
 		SceneGraphComponent world = new SceneGraphComponent();
-		IndexedFaceSet test = Primitives.sphere(10);
+		IndexedFaceSet test = Primitives.sphere(1);
 		world.setGeometry(test);
 		View.setTitle("The Icosahedron");
 		View.setIcon(getIcon("color_swatch.png"));
