@@ -1,8 +1,14 @@
 package crinkle;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Toolkit;
+
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 import javax.swing.UIManager;
 
 
@@ -17,10 +23,16 @@ public class PlaybackMode extends javax.swing.JFrame {
     private javax.swing.JButton btnRewind;
     private javax.swing.JButton btnSnapshot;
     private javax.swing.JLabel lblTimer;
-    private javax.swing.JPanel pnlPlayBack;
+    private javax.swing.JPanel pnlPlayback; // contain pnlPlaybackTop, Middle, Bottom
     private javax.swing.JPanel pnlViewer;
+    private javax.swing.JPanel pnlLeft; // contain pnlPlayback;
+    private javax.swing.JPanel pnlRight; // contain pnlViewer;
+    private JPanel pnlPlaybackTop;
+	private JPanel pnlPlaybackMiddle;
+	private JPanel pnlPlaybackBottom;
 	
     private LaunchMode launchMode;
+	
 
     /**
      * Creates new form PlaybackMode
@@ -50,12 +62,17 @@ public class PlaybackMode extends javax.swing.JFrame {
         }
     	
         pnlViewer = new javax.swing.JPanel();
-        pnlPlayBack = new javax.swing.JPanel();
+        pnlPlayback = new javax.swing.JPanel();
         btnRewind = new javax.swing.JButton();
         btnPlay = new javax.swing.JButton();
         btnForward = new javax.swing.JButton();
         lblTimer = new javax.swing.JLabel();
         btnSnapshot = new javax.swing.JButton();
+        pnlLeft = new javax.swing.JPanel();
+        pnlRight = new javax.swing.JPanel();
+        pnlPlaybackTop = new javax.swing.JPanel();
+        pnlPlaybackMiddle = new javax.swing.JPanel();
+        pnlPlaybackBottom = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Crinkle Viewer");
@@ -66,7 +83,7 @@ public class PlaybackMode extends javax.swing.JFrame {
         });
 
         pnlViewer.setBorder(BorderFactory.createTitledBorder("Viewer"));
-        pnlViewer.setPreferredSize(new java.awt.Dimension(750, 705));
+        //pnlViewer.setPreferredSize(new java.awt.Dimension(750, 705));
 
         GroupLayout pnlViewerLayout = new GroupLayout(pnlViewer);
         pnlViewer.setLayout(pnlViewerLayout);
@@ -79,8 +96,8 @@ public class PlaybackMode extends javax.swing.JFrame {
             .addGap(0, 681, Short.MAX_VALUE)
         );
 
-        pnlPlayBack.setBorder(BorderFactory.createTitledBorder("Playback"));
-        pnlPlayBack.setPreferredSize(new java.awt.Dimension(200, 150));
+        pnlPlayback.setBorder(BorderFactory.createTitledBorder("Playback"));
+        pnlPlayback.setPreferredSize(new java.awt.Dimension(210, 150));
 
         btnRewind.setIcon(new ImageIcon(getClass().getResource("/icons/1427489580_backward-40.png"))); // NOI18N
         btnRewind.setPreferredSize(new java.awt.Dimension(40, 40));
@@ -103,68 +120,47 @@ public class PlaybackMode extends javax.swing.JFrame {
 
         btnSnapshot.setIcon(new ImageIcon(getClass().getResource("/icons/1427962660_camera_-30.png"))); // NOI18N
         btnSnapshot.setPreferredSize(new java.awt.Dimension(40, 40));
+        
+        pnlLeft.setPreferredSize(new Dimension(220, 150));
+        
+        pnlPlaybackTop.setPreferredSize(new Dimension(190, 50));
+        pnlPlaybackMiddle.setPreferredSize(new Dimension(190, 20));
+        pnlPlaybackBottom.setPreferredSize(new Dimension(190, 50));
+        
+        getContentPane().setLayout(new BorderLayout());
+        getContentPane().add(pnlLeft, BorderLayout.LINE_START);
+        getContentPane().add(pnlRight, BorderLayout.CENTER);
+        
+        pnlLeft.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        pnlLeft.add(pnlPlayback);
+        pnlRight.setLayout(new BorderLayout());
+        pnlRight.add(pnlViewer);
+        
+        pnlPlayback.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        pnlPlayback.add(pnlPlaybackTop);
+        pnlPlayback.add(pnlPlaybackMiddle);
+        pnlPlayback.add(pnlPlaybackBottom);
+        
+        pnlPlaybackTop.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 0));
+        pnlPlaybackTop.add(btnSnapshot);
+        
+        pnlPlaybackMiddle.add(lblTimer);
+        
+        pnlPlaybackBottom.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 5));
+        pnlPlaybackBottom.add(btnRewind);
+        pnlPlaybackBottom.add(btnPlay);
+        pnlPlaybackBottom.add(btnForward);
 
-        GroupLayout pnlPlayBackLayout = new GroupLayout(pnlPlayBack);
-        pnlPlayBack.setLayout(pnlPlayBackLayout);
-        pnlPlayBackLayout.setHorizontalGroup(
-            pnlPlayBackLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(pnlPlayBackLayout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addComponent(btnRewind, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnPlay, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnForward, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(GroupLayout.Alignment.TRAILING, pnlPlayBackLayout.createSequentialGroup()
-                .addContainerGap(7, Short.MAX_VALUE)
-                .addGroup(pnlPlayBackLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addGroup(GroupLayout.Alignment.TRAILING, pnlPlayBackLayout.createSequentialGroup()
-                        .addComponent(lblTimer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(GroupLayout.Alignment.TRAILING, pnlPlayBackLayout.createSequentialGroup()
-                        .addComponent(btnSnapshot, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                        .addGap(17, 17, 17))))
-        );
-        pnlPlayBackLayout.setVerticalGroup(
-            pnlPlayBackLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(GroupLayout.Alignment.TRAILING, pnlPlayBackLayout.createSequentialGroup()
-                .addComponent(btnSnapshot, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
-                .addComponent(lblTimer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlPlayBackLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(btnPlay, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnForward, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnRewind, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                .addGap(14, 14, 14))
-        );
+        setSize(960, 720);
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setLocation(dim.width / 2 - this.getSize().width / 2, 0);
+        
+        validate();
 
-        GroupLayout layout = new GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(pnlPlayBack, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlViewer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(pnlViewer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(pnlPlayBack, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 5, Short.MAX_VALUE))
-        );
+    }
+    
 
-        pack();
-        setLocationRelativeTo(null);
-    }// </editor-fold>//GEN-END:initComponents
-
-    private void btnPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlayActionPerformed
+    private void btnPlayActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         btnPlay.setIcon(new ImageIcon(getClass().getResource("/icons/1427489556_icon-pause-40.png")));
     }

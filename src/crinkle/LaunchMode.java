@@ -24,8 +24,8 @@ public class LaunchMode extends javax.swing.JFrame {
     private javax.swing.JLabel lblFileName;
     private javax.swing.JLabel lblStatus;
     private javax.swing.JTextField txfFileName;
-    private javax.swing.JLabel lblTop; // contain btnConnect
-    private javax.swing.JLabel lblBottom; // contain lblFileName, txfFileName, btnOpen
+    private javax.swing.JLabel pnlTop; // contain btnConnect
+    private javax.swing.JLabel pnlBottom; // contain lblFileName, txfFileName, btnOpen
 
     /**
      * Creates new form LaunchMode
@@ -56,8 +56,8 @@ public class LaunchMode extends javax.swing.JFrame {
         btnOpen = new javax.swing.JButton();
         lblFileName = new javax.swing.JLabel();
         lblStatus = new javax.swing.JLabel();
-        lblTop = new JLabel();
-        lblBottom = new JLabel();
+        pnlTop = new JLabel();
+        pnlBottom = new JLabel();
         
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -92,22 +92,22 @@ public class LaunchMode extends javax.swing.JFrame {
         
         jSeparator1.setPreferredSize(new Dimension(430, 10));
         
-        lblTop.setPreferredSize(new Dimension(500, 100));
-        lblBottom.setPreferredSize(new Dimension(500, 30));
+        pnlTop.setPreferredSize(new Dimension(500, 100));
+        pnlBottom.setPreferredSize(new Dimension(500, 30));
         
         getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER, 0, 5));
-        getContentPane().add(lblTop);
-        lblTop.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 15));
-        lblTop.add(btnConnect);
-        lblTop.add(lblStatus);
+        getContentPane().add(pnlTop);
+        pnlTop.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 15));
+        pnlTop.add(btnConnect);
+        pnlTop.add(lblStatus);
         getContentPane().add(jSeparator1);
-        getContentPane().add(lblBottom);
-        lblBottom.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 5));
-        lblBottom.add(lblFileName);
-        lblBottom.add(txfFileName);
-        lblBottom.add(btnOpen);
+        getContentPane().add(pnlBottom);
+        pnlBottom.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 5));
+        pnlBottom.add(lblFileName);
+        pnlBottom.add(txfFileName);
+        pnlBottom.add(btnOpen);
         
-        setSize(540, 200);
+        setSize(510, 200);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
         
