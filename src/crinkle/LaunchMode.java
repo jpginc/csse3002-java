@@ -63,7 +63,6 @@ public class LaunchMode extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Crinkle Viewer");
         setResizable(false);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         btnConnect.setFont(new java.awt.Font("Tahoma", 1, 14));
         btnConnect.setText("Sync");
