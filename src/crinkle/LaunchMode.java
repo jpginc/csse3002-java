@@ -1,7 +1,15 @@
 package crinkle;
 
+import java.awt.ComponentOrientation;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Toolkit;
+
 import javax.swing.GroupLayout;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 /**
@@ -16,6 +24,8 @@ public class LaunchMode extends javax.swing.JFrame {
     private javax.swing.JLabel lblFileName;
     private javax.swing.JLabel lblStatus;
     private javax.swing.JTextField txfFileName;
+    private javax.swing.JLabel lblTop; // contain btnConnect
+    private javax.swing.JLabel lblBottom; // contain lblFileName, txfFileName, btnOpen
 
     /**
      * Creates new form LaunchMode
@@ -46,11 +56,16 @@ public class LaunchMode extends javax.swing.JFrame {
         btnOpen = new javax.swing.JButton();
         lblFileName = new javax.swing.JLabel();
         lblStatus = new javax.swing.JLabel();
+        lblTop = new JLabel();
+        lblBottom = new JLabel();
+        
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Crinkle Viewer");
+        setResizable(false);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-        btnConnect.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnConnect.setFont(new java.awt.Font("Tahoma", 1, 14));
         btnConnect.setText("Sync");
         btnConnect.setPreferredSize(new java.awt.Dimension(140, 40));
         btnConnect.addActionListener(new java.awt.event.ActionListener() {
@@ -71,58 +86,34 @@ public class LaunchMode extends javax.swing.JFrame {
 
         lblFileName.setText("File Name");
 
-        lblStatus.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblStatus.setHorizontalAlignment(SwingConstants.CENTER);
         lblStatus.setText("Status");
-        lblStatus.setPreferredSize(new java.awt.Dimension(440, 14));
-
-        GroupLayout layout = new GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(26, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(15, 15, 15)
-                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(6, 6, 6)
-                                        .addComponent(jSeparator1, GroupLayout.PREFERRED_SIZE, 430, GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(lblStatus, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblFileName)
-                                .addGap(18, 18, 18)
-                                .addComponent(txfFileName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnOpen)))
-                        .addGap(18, 18, 18))
-                    .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnConnect, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                        .addGap(189, 189, 189))))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(btnConnect, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(lblStatus, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator1, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(txfFileName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnOpen)
-                    .addComponent(lblFileName))
-                .addContainerGap(22, Short.MAX_VALUE))
-        );
-
-        pack();
-        setLocationRelativeTo(null);
+        lblStatus.setPreferredSize(new Dimension(440, 15));
+        
+        jSeparator1.setPreferredSize(new Dimension(430, 10));
+        
+        lblTop.setPreferredSize(new Dimension(500, 100));
+        lblBottom.setPreferredSize(new Dimension(500, 30));
+        
+        getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER, 0, 5));
+        getContentPane().add(lblTop);
+        lblTop.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 15));
+        lblTop.add(btnConnect);
+        lblTop.add(lblStatus);
+        getContentPane().add(jSeparator1);
+        getContentPane().add(lblBottom);
+        lblBottom.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 5));
+        lblBottom.add(lblFileName);
+        lblBottom.add(txfFileName);
+        lblBottom.add(btnOpen);
+        
+        setSize(540, 200);
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
+        
+        validate();
     }
-
+    
     private void btnConnectActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
     	
