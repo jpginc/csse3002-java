@@ -22,13 +22,11 @@ public class Canvas {
 		
 		SceneGraphComponent world = new SceneGraphComponent();
 		
-		System.out.println("here: " + test.getFaceAttributes(null));
 		world.setGeometry(test);
 
 		JRViewer jrViewer = JRViewer.createJRViewer(world);
 		jrViewer.startupLocal();
 		viewer = jrViewer.getViewer();
-		//world.setGeometry(test);
 	}
 		
 	public void mutate(int value) {
