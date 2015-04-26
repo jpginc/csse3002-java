@@ -18,7 +18,7 @@ import javax.swing.UIManager;
  */
 public class LaunchMode extends javax.swing.JFrame {
 
-    private javax.swing.JButton btnConnect;
+    private javax.swing.JButton btnSync;
     private javax.swing.JButton btnOpen;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblFileName;
@@ -50,7 +50,7 @@ public class LaunchMode extends javax.swing.JFrame {
             ex.printStackTrace();;
         }
     	
-        btnConnect = new javax.swing.JButton();
+        btnSync = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         txfFileName = new javax.swing.JTextField();
         btnOpen = new javax.swing.JButton();
@@ -64,12 +64,12 @@ public class LaunchMode extends javax.swing.JFrame {
         setTitle("Crinkle Viewer");
         setResizable(false);
 
-        btnConnect.setFont(new java.awt.Font("Tahoma", 1, 14));
-        btnConnect.setText("Sync");
-        btnConnect.setPreferredSize(new java.awt.Dimension(140, 40));
-        btnConnect.addActionListener(new java.awt.event.ActionListener() {
+        btnSync.setFont(new java.awt.Font("Tahoma", 1, 14));
+        btnSync.setText("Sync");
+        btnSync.setPreferredSize(new java.awt.Dimension(140, 40));
+        btnSync.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnConnectActionPerformed(evt);
+                btnSyncActionPerformed(evt);
             }
         });
 
@@ -97,7 +97,7 @@ public class LaunchMode extends javax.swing.JFrame {
         getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER, 0, 5));
         getContentPane().add(pnlTop);
         pnlTop.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 15));
-        pnlTop.add(btnConnect);
+        pnlTop.add(btnSync);
         pnlTop.add(lblStatus);
         getContentPane().add(jSeparator1);
         getContentPane().add(pnlBottom);
@@ -113,9 +113,9 @@ public class LaunchMode extends javax.swing.JFrame {
         validate();
     }
     
-    private void btnConnectActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnSyncActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-    	
+    	lblStatus.setText("Not implement yet");
     }
 
     private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {

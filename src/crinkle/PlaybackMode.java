@@ -5,13 +5,16 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
 
 import javax.swing.BorderFactory;
-import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
+import visualiser.Visualiser;
 import de.jreality.geometry.Primitives;
 import de.jreality.plugin.JRViewer;
 import de.jreality.scene.IndexedFaceSet;
@@ -25,33 +28,38 @@ import de.jreality.scene.Viewer;
  */
 public class PlaybackMode extends javax.swing.JFrame {
 
-	private javax.swing.JButton btnForward;
-	private javax.swing.JButton btnPlay;
-	private javax.swing.JButton btnRewind;
-	private javax.swing.JButton btnSnapshot;
-	private javax.swing.JLabel lblTimer;
-	private javax.swing.JPanel pnlPlayback; // contain pnlPlaybackTop, Middle, Bottom
-	private javax.swing.JPanel pnlViewer;
-	private javax.swing.JPanel pnlLeft; // contain pnlPlayback;
-	private javax.swing.JPanel pnlRight; // contain pnlViewer;
+	private JButton btnForward;
+	private JButton btnPlay;
+	private JButton btnRewind;
+	private JButton btnSnapshot;
+	private JLabel lblTimer;
+	private JPanel pnlPlayback; // contain pnlPlaybackTop, Middle, Bottom
+	private JPanel pnlViewer;
+	private JPanel pnlLeft; // contain pnlPlayback;
+	private JPanel pnlRight; // contain pnlViewer;
 	private JPanel pnlPlaybackTop;
 	private JPanel pnlPlaybackMiddle;
 	private JPanel pnlPlaybackBottom;
 
 	private LaunchMode launchMode;
 
+	private Visualiser visualiser;
+	private boolean isPlay = false;
 
 	/**
 	 * Creates new form PlaybackMode
 	 */
 	public PlaybackMode() {
 		initComponents();
+		setVisualiser(new Visualiser());
 	}
 
 	public PlaybackMode(LaunchMode launchMode) {
 		initComponents();
 		this.launchMode = launchMode;
-		initViewer();
+		setVisualiser(new Visualiser());
+		this.addComponentToPnlViewer(visualiser.getViewerComponent());
+		this.validate();
 	}
 
 	/**
@@ -93,25 +101,18 @@ public class PlaybackMode extends javax.swing.JFrame {
 
 		pnlViewer.setBorder(BorderFactory.createTitledBorder("Viewer"));
 
-
-		GroupLayout pnlViewerLayout = new GroupLayout(pnlViewer);
-		pnlViewer.setLayout(pnlViewerLayout);
-		pnlViewerLayout.setHorizontalGroup(
-				pnlViewerLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGap(0, 738, Short.MAX_VALUE)
-				);
-		pnlViewerLayout.setVerticalGroup(
-				pnlViewerLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGap(0, 681, Short.MAX_VALUE)
-				);
-
 		pnlPlayback.setBorder(BorderFactory.createTitledBorder("Playback"));
 		pnlPlayback.setPreferredSize(new java.awt.Dimension(210, 150));
 
-		btnRewind.setIcon(new ImageIcon(getClass().getResource("/icons/1427489580_backward-40.png"))); // NOI18N
+		btnRewind.setIcon(new ImageIcon(getClass().getResource("/icons/1427489580_backward-40.png")));
 		btnRewind.setPreferredSize(new java.awt.Dimension(40, 40));
+		btnRewind.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				btnRewindActionPerformed(evt);
+			}
+		});
 
-		btnPlay.setIcon(new ImageIcon(getClass().getResource("/icons/1427489511_icon-play-128.png"))); // NOI18N
+		btnPlay.setIcon(new ImageIcon(getClass().getResource("/icons/1427489511_icon-play-128.png")));
 		btnPlay.setPreferredSize(new java.awt.Dimension(50, 40));
 		btnPlay.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -119,8 +120,13 @@ public class PlaybackMode extends javax.swing.JFrame {
 			}
 		});
 
-		btnForward.setIcon(new ImageIcon(getClass().getResource("/icons/1427489580_fast_forward_128.png"))); // NOI18N
+		btnForward.setIcon(new ImageIcon(getClass().getResource("/icons/1427489580_fast_forward_128.png")));
 		btnForward.setPreferredSize(new java.awt.Dimension(40, 40));
+		btnForward.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				btnForwardActionPerformed(evt);
+			}
+		});
 
 		lblTimer.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 		lblTimer.setText("00:00:00");
@@ -164,14 +170,23 @@ public class PlaybackMode extends javax.swing.JFrame {
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setLocation(dim.width / 2 - this.getSize().width / 2, 0);
 
-		validate();
+		//validate();
 
 	}
 
 
 	private void btnPlayActionPerformed(java.awt.event.ActionEvent evt) {
 		// TODO add your handling code here:
-		btnPlay.setIcon(new ImageIcon(getClass().getResource("/icons/1427489556_icon-pause-40.png")));
+		if(isPlay == false) {
+			btnPlay.setIcon(new ImageIcon(getClass().getResource("/icons/1427489556_icon-pause-40.png")));
+			visualiser.play();
+			isPlay = true;
+			lblTimer.setText("00:00:00");
+		} else { // isPlay == true;
+			btnPlay.setIcon(new ImageIcon(getClass().getResource("/icons/1427489511_icon-play-128.png")));
+			visualiser.pause();
+			lblTimer.setText("Not implement yet!");
+		}
 	}
 
 	private void formWindowClosed(java.awt.event.WindowEvent evt) {
@@ -179,22 +194,29 @@ public class PlaybackMode extends javax.swing.JFrame {
 		launchMode.setVisible(true);
 	}
 
-	public void addComponentToPnlViewer(Component component) {
+	private void addComponentToPnlViewer(Component component) {
 		pnlViewer.setLayout(new BorderLayout());
 		pnlViewer.add(component);
 		validate();
 	}
+	
+	private void btnRewindActionPerformed(ActionEvent evt) {
+		// TODO Auto-generated method stub
+		visualiser.rewind();
+		lblTimer.setText("Not implement yet!");
+	}
+	
+	private void btnForwardActionPerformed(ActionEvent evt) {
+		// TODO Auto-generated method stub
+		visualiser.fastForward();
+		lblTimer.setText("Not implement yet!");
+	}
 
-	private void initViewer() {
-		SceneGraphComponent world = new SceneGraphComponent();
-		IndexedFaceSet test = Primitives.sphere(10);
-		System.out.println("here: " + test.getFaceAttributes(null));
-		world.setGeometry(test);
+	public Visualiser getVisualiser() {
+		return visualiser;
+	}
 
-		JRViewer v = JRViewer.createJRViewer(world);
-		v.startupLocal();
-		Viewer viewer = v.getViewer();
-		world.setGeometry(test);
-		this.addComponentToPnlViewer((Component) viewer.getViewingComponent());
+	public void setVisualiser(Visualiser visualiser) {
+		this.visualiser = visualiser;
 	}
 }
