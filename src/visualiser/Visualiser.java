@@ -9,6 +9,8 @@ import data.MovementData;
 public class Visualiser {
 
 	private Canvas canvas;
+	
+	private Timer timer = new Timer();
 
 	public Visualiser() {
 		canvas = new Canvas();
@@ -21,18 +23,17 @@ public class Visualiser {
 	
 	/** Play **/
 	public void play() {
-		Timer timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask() {
 		  @Override
 		  public void run() {
 			  canvas.mutate(1);
 		  }
-		}, 100, 100);
+		}, 1000/24, 1000/24);
 	}
 	
 	/** Pause **/
 	public void pause() {
-		
+		timer.cancel();
 	}
 	
 	/** Fast Forward **/
