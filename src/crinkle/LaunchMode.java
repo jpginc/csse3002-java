@@ -118,9 +118,10 @@ public class LaunchMode extends javax.swing.JFrame {
         // TODO add your handling code here:
         //JFileChooser fc = new JFileChooser();
         //fc.showOpenDialog(this);
-        this.setVisible(false);
         PlaybackMode playbackMode = new PlaybackMode(this);
+        this.setVisible(false);
         playbackMode.setVisible(true);
+        
         
     }
 

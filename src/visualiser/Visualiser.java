@@ -10,7 +10,7 @@ public class Visualiser {
 
 	private Canvas canvas;
 	
-	private Timer timer = new Timer();
+	private Timer timer;
 
 	public Visualiser() {
 		canvas = new Canvas();
@@ -23,6 +23,7 @@ public class Visualiser {
 	
 	/** Play **/
 	public void play() {
+		timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask() {
 		  @Override
 		  public void run() {

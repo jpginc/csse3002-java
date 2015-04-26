@@ -130,6 +130,11 @@ public class PlaybackMode extends javax.swing.JFrame {
 
 		btnSnapshot.setIcon(new ImageIcon(getClass().getResource("/icons/1427962660_camera_-30.png"))); // NOI18N
 		btnSnapshot.setPreferredSize(new java.awt.Dimension(40, 40));
+		btnSnapshot.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				btnSnapshotActionPerformed(evt);
+			}
+		});
 
 		pnlLeft.setPreferredSize(new Dimension(220, 150));
 
@@ -179,7 +184,7 @@ public class PlaybackMode extends javax.swing.JFrame {
 		} else { // isPlay == true;
 			btnPlay.setIcon(new ImageIcon(getClass().getResource("/icons/1427489511_icon-play-128.png")));
 			visualiser.pause();
-			lblTimer.setText("Not implement yet!");
+			isPlay = false;
 		}
 	}
 
@@ -198,6 +203,12 @@ public class PlaybackMode extends javax.swing.JFrame {
 		// TODO Auto-generated method stub
 		visualiser.rewind();
 		lblTimer.setText("Not implement yet!");
+	}
+	
+	private void btnSnapshotActionPerformed(ActionEvent evt) {
+		// TODO Auto-generated method stub
+		visualiser.snapshot();
+		lblTimer.setText("Not implement yet");
 	}
 	
 	private void btnForwardActionPerformed(ActionEvent evt) {
