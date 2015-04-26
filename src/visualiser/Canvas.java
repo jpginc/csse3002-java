@@ -23,7 +23,6 @@ public class Canvas {
 		JRViewer jrViewer = JRViewer.createJRViewer(world);
 		jrViewer.startupLocal();
 		viewer = jrViewer.getViewer();
-		//world.setGeometry(test);
 	}
 		
 	public void mutate(int value) {
