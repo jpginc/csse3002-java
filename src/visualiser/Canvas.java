@@ -6,6 +6,7 @@ import java.awt.Component;
 
 import javax.swing.JFrame;
 
+import crinkle.PlaybackMode;
 import de.jreality.geometry.Primitives;
 import de.jreality.plugin.JRViewer;
 import de.jreality.plugin.basic.View;
@@ -33,11 +34,14 @@ public class Canvas {
 		v.startupLocal();
 		Viewer viewer = v.getViewer();
 		world.setGeometry(test);
-		JFrame f = new JFrame();
+		/*JFrame f = new JFrame();
         f.getContentPane().add((Component)viewer.getViewingComponent());
         f.setSize(512, 512);
         f.validate();
-        f.setVisible(true);		
+        f.setVisible(true);	*/	
+		PlaybackMode playbackMode = new PlaybackMode();
+		playbackMode.addComponentToPnlViewer((Component) viewer.getViewingComponent());
+		playbackMode.setVisible(true);
 	}
 		
 	public void move(int value) {
