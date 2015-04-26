@@ -1,8 +1,6 @@
 
 package crinkle;
 
-import visualiser.Visualiser;
-
 /**
  *
  * @author ToanHo

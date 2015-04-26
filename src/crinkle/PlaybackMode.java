@@ -15,11 +15,6 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 
 import visualiser.Visualiser;
-import de.jreality.geometry.Primitives;
-import de.jreality.plugin.JRViewer;
-import de.jreality.scene.IndexedFaceSet;
-import de.jreality.scene.SceneGraphComponent;
-import de.jreality.scene.Viewer;
 
 
 /**
@@ -171,7 +166,6 @@ public class PlaybackMode extends javax.swing.JFrame {
 		this.setLocation(dim.width / 2 - this.getSize().width / 2, 0);
 
 		//validate();
-
 	}
 
 

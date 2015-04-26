@@ -1,8 +1,5 @@
 package visualiser;
 
-import java.awt.Component;
-
-import crinkle.PlaybackMode;
 import data.AccelReading;
 import de.jreality.geometry.Primitives;
 import de.jreality.plugin.JRViewer;
@@ -14,15 +11,13 @@ import de.jreality.scene.data.StorageModel;
 
 public class Canvas {
 	
-	IndexedFaceSet test = Primitives.sphere(10);
+	IndexedFaceSet test = Primitives.sphere(20);
 	Integer pointsIndex = 0;
 	private Viewer viewer;
 	
 	public Canvas() {
 		
 		SceneGraphComponent world = new SceneGraphComponent();
-		
-		//System.out.println("here: " + test.getFaceAttributes(null));
 		world.setGeometry(test);
 
 		JRViewer jrViewer = JRViewer.createJRViewer(world);
@@ -43,7 +38,7 @@ public class Canvas {
 	}
 	
 	public void changeColor(AccelReading accelReading) {
-		
+		//TODO
 	}
 
 	public Viewer getViewer() {
