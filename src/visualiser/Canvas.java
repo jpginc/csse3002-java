@@ -11,7 +11,7 @@ import de.jreality.scene.data.StorageModel;
 
 public class Canvas {
 	
-	IndexedFaceSet test = Primitives.sphere(20);
+	IndexedFaceSet test = Primitives.sphere(10);
 	Integer pointsIndex = 0;
 	private Viewer viewer;
 	
@@ -28,7 +28,10 @@ public class Canvas {
 	public void mutate(int value) {
         double[][] points=new double[test.getNumPoints()][];
 		test.getVertexAttributes(Attribute.COORDINATES).toDoubleArrayArray(points);
-        points[pointsIndex++][(int) Math.floor(Math.random() * 3)] += Math.random() * 10;
+		// Needs both positive and negative random number 
+		// and -2 <= random <= 2 (pattern is displayed in the canvas)
+		double random = Math.random() * 6 - 3; 
+        points[pointsIndex++][(int) Math.floor(Math.random() * 3)] = random;
         if(pointsIndex > 99) {
         	pointsIndex = 0;
         }
