@@ -45,6 +45,8 @@ public class Canvas {
 	}
 	
 	public void changeColor(AccelReading accelReading) {
+		//test.getNumFaces();
+		//System.out.println(test.getFaceAttributes(Attribute.COLORS));
 		Appearance ap = world.getAppearance();
 		ap.setAttribute(LINE_SHADER+"."+DIFFUSE_COLOR, Color.yellow);
 		ap.setAttribute(LINE_SHADER+"."+TUBE_RADIUS, .05);
@@ -55,6 +57,8 @@ public class Canvas {
 		ap.setAttribute(TRANSPARENCY_ENABLED, true);
 		ap.setAttribute(OPAQUE_TUBES_AND_SPHERES, true);
 		ap.setAttribute(POLYGON_SHADER+"."+TRANSPARENCY, .4);
+		Color newColor = new Color(255, 255, 255);
+		ap.setAttribute(POLYGON_SHADER+"."+DIFFUSE_COLOR, newColor);
 	}
 
 	public Viewer getViewer() {
