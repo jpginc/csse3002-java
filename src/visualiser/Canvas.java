@@ -57,7 +57,7 @@ public class Canvas {
 		ap.setAttribute(TRANSPARENCY_ENABLED, true);
 		ap.setAttribute(OPAQUE_TUBES_AND_SPHERES, true);
 		ap.setAttribute(POLYGON_SHADER+"."+TRANSPARENCY, .4);
-		Color newColor = new Color(255, 255, 255);
+		Color newColor = new Color(000, 000, 000);
 		ap.setAttribute(POLYGON_SHADER+"."+DIFFUSE_COLOR, newColor);
 	}
 
