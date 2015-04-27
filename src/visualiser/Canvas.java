@@ -29,7 +29,7 @@ public class Canvas {
         double[][] points=new double[test.getNumPoints()][];
 		test.getVertexAttributes(Attribute.COORDINATES).toDoubleArrayArray(points);
 		// Needs both positive and negative random number 
-		// and -2 <= random <= 2 (pattern is displayed in the canvas)
+		// and -3 <= random <= 3 (pattern is displayed in the canvas)
 		double random = Math.random() * 6 - 3; 
         points[pointsIndex++][(int) Math.floor(Math.random() * 3)] = random;
         if(pointsIndex > 99) {
