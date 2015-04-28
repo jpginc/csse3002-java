@@ -34,6 +34,7 @@ public class MovementData {
 					SensorReading tempReading = new SensorReading(tempArray);
 					store.add(tempReading);
 				}
+				br.close();
 	 
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -41,31 +42,40 @@ public class MovementData {
 			return store;		
 	}
 	
-	public boolean isNumeric(String str)  
-	{  
-	  try  
-	  {  
-	    double d = Double.parseDouble(str);  
-	  }  
-	  catch(NumberFormatException nfe)  
-	  {  
-	    return false;  
-	  }  
-	  return true;  
+	public boolean isNumeric(String str) {  
+		try {  
+			double d = Double.parseDouble(str);  
+		}  
+		catch(NumberFormatException nfe) {  
+			return false;  
+		}  
+		return true;  
 	}
 	
+	/** Check if every element in sensorData is a valid SensorReading **/
 	public boolean validate() {
-		//TODO Miya
-		
+		for(int i=0; i<sensorData.size(); i++) {
+			if(!sensorData.get(i).isValid()) {
+				return false;
+			}
+		}
 		return true;
 	}
 	
-	public void next() {
-		//TODO  Miya
+	public void getNext() {
+		//TODO
 	}
 	
-	public void previous() {
-		//TODO Miya
+	public void getPrevious() {
+		//TODO
+	}
+	
+	public void setNext() {
+		//TODO
+	}
+	
+	public void setPrev() {
+		//TODO
 	}
 
 	public List<SensorReading> getSensorData() {

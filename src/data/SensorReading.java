@@ -7,14 +7,14 @@ import java.util.List;
  */
 public class SensorReading {
 	
-	private List<Integer> arr;
+	private List<Integer> sensorValue;
 	
-	public SensorReading(List<Integer> arr) {
-		this.arr = arr;
+	public SensorReading(List<Integer> sensorValue) {
+		this.sensorValue = sensorValue;
 	}
 	
 	public boolean isValid() {
-		if(arr.size() == 5) {
+		if(sensorValue.size() == 5) {
 			return true;
 		} else {
 			return false;
@@ -22,15 +22,15 @@ public class SensorReading {
 	}
 	
 	public int getFlex1() {
-		return arr.get(0);
+		return sensorValue.get(0);
 	}
 	
 	public int getFlex2() {
-		return arr.get(1);
+		return sensorValue.get(1);
 	}
 	
 	public AccelReading getAccel() {
-		return new AccelReading(arr.get(2), arr.get(3), arr.get(4));
+		return new AccelReading(sensorValue.get(2), sensorValue.get(3), sensorValue.get(4));
 	}
 	
 	 
