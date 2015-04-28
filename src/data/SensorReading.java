@@ -23,4 +23,6 @@ public class SensorReading {
 		//TODO
 		return new AccelReading(0, 0, 0);
 	}
+	
+	 
 }
