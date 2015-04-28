@@ -127,44 +127,4 @@ public class LaunchMode extends javax.swing.JFrame {
         playbackMode.setVisible(true);        
     }
     
-	public static boolean isNumeric(String str)  
-	{  
-	  try  
-	  {  
-	    double d = Double.parseDouble(str);  
-	  }  
-	  catch(NumberFormatException nfe)  
-	  {  
-	    return false;  
-	  }  
-	  return true;  
-	}
-	
-	public static List<List<Integer>> readFile(String filename) {
-		List<List<Integer>> store = new ArrayList<List<Integer>>();		
-		
-		// read a file
-		try (BufferedReader br = new BufferedReader(new FileReader(filename)))
-		{ 
-			String sCurrentLine;
- 
-			while ((sCurrentLine = br.readLine()) != null) {
-				List<Integer> tempArray = new ArrayList<Integer>();
-				String[] sr = sCurrentLine.split(",");
-				for(int i=0; i<sr.length; i++) {
-					if(isNumeric(sr[i])) {
-						int num = Integer.parseInt(sr[i]);
-						tempArray.add(num);
-						//System.out.println(num);
-					}
-				}
-				store.add(tempArray);
-			}
- 
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return store;
-	}
-
 }
