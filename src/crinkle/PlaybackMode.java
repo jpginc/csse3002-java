@@ -55,6 +55,7 @@ public class PlaybackMode extends javax.swing.JFrame {
 		setVisualiser(new Visualiser());
 		this.addComponentToPnlViewer(visualiser.getViewerComponent());
 		this.validate();
+		 
 	}
 
 	/**

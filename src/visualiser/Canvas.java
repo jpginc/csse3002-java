@@ -19,11 +19,14 @@ import de.jreality.util.SceneGraphUtility;
 
 
 public class Canvas {
-	
+
+    private AccelReading a = new AccelReading(10,5,2);
 	private IndexedFaceSet test = Primitives.sphere(10);
 	private Integer pointsIndex = 0;
 	private Viewer viewer;
 	private SceneGraphComponent world = SceneGraphUtility.createFullSceneGraphComponent("test");
+	//Initialise the color of the sphere to black. also used to keep track of the color of the sphere
+	private Color base = new Color(0,0,0);
 	
 	public Canvas() {
 		SceneGraphComponent world = new SceneGraphComponent();
@@ -31,7 +34,10 @@ public class Canvas {
 		JRViewer jrViewer = JRViewer.createJRViewer(world);
 		jrViewer.startupLocal();
 		viewer = jrViewer.getViewer();
-		this.changeColor(null);
+		//System.out.println(a == null);
+		this.changeColor(a);
+		//this.changeColor(null);
+		
 	}
 		
 	public void mutate(int value) {
@@ -44,7 +50,7 @@ public class Canvas {
         if(pointsIndex > 99) {
         	pointsIndex = 0;
         }
-
+        changeColor(a);
         test.setVertexAttributes(Attribute.COORDINATES,StorageModel.DOUBLE_ARRAY.array(3).createReadOnly(points));			
 	}
 	
@@ -52,6 +58,7 @@ public class Canvas {
 		//test.getNumFaces();
 		//System.out.println(test.getFaceAttributes(Attribute.COLORS));
 		Appearance ap = world.getAppearance();
+		/*
 		ap.setAttribute(LINE_SHADER+"."+DIFFUSE_COLOR, Color.yellow);
 		ap.setAttribute(LINE_SHADER+"."+TUBE_RADIUS, .05);
 		ap.setAttribute(POINT_SHADER+"."+DIFFUSE_COLOR, Color.red);
@@ -61,10 +68,27 @@ public class Canvas {
 		ap.setAttribute(TRANSPARENCY_ENABLED, true);
 		ap.setAttribute(OPAQUE_TUBES_AND_SPHERES, true);
 		ap.setAttribute(POLYGON_SHADER+"."+TRANSPARENCY, .4);
-		Color newColor = new Color(000, 000, 000);
-		ap.setAttribute(POLYGON_SHADER+"."+DIFFUSE_COLOR, newColor);
+		//accelReading = new AccellReading(0,0,0);
+		*/
+		int oldBlue = base.getBlue();
+		int oldRed = base.getRed();
+		int oldGreen = base.getGreen();
+		int newBlue = (oldBlue + accelReading.getZ()) % 255;
+		int newRed = (oldRed + accelReading.getX()) % 255;
+		int newGreen = (oldGreen + accelReading.getY()) % 255;
+System.out.println(newBlue);
+System.out.println(newRed);
+System.out.println(newGreen);
+		base = new Color(newRed, newGreen, newBlue);
+		 
+		//Color newColor = new Color(000, 000, 000);
+		ap.setAttribute(POLYGON_SHADER+"."+DIFFUSE_COLOR, base);
+		//ap.setAttribute(POLYGON_SHADER+"."+DIFFUSE_COLOR, newColor);
 	}
 
+
+
+	
 	public Viewer getViewer() {
 		return viewer;
 	}
