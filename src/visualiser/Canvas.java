@@ -16,6 +16,9 @@ import de.jreality.util.SceneGraphUtility;
 
 
 public class Canvas {
+	static final boolean FORWARD = false;
+	static final boolean REVERSE = true;
+
 	IndexedFaceSet test = Primitives.sphere(10);
 	Integer pointsIndex = 0;
 	Integer pointsYIndex = 0;

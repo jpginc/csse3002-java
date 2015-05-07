@@ -9,6 +9,7 @@ import data.SensorReading;
 
 public class Visualiser {
 
+
 	private Canvas canvas;
 	private MovementData currentMovementData;
 	
@@ -24,15 +25,16 @@ public class Visualiser {
 	//currentFrame indicates how many times the sensor reading has ben split up already
 	private int currentFrame = fps;
 	
-	//
-	private SensorReading nextReading;
+	//this is the sensor reading that we are using to mutate the sphere
+	private SensorReading currentReading;
 	
 	//TODO 
 	//ensure thread safety
 	private boolean playing;
 	
-	static final boolean FORWARD = false;
-	static final boolean REVERSE = true;
+	//indicates whether to get the next sensor reading or the previous one
+	private boolean isReverse = false;
+	
 	
 
 	public Visualiser() {
@@ -54,8 +56,15 @@ public class Visualiser {
 		currentFrame = fps;
 	}
 	
-	/*
+	/**
+	 * runs one mutation on the canvas. It will get the next/previous sensor reading and
+	 * run fps mutations on it before getting the next/previous reading etc.
 	 * 
+	 * TODO
+	 * currently if no movement data is loaded, random mutations occur infinitely
+	 * 
+	 * @return
+	 *  true if a mutation occurred false if there are no mutations left
 	 */
 	private boolean run() {
 		if(currentMovementData == null) {
@@ -66,13 +75,18 @@ public class Visualiser {
 			if(currentFrame++ == fps) {
 				canvas.next();
 				currentFrame = 1;
-				nextReading = currentMovementData.getNext();
+				if(isReverse) { 
+					currentReading = currentMovementData.getNext();
+				} else {
+					currentReading = currentMovementData.getPrevious();
+				}
+					
 			}	
-			if(nextReading == null) {
+			if(currentReading == null) {
 				//stop
 				return false;
 			} else {
-				canvas.mutate(nextReading, fps * currentSpeed);
+				canvas.mutate(currentReading, fps * currentSpeed);
 				return true;
 			}
 		}
@@ -84,7 +98,8 @@ public class Visualiser {
 	 * 
 	 */
 	public void play() {
-		canvas.setDirection(FORWARD);
+		isReverse = false;
+		canvas.setDirection(Canvas.FORWARD);
 		currentSpeed = playSpeed;
 		if(! startTimer()) {
 			//TODO
@@ -135,7 +150,8 @@ public class Visualiser {
 	 */
 	public int fastForward() {
 		currentSpeed = playSpeed * 4;
-		canvas.setDirection(FORWARD);
+		isReverse = false;
+		canvas.setDirection(Canvas.FORWARD);
 		if(! playing) {
             startTimer();
 		}
@@ -149,7 +165,8 @@ public class Visualiser {
 	 */
 	public int rewind() {
 		currentSpeed = playSpeed * 4;
-		canvas.setDirection(REVERSE);
+		isReverse = true;
+		canvas.setDirection(Canvas.REVERSE);
 		if(! playing) {
 			startTimer();
 		}
