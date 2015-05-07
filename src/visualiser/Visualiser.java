@@ -9,6 +9,7 @@ import data.MovementData;
 public class Visualiser {
 
 	private Canvas canvas;
+	private MovementData currentMovementData;
 	
 	private Timer timer;
 
@@ -18,7 +19,7 @@ public class Visualiser {
 	
 	/** Load data**/
 	public void Load(MovementData movementData) {
-		
+        currentMovementData = movementData;
 	}
 	
 	/** Play **/
@@ -28,6 +29,16 @@ public class Visualiser {
 		  @Override
 		  public void run() {
 			  canvas.mutate(1);
+			  /*
+			  SensorReading next = currentMovementData.getNext();
+			  if(next == null)
+			  {
+				  //stop
+			  } else
+			  {
+			  	canvas.mutate(next);
+			  }
+			  */
 		  }
 		}, 1000/48, 1000/48);
 	}
