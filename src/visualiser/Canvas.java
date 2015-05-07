@@ -50,17 +50,15 @@ public class Canvas {
 		
 	}
 	
-	/*
+	/**
 	 * This function is called by the visualizer to mutate the image one step
 	 * 
 	 * Whenever you want to use the next sensor reading call next()
 	 * 
 	 * @param reading
 	 *  The sensor reading to mutate with
-	 * 
 	 * @param stepCount
 	 *  The number of steps to break the sensor readings into
-	 *  
 	 */
 	public void mutate(SensorReading reading, int stepCount) {
 		movePoint(((double) reading.getFlex1()) / stepCount);
@@ -68,7 +66,7 @@ public class Canvas {
 		changeColor(reading.getAccel(), stepCount);
 	}
 	
-	/*
+	/**
 	 * This function changes the point that the mutate function works on
 	 * 
 	 * Call this whenever you change sensor reading
@@ -92,7 +90,7 @@ public class Canvas {
 		}
 	}
 	
-	/*
+	/**
 	 * Moves the point value distance on the current axis
 	 * 
 	 * @param value
@@ -106,7 +104,7 @@ public class Canvas {
 
 	}
 
-	/*
+	/**
 	 * changes the color of the sphere easing the color change according to the number of steps
 	 * 
 	 * todo this functions doesn't scale as steps gets larger!
@@ -132,7 +130,7 @@ public class Canvas {
 		ap.setAttribute(POLYGON_SHADER+"."+DIFFUSE_COLOR, base);
 	}
 
-	/*
+	/**
 	 * moves a point and changes the color according to a random number
 	 */
 	public void mutate(int value) {
