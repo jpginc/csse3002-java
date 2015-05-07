@@ -66,8 +66,9 @@ public class MovementData {
 		return true;
 	}
 	
-	public void getNext() {
+	public SensorReading getNext() {
 		//TODO
+		return null;
 	}
 	
 	public void getPrevious() {

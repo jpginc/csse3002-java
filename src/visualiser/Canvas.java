@@ -30,6 +30,9 @@ public class Canvas {
 	private int point = 0;
 	//this is the number of points in the sphere
 	private int pointMax = test.getNumPoints();
+	
+	//indicates whether to move backwards or forwards
+	private boolean reverse = false;
 
 	double random;
 	double diff;
@@ -71,10 +74,8 @@ public class Canvas {
 	 * 
 	 * Call this whenever you change sensor reading
 	 * 
-	 * @param reverse
-	 * if set to true it changes to the previous point instead of the next one (for rewind)
 	 */
-	public void next(boolean reverse) {
+	public void next() {
 		point += reverse ? -1 : 1;
 		if(point == -1){
 			point = pointMax -1 ;
@@ -91,6 +92,22 @@ public class Canvas {
 	}
 	
 	/**
+	 * sets the direction to go in.
+	 * 
+	 * true == go backwards
+	 * false == go forwards
+	 * 
+	 * @param newDirection
+	 * 	the new direction to be going
+	 * @return
+	 *  the direction
+	 */
+	public boolean setDirection(boolean newDirection) {
+		reverse = newDirection;
+		return reverse;
+	}
+	
+	/**
 	 * Moves the point value distance on the current axis
 	 * 
 	 * @param value
@@ -99,7 +116,7 @@ public class Canvas {
 	private void movePoint(double value) {
         double[][] points=new double[test.getNumPoints()][];
 		test.getVertexAttributes(Attribute.COORDINATES).toDoubleArrayArray(points);
-		points[point][axis] += value;
+		points[point][axis] += reverse ? -1 * value : value;
 		test.setVertexAttributes(Attribute.COORDINATES,StorageModel.DOUBLE_ARRAY.array(3).createReadOnly(points));
 
 	}
@@ -121,9 +138,9 @@ public class Canvas {
 		int oldGreen = base.getGreen();	
 		int newBlue, newRed, newGreen;
 
-		newBlue = (oldBlue + stepZ) % 255;
-        newRed = (oldRed + stepX) % 255;
-        newGreen = (oldGreen + stepY) % 255;					
+		newBlue = (oldBlue + (reverse ? -1 * stepZ : stepZ)) % 255;
+        newRed = (oldRed + (reverse ? -1 * stepX : stepX)) % 255;
+        newGreen = (oldGreen + (reverse ? -1 * stepY : stepY)) % 255;					
 		
 		base = new Color(newRed, newGreen, newBlue);
 		 
