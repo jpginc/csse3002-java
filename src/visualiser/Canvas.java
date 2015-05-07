@@ -56,16 +56,15 @@ public class Canvas {
 		points[pointsIndex][pointsYIndex] = random;
 		test.setVertexAttributes(Attribute.COORDINATES,StorageModel.DOUBLE_ARRAY.array(3).createReadOnly(points));
 		random += diff;
+
+		AccelReading a = new AccelReading((int) (Math.random() * 100),(int) (Math.random() * 100),(int) (Math.random() * 100));	
+		changeColor(a);
+
 		timer += 1;
 		if(timer == 25) {
 			pointsIndex += 1;
 			pointsYIndex += 1;
 			timer = 0;
-		}
-		if(timer == 1)
-		{
-            AccelReading a = new AccelReading((int) (Math.random() * 10),(int) (Math.random() * 10),(int) (Math.random() * 10));	
-            changeColor(a);
 		}
 		if(pointsIndex > 99) {
         	pointsIndex = 0;
@@ -92,15 +91,38 @@ public class Canvas {
 		ap.setAttribute(POLYGON_SHADER+"."+TRANSPARENCY, .4);
 		//accelReading = new AccellReading(0,0,0);
 		*/
-		int oldBlue = base.getBlue();
+		
+		int stepZ = accelReading.getZ() / 24;
+		int leftoverZ = accelReading.getZ() % 24;
+
+		int stepX = accelReading.getX() / 24;
+		int leftoverX = accelReading.getX() % 24;
+		
+		int stepY = accelReading.getY() / 24;
+		int leftoverY = accelReading.getY() % 24;
+
+        int oldBlue = base.getBlue();
 		int oldRed = base.getRed();
-		int oldGreen = base.getGreen();
-		int newBlue = (oldBlue + accelReading.getZ()) % 255;
-		int newRed = (oldRed + accelReading.getX()) % 255;
-		int newGreen = (oldGreen + accelReading.getY()) % 255;
+		int oldGreen = base.getGreen();	
+		int newBlue, newRed, newGreen;
+
+		if(timer == 0) {
+            newBlue = (oldBlue + leftoverZ) % 255;
+            newRed = (oldRed + leftoverX) % 255;
+            newGreen = (oldGreen + leftoverY) % 255;			
+		} else {
+			newBlue = (oldBlue + stepZ) % 255;
+            newRed = (oldRed + stepX) % 255;
+            newGreen = (oldGreen + stepY) % 255;					
+		}
+		
+		
+
+		/*
         System.out.println(newBlue);
         System.out.println(newRed);
         System.out.println(newGreen);
+        */
 		base = new Color(newRed, newGreen, newBlue);
 		 
 		//Color newColor = new Color(000, 000, 000);
