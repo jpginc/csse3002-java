@@ -29,7 +29,7 @@ public class Visualiser {
 		  public void run() {
 			  canvas.mutate(1);
 		  }
-		}, 100, 100);
+		}, 1000/48, 1000/48);
 	}
 	
 	/** Pause **/
