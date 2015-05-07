@@ -29,7 +29,7 @@ public class Canvas {
 	private Color base = new Color(0,0,0);
 	
 	public Canvas() {
-		SceneGraphComponent world = new SceneGraphComponent();
+		//SceneGraphComponent world = new SceneGraphComponent();
 		world.setGeometry(test);
 		JRViewer jrViewer = JRViewer.createJRViewer(world);
 		jrViewer.startupLocal();
@@ -76,9 +76,9 @@ public class Canvas {
 		int newBlue = (oldBlue + accelReading.getZ()) % 255;
 		int newRed = (oldRed + accelReading.getX()) % 255;
 		int newGreen = (oldGreen + accelReading.getY()) % 255;
-System.out.println(newBlue);
-System.out.println(newRed);
-System.out.println(newGreen);
+        System.out.println(newBlue);
+        System.out.println(newRed);
+        System.out.println(newGreen);
 		base = new Color(newRed, newGreen, newBlue);
 		 
 		//Color newColor = new Color(000, 000, 000);
