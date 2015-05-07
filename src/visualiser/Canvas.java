@@ -20,8 +20,12 @@ import de.jreality.util.SceneGraphUtility;
 
 public class Canvas {
 	
-	private IndexedFaceSet test = Primitives.sphere(10);
-	private Integer pointsIndex = 0;
+	IndexedFaceSet test = Primitives.sphere(10);
+	Integer pointsIndex = 0;
+	Integer pointsYIndex = 0;
+	Integer timer = 0;
+	double random;
+	double diff;
 	private Viewer viewer;
 	private SceneGraphComponent world = SceneGraphUtility.createFullSceneGraphComponent("test");
 	
@@ -39,13 +43,27 @@ public class Canvas {
 		test.getVertexAttributes(Attribute.COORDINATES).toDoubleArrayArray(points);
 		// Needs both positive and negative random number 
 		// and -3 <= random <= 3 (pattern is displayed in the canvas)
-		double random = Math.random() * 6 - 3; 
-        points[pointsIndex++][(int) Math.floor(Math.random() * 3)] = random;
-        if(pointsIndex > 99) {
+		if(timer == 0) {
+			random = Math.random() * 6 - 3;
+			diff = random / 24;
+			random = diff;
+		}
+        //points[pointsIndex++][(int) Math.floor(Math.random() * 3)] = random;
+		points[pointsIndex][pointsYIndex] = random;
+		test.setVertexAttributes(Attribute.COORDINATES,StorageModel.DOUBLE_ARRAY.array(3).createReadOnly(points));
+		random += diff;
+		timer += 1;
+		if(timer == 25) {
+			pointsIndex += 1;
+			pointsYIndex += 1;
+			timer = 0;
+		}
+		if(pointsIndex > 99) {
         	pointsIndex = 0;
         }
-
-        test.setVertexAttributes(Attribute.COORDINATES,StorageModel.DOUBLE_ARRAY.array(3).createReadOnly(points));			
+		if(pointsYIndex >= 3) {
+			pointsYIndex = 0;
+		}
 	}
 	
 	public void changeColor(AccelReading accelReading) {
