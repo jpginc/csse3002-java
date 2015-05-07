@@ -19,7 +19,6 @@ import de.jreality.util.SceneGraphUtility;
 
 
 public class Canvas {
-	private AccelReading a = new AccelReading(10,5,2);	
 	IndexedFaceSet test = Primitives.sphere(10);
 	Integer pointsIndex = 0;
 	Integer pointsYIndex = 0;
@@ -38,7 +37,7 @@ public class Canvas {
 		jrViewer.startupLocal();
 		viewer = jrViewer.getViewer();
 		//System.out.println(a == null);
-		this.changeColor(a);
+		this.changeColor(new AccelReading(0,0,0));
 		//this.changeColor(null);
 		
 	}
@@ -65,7 +64,8 @@ public class Canvas {
 		}
 		if(timer == 1)
 		{
-                changeColor(a);
+            AccelReading a = new AccelReading((int) (Math.random() * 10),(int) (Math.random() * 10),(int) (Math.random() * 10));	
+            changeColor(a);
 		}
 		if(pointsIndex > 99) {
         	pointsIndex = 0;
