@@ -40,10 +40,11 @@ public class Visualiser {
 	public Visualiser() {
 		canvas = new Canvas();
 		initialise();
+		load(new MovementData("sample.txt"));
 	}
 	
 	/** Load data**/
-	public void Load(MovementData movementData) {
+	public void load(MovementData movementData) {
         currentMovementData = movementData;
         initialise();
 	}
@@ -74,15 +75,19 @@ public class Visualiser {
 		} else {
 			if(currentFrame++ == fps) {
 				canvas.next();
+			System.out.println("moving to the next reading");
 				currentFrame = 1;
 				if(isReverse) { 
-					currentReading = currentMovementData.getNext();
-				} else {
 					currentReading = currentMovementData.getPrevious();
+			System.out.println("it's reverse");
+				} else {
+					currentReading = currentMovementData.getNext();
+			System.out.println("it's forward");
 				}
 					
 			}	
 			if(currentReading == null) {
+			System.out.println("there are no more readings");
 				//stop
 				return false;
 			} else {

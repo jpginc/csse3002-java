@@ -127,7 +127,9 @@ public class Canvas {
 	/**
 	 * changes the color of the sphere easing the color change according to the number of steps
 	 * 
-	 * todo this functions doesn't scale as steps gets larger!
+	 * TODO
+	 *  this functions doesn't scale as steps gets larger!
+	 *  this function doesn't work in reverse
 	 */
 	public void changeColor(AccelReading accelReading, int steps) {
 		Appearance ap = world.getAppearance();
@@ -141,9 +143,9 @@ public class Canvas {
 		int oldGreen = base.getGreen();	
 		int newBlue, newRed, newGreen;
 
-		newBlue = (oldBlue + (reverse ? -1 * stepZ : stepZ)) % 255;
-        newRed = (oldRed + (reverse ? -1 * stepX : stepX)) % 255;
-        newGreen = (oldGreen + (reverse ? -1 * stepY : stepY)) % 255;					
+		newBlue = Math.abs((oldBlue + (reverse ? -1 * stepZ : stepZ)) % 255);
+        newRed = Math.abs((oldRed + (reverse ? -1 * stepX : stepX)) % 255);
+        newGreen = Math.abs((oldGreen + (reverse ? -1 * stepY : stepY)) % 255);					
 		
 		base = new Color(newRed, newGreen, newBlue);
 		 
