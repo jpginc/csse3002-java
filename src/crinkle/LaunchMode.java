@@ -125,7 +125,7 @@ public class LaunchMode extends javax.swing.JFrame {
         this.setVisible(false);
         PlaybackMode playbackMode = new PlaybackMode(this);
         playbackMode.setVisible(true);
-        
+       
     }
 
 
