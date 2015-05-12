@@ -2,6 +2,7 @@ package data;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,8 @@ public class TestData {
 	public void readData1() {
 		SensorReading next;
 		SensorReading prev;
-		MovementData tMovementData = new MovementData("sample.txt");
+		File file = new File("sample.txt");
+		MovementData tMovementData = new MovementData(file);
 		assertTrue(tMovementData.validate());
 		
 		prev = tMovementData.getPrevious();
@@ -78,13 +80,15 @@ public class TestData {
 	
 	@Test
 	public void readData2() {
-		MovementData tMovementData = new MovementData("sample2.txt");
+		File file = new File("sample2.txt");
+		MovementData tMovementData = new MovementData(file);
 		assertFalse(tMovementData.validate());
 	}
 	
 	@Test
 	public void readData3() {
-		MovementData tMovementData = new MovementData("sample3.txt");
+		File file = new File("sample3.txt");
+		MovementData tMovementData = new MovementData(file);
 		assertFalse(tMovementData.validate());
 	}
 	

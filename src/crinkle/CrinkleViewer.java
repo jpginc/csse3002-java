@@ -7,6 +7,9 @@ package crinkle;
  */
 public class CrinkleViewer {
 
+	// We should choose a new file extension for crinkle viewer. e.g "crvf"
+	public static final String FILE_EXTENSION = "txt"; 
+	
     private LaunchMode launchMode;
     
     public CrinkleViewer() {

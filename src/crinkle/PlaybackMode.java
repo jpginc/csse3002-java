@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.io.File;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -53,6 +54,15 @@ public class PlaybackMode extends javax.swing.JFrame {
 		initComponents();
 		this.launchMode = launchMode;
 		setVisualiser(new Visualiser());
+		this.addComponentToPnlViewer(visualiser.getViewerComponent());
+		this.validate();
+		 
+	}
+	
+	public PlaybackMode(LaunchMode launchMode, File crinkleViewerFile) {
+		initComponents();
+		this.launchMode = launchMode;
+		setVisualiser(new Visualiser(crinkleViewerFile));
 		this.addComponentToPnlViewer(visualiser.getViewerComponent());
 		this.validate();
 		 
@@ -191,6 +201,8 @@ public class PlaybackMode extends javax.swing.JFrame {
 
 	private void formWindowClosed(java.awt.event.WindowEvent evt) {
 		// TODO add your handling code here:
+		//launchMode.setEnabledBtnOpen(true);
+		launchMode.setFocusable(true);
 		launchMode.setVisible(true);
 	}
 

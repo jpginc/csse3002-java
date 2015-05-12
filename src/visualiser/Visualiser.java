@@ -1,6 +1,7 @@
 package visualiser;
 
 import java.awt.Component;
+import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -38,6 +39,12 @@ public class Visualiser {
 	
 
 	public Visualiser() {
+		canvas = new Canvas();
+		initialise();
+	}
+	
+	public Visualiser(File crinkleViewerFile) {
+		currentMovementData = new MovementData(crinkleViewerFile);
 		canvas = new Canvas();
 		initialise();
 	}
