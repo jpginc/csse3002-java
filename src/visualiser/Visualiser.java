@@ -47,6 +47,11 @@ public class Visualiser {
 		currentMovementData = new MovementData(crinkleViewerFile);
 		canvas = new Canvas();
 		initialise();
+		System.out.println("<<<Test in Visualiser constructor>>>");
+		while(currentMovementData.hasNext()) {
+			SensorReading sr = currentMovementData.getNext();
+			System.out.println(sr.toString());
+		}
 	}
 	
 	/** Load data**/

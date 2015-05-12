@@ -14,19 +14,12 @@ public class TestData {
 	public void readData1() {
 		SensorReading next;
 		SensorReading prev;
-		File file = new File("sample.txt");
+		File file = new File("src/sampleData/sample.crvf");
 		MovementData tMovementData = new MovementData(file);
 		assertTrue(tMovementData.validate());
 		
 		prev = tMovementData.getPrevious();
 		assertNull(prev);
-		
-		List<Integer> tempArr1 = createArray(0, 0, 0, 0, 1);		
-		SensorReading nextMock1 = new SensorReading(tempArr1);
-		next = tMovementData.getNext();
-		compareEquals(nextMock1, next);
-		prev = tMovementData.getPrevious();
-		compareEquals(nextMock1, prev);
 				
 		List<Integer> tempArr2 = createArray(123, 568, 890, 678, 555);
 		SensorReading nextMock2 = new SensorReading(tempArr2);
@@ -80,14 +73,14 @@ public class TestData {
 	
 	@Test
 	public void readData2() {
-		File file = new File("sample2.txt");
+		File file = new File("src/sampleData/sample2.crvf");
 		MovementData tMovementData = new MovementData(file);
 		assertFalse(tMovementData.validate());
 	}
 	
 	@Test
 	public void readData3() {
-		File file = new File("sample3.txt");
+		File file = new File("src/sampleData/sample3.crvf");
 		MovementData tMovementData = new MovementData(file);
 		assertFalse(tMovementData.validate());
 	}
