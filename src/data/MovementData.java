@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import org.python.antlr.PythonParser.return_stmt_return;
-
 public class MovementData {
 	private String id;
 	private List<SensorReading> sensorData;
@@ -69,7 +67,27 @@ public class MovementData {
 		}
 		return true;
 	}
+	
+	/** Returns true if there is a next SensorReading in the data set.
+	 * @return true if and only if the data set has next SensorReading, otherwise false. */
+	public boolean hasNext() {
+		if(nextIndex < numOfSensorReading()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
+	/** Returns true if there is a previous SensorReading in the data set.
+	 * @return true if and only if the data set has previous SensorReading, otherwise false. */
+	public boolean hasPrevious() {
+		if(prevIndex > -1) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	/** Gets next SensorReading 
 	 * @return next SensorReading if available, otherwise null*/
 	public SensorReading getNext() {
