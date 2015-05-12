@@ -5,6 +5,8 @@ import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.io.File;
 
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -165,7 +167,32 @@ public class LaunchMode extends javax.swing.JFrame {
 				}
 			}
 		});
+		fc.setFileView(new FileView() {
+			ImageIcon crinkleIcon = new ImageIcon(getClass().getResource("/icons/crinkleIcon_16x16.png"));
+			
+			public String getTypeDescription(File f) {
+		        String extension = getFileExtension(f);
+		        String type = null;
+		        if (extension != null) {
+		            if (extension.equals(CrinkleViewer.FILE_EXTENSION)) {
+		                type = "CrinkleViewer File";
+		            } 
+		        }
+		        return type;
+		    }	
+			
+			public Icon getIcon(File f) {
+				String extension = getFileExtension(f);
+				Icon icon = null;
 
+				if (extension != null) {
+					if (extension.equals(CrinkleViewer.FILE_EXTENSION)) {
+						icon = crinkleIcon;
+					}
+				}
+				return icon;
+			}
+		});
 		int returnVal = fc.showOpenDialog(this);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
 			return fc.getSelectedFile();

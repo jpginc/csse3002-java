@@ -180,7 +180,7 @@ public class PlaybackMode extends javax.swing.JFrame {
 		setSize(960, 720);
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setLocation(dim.width / 2 - this.getSize().width / 2, 0);
-
+		
 		//validate();
 	}
 
