@@ -33,5 +33,11 @@ public class SensorReading {
 		return new AccelReading(sensorValue.get(2), sensorValue.get(3), sensorValue.get(4));
 	}
 	
-	 
+	public String toString() {
+		String str = "";
+		for(int i = 0; i < sensorValue.size(); i++) {
+			str += sensorValue.get(i) + " ";
+		}
+		return str;
+	} 
 }
