@@ -125,11 +125,13 @@ public class LaunchMode extends javax.swing.JFrame {
 		//btnOpen.setEnabled(false);
 		File selectedFile = chooseFile();
 		if(selectedFile != null) {
+			this.setEnabled(false);
 			txfFileName.setText(selectedFile.getName());
 			PlaybackMode playbackMode = new PlaybackMode(this, selectedFile);
 			this.setVisible(false);
 			playbackMode.setVisible(true);
 		} else { // This branch is demo 
+			this.setEnabled(false);
 			PlaybackMode playbackMode = new PlaybackMode(this);
 			this.setVisible(false);
 			playbackMode.setVisible(true);        

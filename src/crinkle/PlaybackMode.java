@@ -61,6 +61,7 @@ public class PlaybackMode extends javax.swing.JFrame {
 	
 	public PlaybackMode(LaunchMode launchMode, File crinkleViewerFile) {
 		initComponents();
+		this.setTitle("Crinkle Viewer - " + crinkleViewerFile.getAbsolutePath());
 		this.launchMode = launchMode;
 		setVisualiser(new Visualiser(crinkleViewerFile));
 		this.addComponentToPnlViewer(visualiser.getViewerComponent());
@@ -200,9 +201,7 @@ public class PlaybackMode extends javax.swing.JFrame {
 	}
 
 	private void formWindowClosed(java.awt.event.WindowEvent evt) {
-		// TODO add your handling code here:
-		//launchMode.setEnabledBtnOpen(true);
-		launchMode.setFocusable(true);
+		launchMode.setEnabled(true);
 		launchMode.setVisible(true);
 	}
 
