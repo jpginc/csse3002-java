@@ -17,6 +17,7 @@ import javax.swing.UIManager;
 
 import visualiser.Visualiser;
 
+import com.apple.eawt.Application;
 
 /**
  *
@@ -111,7 +112,7 @@ public class PlaybackMode extends javax.swing.JFrame {
 		pnlPlayback.setBorder(BorderFactory.createTitledBorder("Playback"));
 		pnlPlayback.setPreferredSize(new java.awt.Dimension(210, 150));
 
-		btnRewind.setIcon(new ImageIcon(getClass().getResource("/icons/1427489580_backward-40.png")));
+		btnRewind.setIcon(new ImageIcon(getClass().getResource(CrinkleViewer.REWIND_ICON)));
 		btnRewind.setPreferredSize(new java.awt.Dimension(40, 40));
 		btnRewind.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -119,7 +120,7 @@ public class PlaybackMode extends javax.swing.JFrame {
 			}
 		});
 
-		btnPlay.setIcon(new ImageIcon(getClass().getResource("/icons/1427489511_icon-play-128.png")));
+		btnPlay.setIcon(new ImageIcon(getClass().getResource(CrinkleViewer.PLAY_ICON)));
 		btnPlay.setPreferredSize(new java.awt.Dimension(50, 40));
 		btnPlay.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -127,7 +128,7 @@ public class PlaybackMode extends javax.swing.JFrame {
 			}
 		});
 
-		btnForward.setIcon(new ImageIcon(getClass().getResource("/icons/1427489580_fast_forward_128.png")));
+		btnForward.setIcon(new ImageIcon(getClass().getResource(CrinkleViewer.FAST_FORWARD_ICON)));
 		btnForward.setPreferredSize(new java.awt.Dimension(40, 40));
 		btnForward.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -140,7 +141,7 @@ public class PlaybackMode extends javax.swing.JFrame {
 		lblTimer.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 		lblTimer.setPreferredSize(new java.awt.Dimension(175, 16));
 
-		btnSnapshot.setIcon(new ImageIcon(getClass().getResource("/icons/1427962660_camera_-30.png"))); // NOI18N
+		btnSnapshot.setIcon(new ImageIcon(getClass().getResource(CrinkleViewer.CAMERA_ICON))); // NOI18N
 		btnSnapshot.setPreferredSize(new java.awt.Dimension(40, 40));
 		btnSnapshot.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -182,6 +183,14 @@ public class PlaybackMode extends javax.swing.JFrame {
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setLocation(dim.width / 2 - this.getSize().width / 2, 0);
 		
+		String os = System.getProperty("os.name");
+		if (os.equalsIgnoreCase("Mac OS X")) {
+			this.setIconImage((new ImageIcon(getClass().getResource(CrinkleViewer.CRINKLE_ICON_MAC))).getImage());
+		} else {
+			this.setIconImage((new ImageIcon(getClass().getResource(CrinkleViewer.CRINKLE_ICON_WIN))).getImage());
+		}
+		
+		//Application.getApplication().setDockIconImage((new ImageIcon(getClass().getResource("/icons/crinkleIcon_256x256.png"))).getImage());
 		//validate();
 	}
 
@@ -189,12 +198,12 @@ public class PlaybackMode extends javax.swing.JFrame {
 	private void btnPlayActionPerformed(java.awt.event.ActionEvent evt) {
 		// TODO add your handling code here:
 		if(isPlay == false) {
-			btnPlay.setIcon(new ImageIcon(getClass().getResource("/icons/1427489556_icon-pause-40.png")));
+			btnPlay.setIcon(new ImageIcon(getClass().getResource(CrinkleViewer.PAUSE_ICON)));
 			visualiser.play();
 			isPlay = true;
 			lblTimer.setText("00:00:00");
 		} else { // isPlay == true;
-			btnPlay.setIcon(new ImageIcon(getClass().getResource("/icons/1427489511_icon-play-128.png")));
+			btnPlay.setIcon(new ImageIcon(getClass().getResource(CrinkleViewer.PLAY_ICON)));
 			visualiser.pause();
 			isPlay = false;
 		}

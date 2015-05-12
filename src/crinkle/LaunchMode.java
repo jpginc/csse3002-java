@@ -111,7 +111,15 @@ public class LaunchMode extends javax.swing.JFrame {
 		setSize(510, 200);
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
+		
+		String os = System.getProperty("os.name");
+		if (os.equalsIgnoreCase("Mac OS X")) {
+			this.setIconImage((new ImageIcon(getClass().getResource(CrinkleViewer.CRINKLE_ICON_MAC))).getImage());
+		} else {
+			this.setIconImage((new ImageIcon(getClass().getResource(CrinkleViewer.CRINKLE_ICON_WIN))).getImage());
+		}
 
+		//Application.getApplication().setDockIconImage((new ImageIcon(getClass().getResource("/icons/crinkleIcon_256x256.png"))).getImage());
 		validate();
 	}
 
@@ -170,19 +178,19 @@ public class LaunchMode extends javax.swing.JFrame {
 			}
 		});
 		fc.setFileView(new FileView() {
-			ImageIcon crinkleIcon = new ImageIcon(getClass().getResource("/icons/crinkleIcon_16x16.png"));
-			
+			ImageIcon crinkleIcon = new ImageIcon(getClass().getResource(CrinkleViewer.CRINKLE_FILE_ICON));
+
 			public String getTypeDescription(File f) {
-		        String extension = getFileExtension(f);
-		        String type = null;
-		        if (extension != null) {
-		            if (extension.equals(CrinkleViewer.FILE_EXTENSION)) {
-		                type = "CrinkleViewer File";
-		            } 
-		        }
-		        return type;
-		    }	
-			
+				String extension = getFileExtension(f);
+				String type = null;
+				if (extension != null) {
+					if (extension.equals(CrinkleViewer.FILE_EXTENSION)) {
+						type = "CrinkleViewer File";
+					} 
+				}
+				return type;
+			}	
+
 			public Icon getIcon(File f) {
 				String extension = getFileExtension(f);
 				Icon icon = null;
