@@ -111,7 +111,7 @@ public class LaunchMode extends javax.swing.JFrame {
 		setSize(510, 200);
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
-		
+
 		String os = System.getProperty("os.name");
 		if (os.equalsIgnoreCase("Mac OS X")) {
 			this.setIconImage((new ImageIcon(getClass().getResource(CrinkleViewer.CRINKLE_ICON_MAC))).getImage());
@@ -119,7 +119,7 @@ public class LaunchMode extends javax.swing.JFrame {
 			this.setIconImage((new ImageIcon(getClass().getResource(CrinkleViewer.CRINKLE_ICON_WIN))).getImage());
 		}
 
-		//Application.getApplication().setDockIconImage((new ImageIcon(getClass().getResource("/icons/crinkleIcon_256x256.png"))).getImage());
+		//Application.getApplication().setDockIconImage((new ImageIcon(getClass().getResource(CrinkleViewer.CRINKLE_ICON_MAC))).getImage());
 		validate();
 	}
 
@@ -130,28 +130,31 @@ public class LaunchMode extends javax.swing.JFrame {
 
 	private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {
 		// TODO add your handling code here:
-		//btnOpen.setEnabled(false);
-		File selectedFile = chooseFile();
+		System.err.println("<<<Browse sample file: [Your Workspace]/csse3002-java/src/sampleData/sample.crvf>>>");
+		String recentDir = getRecentDir(txfFileName.getText());
+		File selectedFile = chooseFile(recentDir);
 		if(selectedFile != null) {
 			this.setEnabled(false);
-			txfFileName.setText(selectedFile.getName());
+			txfFileName.setText(selectedFile.getAbsolutePath());
 			PlaybackMode playbackMode = new PlaybackMode(this, selectedFile);
 			this.setVisible(false);
 			playbackMode.setVisible(true);
-		} else { // This branch is demo 
+		} else { // This branch is demo, visualize randomly 
 			this.setEnabled(false);
 			PlaybackMode playbackMode = new PlaybackMode(this);
 			this.setVisible(false);
-			playbackMode.setVisible(true);        
+			playbackMode.setVisible(true);
+			System.err.println("<<<This branch is demo, visualize randomly without reading the real data set.>>>");
 		}
 	}
 
 	/** Show file chooser dialog with crinkle viewer files displayed.
 	 * @return file selected or null if user click cancel */
-	private File chooseFile() {
+	private File chooseFile(String recentDir) {
 		JFileChooser fc = new JFileChooser();
 		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		fc.setAcceptAllFileFilterUsed(false);
+		fc.setCurrentDirectory(new File(recentDir));
 		fc.addChoosableFileFilter(new FileFilter() {
 
 			@Override
@@ -221,5 +224,18 @@ public class LaunchMode extends javax.swing.JFrame {
 			extension = fileName.substring(i + 1).toLowerCase();
 		}
 		return extension;
+	}
+
+	/** Get absolute path of the recent directory 
+	 * @return absolute path of the recent directory, otherwise empty string */
+	private String getRecentDir(String absolutePath) {
+		String recentDir = "";
+		if(absolutePath != "") {
+			int i = absolutePath.lastIndexOf("/");
+			if(i > 0) {
+				recentDir = absolutePath.substring(0, i);
+			}
+		}
+		return recentDir;
 	}
 }

@@ -52,6 +52,11 @@ public class Visualiser {
 			SensorReading sr = currentMovementData.getNext();
 			System.out.println(sr.toString());
 		}
+		System.out.println("Print backward");
+		while(currentMovementData.hasPrevious()) {
+			SensorReading sr = currentMovementData.getPrevious();
+			System.out.println(sr.toString());
+		}
 	}
 	
 	/** Load data**/
@@ -88,9 +93,9 @@ public class Visualiser {
 				canvas.next();
 				currentFrame = 1;
 				if(isReverse) { 
-					currentReading = currentMovementData.getNext();
-				} else {
 					currentReading = currentMovementData.getPrevious();
+				} else {
+					currentReading = currentMovementData.getNext();
 				}
 					
 			}	

@@ -190,7 +190,7 @@ public class PlaybackMode extends javax.swing.JFrame {
 			this.setIconImage((new ImageIcon(getClass().getResource(CrinkleViewer.CRINKLE_ICON_WIN))).getImage());
 		}
 		
-		//Application.getApplication().setDockIconImage((new ImageIcon(getClass().getResource("/icons/crinkleIcon_256x256.png"))).getImage());
+		//Application.getApplication().setDockIconImage((new ImageIcon(getClass().getResource(CrinkleViewer.CRINKLE_ICON_MAC))).getImage());
 		//validate();
 	}
 
