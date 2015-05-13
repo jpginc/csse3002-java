@@ -54,6 +54,7 @@ public class LaunchMode extends javax.swing.JFrame {
 		link = Link.getDefaultInstance();
 		portList = link.getPortList();
 		
+		//Add data received from crinkle to data array or store the data as a file
 		link.addRawDataListener(new RawDataListener() {
     		@Override
     		public void parseInput(String id, int numBytes, int[] message) {
@@ -330,7 +331,9 @@ public class LaunchMode extends javax.swing.JFrame {
 		return extension;
 	}
 	
-	
+	/**
+	 * Saves the data received from the crinkle to a .crvf file
+	 */
 	private void saveData() {
     	String filePath = "";
     	PrintWriter writer = null;
@@ -340,7 +343,7 @@ public class LaunchMode extends javax.swing.JFrame {
         System.out.println("status =" + status);
         if (status == JFileChooser.APPROVE_OPTION) {
         	File fileToSave = sfc.getSelectedFile();
-        	filePath = fileToSave.getAbsolutePath();
+        	filePath = (fileToSave.getAbsolutePath() + ".crvf");
         	System.out.println("Saving file as: " + filePath);
         	try {
 				writer = new PrintWriter(fileToSave);
@@ -357,6 +360,10 @@ public class LaunchMode extends javax.swing.JFrame {
         }
     }
     
+	/**
+	 * Establishes a link to the Crinkle device on the specified port
+	 * @return
+	 */
     private boolean connect() {
     	boolean connected = false;
     	
