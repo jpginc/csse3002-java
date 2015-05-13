@@ -310,7 +310,12 @@ public class LaunchMode extends javax.swing.JFrame {
 		});
 		int returnVal = fc.showOpenDialog(this);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
-			return fc.getSelectedFile();
+			File file = fc.getSelectedFile();
+			if(file.exists()) {
+				return file;
+			} else {
+				return null;
+			}
 		} else {
 			return null;
 		}
@@ -353,7 +358,7 @@ public class LaunchMode extends javax.swing.JFrame {
         System.out.println("status =" + status);
         if (status == JFileChooser.APPROVE_OPTION) {
         	File fileToSave = sfc.getSelectedFile();
-        	filePath = (fileToSave.getAbsolutePath() + ".crvf");
+        	filePath = (fileToSave.getAbsolutePath() + "." + CrinkleViewer.FILE_EXTENSION);
         	System.out.println("Saving file as: " + filePath);
         	try {
 				writer = new PrintWriter(fileToSave);
