@@ -17,6 +17,7 @@ import javax.swing.JRootPane;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 
+import crinkle.CrinkleViewer;
 import de.jreality.io.JrScene;
 import de.jreality.math.Pn;
 import de.jreality.plugin.audio.Audio;
@@ -186,7 +187,8 @@ public class JRViewer {
 		if (lnfClass.contains("Aqua") || lnfClass.contains("Windows")) {
 			if (lnfClass.contains("Aqua")) {
 				System.setProperty("com.apple.mrj.application.apple.menu.about.name", "jReality");
-				setApplicationIcon(ImageHook.getImage("hausgruen.png"));
+				//setApplicationIcon(ImageHook.getImage("hausgruen.png"));
+				setApplicationIcon(ImageHook.getImage(CrinkleViewer.CRINKLE_ICON_MAC));
 				Secure.setProperty("apple.laf.useScreenMenuBar", "true");
 			}
 			try {

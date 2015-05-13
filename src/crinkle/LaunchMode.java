@@ -184,15 +184,9 @@ public class LaunchMode extends javax.swing.JFrame {
 		setSize(510, 200);
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
-
-		String os = System.getProperty("os.name");
-		if (os.equalsIgnoreCase("Mac OS X")) {
-			this.setIconImage((new ImageIcon(getClass().getResource(CrinkleViewer.CRINKLE_ICON_MAC))).getImage());
-		} else {
-			this.setIconImage((new ImageIcon(getClass().getResource(CrinkleViewer.CRINKLE_ICON_WIN))).getImage());
-		}
-
-		//Application.getApplication().setDockIconImage((new ImageIcon(getClass().getResource(CrinkleViewer.CRINKLE_ICON_MAC))).getImage());
+		
+		CrinkleViewer.setAppIcon(CrinkleViewer.CRINKLE_ICON_MAC, CrinkleViewer.CRINKLE_ICON_WIN, this);
+		
 		validate();
 	}
 

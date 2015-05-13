@@ -54,6 +54,7 @@ public class PlaybackMode extends javax.swing.JFrame {
 		this.launchMode = launchMode;
 		setVisualiser(new Visualiser());
 		this.addComponentToPnlViewer(visualiser.getViewerComponent());
+		CrinkleViewer.setAppIcon(CrinkleViewer.CRINKLE_ICON_MAC, CrinkleViewer.CRINKLE_ICON_WIN, this);
 		this.validate();
 		 
 	}
@@ -64,6 +65,7 @@ public class PlaybackMode extends javax.swing.JFrame {
 		this.launchMode = launchMode;
 		setVisualiser(new Visualiser(crinkleViewerFile));
 		this.addComponentToPnlViewer(visualiser.getViewerComponent());
+		CrinkleViewer.setAppIcon(CrinkleViewer.CRINKLE_ICON_MAC, CrinkleViewer.CRINKLE_ICON_WIN, this);
 		this.validate();
 		 
 	}
@@ -181,14 +183,7 @@ public class PlaybackMode extends javax.swing.JFrame {
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setLocation(dim.width / 2 - this.getSize().width / 2, 0);
 		
-		String os = System.getProperty("os.name");
-		if (os.equalsIgnoreCase("Mac OS X")) {
-			this.setIconImage((new ImageIcon(getClass().getResource(CrinkleViewer.CRINKLE_ICON_MAC))).getImage());
-		} else {
-			this.setIconImage((new ImageIcon(getClass().getResource(CrinkleViewer.CRINKLE_ICON_WIN))).getImage());
-		}
 		
-		//Application.getApplication().setDockIconImage((new ImageIcon(getClass().getResource(CrinkleViewer.CRINKLE_ICON_MAC))).getImage());
 		//validate();
 	}
 
