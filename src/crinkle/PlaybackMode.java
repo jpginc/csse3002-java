@@ -17,8 +17,6 @@ import javax.swing.UIManager;
 
 import visualiser.Visualiser;
 
-import com.apple.eawt.Application;
-
 /**
  *
  * @author ToanHo
