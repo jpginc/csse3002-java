@@ -31,10 +31,6 @@ public class Canvas {
 	double diff;
 
 	//@ Josh G
-	//when moving a point this value indicates which axis to move along
-	private int axis = 0;
-	//there are 3 axis a point can move along
-	private int maxAxis = 3;
 	//when moving a point this value indicates which point will be moved
 	private int point = 0;
 	//this is the number of points in the sphere
@@ -71,9 +67,10 @@ public class Canvas {
 	 *  The number of steps to break the sensor readings into
 	 */
 	public void mutate(SensorReading reading, int stepCount) {
-		movePoint(((double) reading.getFlex1()) / stepCount);
-		movePoint(((double) reading.getFlex2()) / stepCount);
-		changeColor(reading.getAccel(), stepCount);
+		movePoint(((double) reading.getFlex1()) / stepCount, 
+				((double) reading.getAccel().getX()) / stepCount,
+				((double) reading.getAccel().getY()) / stepCount);
+		//changeColor(reading.getFlex2(), stepCount);
 	}
 	
 	/**
@@ -90,12 +87,6 @@ public class Canvas {
 			point = 0;
 		}
 		
-		axis += reverse ? -1 : 1;
-		if(axis == -1) {
-			axis = maxAxis - 1;
-		} else if(axis == maxAxis) {
-			axis = 0;
-		}
 	}
 	
 	/**
@@ -120,10 +111,12 @@ public class Canvas {
 	 * @param value
 	 *  The distance to move the point
 	 */
-	private void movePoint(double value) {
+	private void movePoint(double x, double y, double z) {
         double[][] points=new double[sphere.getNumPoints()][];
 		sphere.getVertexAttributes(Attribute.COORDINATES).toDoubleArrayArray(points);
-		points[point][axis] += reverse ? -1 * value : value;
+		points[point][0] += reverse ? -1 * x : x;
+		points[point][1] += reverse ? -1 * y : y;
+		points[point][2] += reverse ? -1 * z : z;
 		sphere.setVertexAttributes(Attribute.COORDINATES,StorageModel.DOUBLE_ARRAY.array(3).createReadOnly(points));
 
 	}
@@ -133,23 +126,21 @@ public class Canvas {
 	 * 
 	 * todo this functions doesn't scale as steps gets larger!
 	 */
-	public void changeColor(AccelReading accelReading, int steps) {
+	public void changeColor(double reading, int steps) {
 		Appearance ap = world.getAppearance();
-		
-		int stepZ = accelReading.getZ() / steps;
-		int stepX = accelReading.getX() / steps;
-		int stepY = accelReading.getY() / steps;
 
-        int oldBlue = base.getBlue();
 		int oldRed = base.getRed();
 		int oldGreen = base.getGreen();	
-		int newBlue, newRed, newGreen;
+        int oldBlue = base.getBlue();
 
-		newBlue = (oldBlue + (reverse ? -1 * stepZ : stepZ)) % 255;
+		int newBlue, newRed, newGreen;
+		/*
         newRed = (oldRed + (reverse ? -1 * stepX : stepX)) % 255;
         newGreen = (oldGreen + (reverse ? -1 * stepY : stepY)) % 255;					
+		newBlue = (oldBlue + (reverse ? -1 * stepZ : stepZ)) % 255;
 		
 		base = new Color(newRed, newGreen, newBlue);
+		*/
 		 
 		ap.setAttribute(POLYGON_SHADER+"."+DIFFUSE_COLOR, base);
 	}
