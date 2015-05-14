@@ -35,7 +35,7 @@ public class LaunchMode extends javax.swing.JFrame {
 	private javax.swing.JLabel lblStatus;
 	private javax.swing.JTextField txfRecentFile;
 	private javax.swing.JLabel pnlTop; // contain btnConnect
-	private javax.swing.JLabel pnlBottom; // contain lblFileName, txfFileName, btnOpen
+	private javax.swing.JLabel pnlBottom; // contain lblRecentFile, txfRecentFile, btnOpen
 	private javax.swing.JButton btnReceive; //button that starts receiving live data from the crinkle
 	private javax.swing.JButton btnStop; 
 	private javax.swing.JButton btnConnect;
@@ -268,13 +268,7 @@ public class LaunchMode extends javax.swing.JFrame {
 			PlaybackMode playbackMode = new PlaybackMode(this, selectedFile);
 			this.setVisible(false);
 			playbackMode.setVisible(true);
-		} else { // This branch is demo, visualize randomly 
-			this.setEnabled(false);
-			PlaybackMode playbackMode = new PlaybackMode(this);
-			this.setVisible(false);
-			playbackMode.setVisible(true);
-			System.err.println("<<<This branch is demo, visualize randomly without reading the real data set.>>>");
-		}
+		} 
 	}
 
 	/** Show file chooser dialog with crinkle viewer files displayed.
