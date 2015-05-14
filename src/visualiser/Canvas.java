@@ -19,11 +19,17 @@ public class Canvas {
 	static final boolean FORWARD = false;
 	static final boolean REVERSE = true;
 
-	IndexedFaceSet test = Primitives.sphere(10);
+	//the shape to be changed
+	IndexedFaceSet sphere = Primitives.sphere(10);
+	
+	//TODO 
+	//remove these vars as they are only used for the demo
 	Integer pointsIndex = 0;
 	Integer pointsYIndex = 0;
 	Integer timer = 0;
-	
+	double random;
+	double diff;
+
 	//@ Josh G
 	//when moving a point this value indicates which axis to move along
 	private int axis = 0;
@@ -32,21 +38,19 @@ public class Canvas {
 	//when moving a point this value indicates which point will be moved
 	private int point = 0;
 	//this is the number of points in the sphere
-	private int pointMax = test.getNumPoints();
+	private int pointMax = sphere.getNumPoints();
 	
 	//indicates whether to move backwards or forwards
 	private boolean reverse = false;
 
-	double random;
-	double diff;
 	private Viewer viewer;
-	private SceneGraphComponent world = SceneGraphUtility.createFullSceneGraphComponent("test");
+	private SceneGraphComponent world = SceneGraphUtility.createFullSceneGraphComponent("Crinkle");
 	//Initialise the color of the sphere to black. also used to keep track of the color of the sphere
 	private Color base = new Color(0,0,0);
 	
 	public Canvas() {
 		//SceneGraphComponent world = new SceneGraphComponent();
-		world.setGeometry(test);
+		world.setGeometry(sphere);
 		JRViewer jrViewer = JRViewer.createJRViewer(world);
 		jrViewer.startupLocal();
 		viewer = jrViewer.getViewer();
@@ -117,10 +121,10 @@ public class Canvas {
 	 *  The distance to move the point
 	 */
 	private void movePoint(double value) {
-        double[][] points=new double[test.getNumPoints()][];
-		test.getVertexAttributes(Attribute.COORDINATES).toDoubleArrayArray(points);
+        double[][] points=new double[sphere.getNumPoints()][];
+		sphere.getVertexAttributes(Attribute.COORDINATES).toDoubleArrayArray(points);
 		points[point][axis] += reverse ? -1 * value : value;
-		test.setVertexAttributes(Attribute.COORDINATES,StorageModel.DOUBLE_ARRAY.array(3).createReadOnly(points));
+		sphere.setVertexAttributes(Attribute.COORDINATES,StorageModel.DOUBLE_ARRAY.array(3).createReadOnly(points));
 
 	}
 
@@ -154,8 +158,8 @@ public class Canvas {
 	 * moves a point and changes the color according to a random number
 	 */
 	public void mutate(int value) {
-        double[][] points=new double[test.getNumPoints()][];
-		test.getVertexAttributes(Attribute.COORDINATES).toDoubleArrayArray(points);
+        double[][] points=new double[sphere.getNumPoints()][];
+		sphere.getVertexAttributes(Attribute.COORDINATES).toDoubleArrayArray(points);
 		// Needs both positive and negative random number 
 		// and -3 <= random <= 3 (pattern is displayed in the canvas)
 		if(timer == 0) {
@@ -165,7 +169,7 @@ public class Canvas {
 		}
         //points[pointsIndex++][(int) Math.floor(Math.random() * 3)] = random;
 		points[pointsIndex][pointsYIndex] = random;
-		test.setVertexAttributes(Attribute.COORDINATES,StorageModel.DOUBLE_ARRAY.array(3).createReadOnly(points));
+		sphere.setVertexAttributes(Attribute.COORDINATES,StorageModel.DOUBLE_ARRAY.array(3).createReadOnly(points));
 		random += diff;
 
 		AccelReading a = new AccelReading((int) (Math.random() * 100),(int) (Math.random() * 100),(int) (Math.random() * 100));	
@@ -180,7 +184,7 @@ public class Canvas {
 		if(pointsIndex > 99) {
         	pointsIndex = 0;
         }
-        test.setVertexAttributes(Attribute.COORDINATES,StorageModel.DOUBLE_ARRAY.array(3).createReadOnly(points));			
+        sphere.setVertexAttributes(Attribute.COORDINATES,StorageModel.DOUBLE_ARRAY.array(3).createReadOnly(points));			
 		if(pointsYIndex >= 3) {
 			pointsYIndex = 0;
 		}
