@@ -9,7 +9,6 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
@@ -45,6 +44,8 @@ public class LaunchMode extends javax.swing.JFrame {
 	private JComboBox comboPorts;
 	private List<String> dataArray = new ArrayList<String>();
 	private JFileChooser sfc = new JFileChooser();
+	private boolean connectedFlag = false;
+	private String debugArray = "1,0,0,0,0"; //change for debug purposes
 
 
 	/**
@@ -53,7 +54,6 @@ public class LaunchMode extends javax.swing.JFrame {
 	public LaunchMode() {
 
 		link = Link.getDefaultInstance();
-		portList = link.getPortList();
 
 		//Add data received from crinkle to data array or store the data as a file
 		link.addRawDataListener(new RawDataListener() {
@@ -68,6 +68,10 @@ public class LaunchMode extends javax.swing.JFrame {
 					System.out.println("Saving data");
 					saveData();
 					dataArray.clear();
+				} else if ("$_YES_$".equals(received.trim())) {
+					connectedFlag = true;
+				} else if ("$_START_$".equals(received.trim())) {
+					dataArray.add(debugArray);
 				} else if (!("$_START_$".equals(received.trim()))) {
 					dataArray.add(received.trim());
 				}
@@ -174,7 +178,6 @@ public class LaunchMode extends javax.swing.JFrame {
 		getContentPane().add(pnlTop);
 		pnlTop.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 15));
 		pnlTop.add(btnConnect);
-		pnlTop.add(comboPorts);
 		pnlTop.add(lblStatus);
 		getContentPane().add(jSeparator1);
 		getContentPane().add(pnlBottom);
@@ -194,17 +197,39 @@ public class LaunchMode extends javax.swing.JFrame {
 
 	private void btnSyncActionPerformed(java.awt.event.ActionEvent evt) {
 		// TODO add your handling code here:
-		lblStatus.setText("Synchronising...");
-		link.writeSerial("$_SYNC_$");
-		lblStatus.setText("Finished Sync");
+		if (link.isConnected()) {
+			lblStatus.setText("Synchronising...");
+			link.writeSerial("$_SYNC_$");
+			lblStatus.setText("Finished Sync");
+		} else {
+			lblStatus.setText("Crinkle disconnected");
+			pnlTop.remove(btnSync);
+			pnlTop.remove(btnReceive);
+			pnlTop.remove(btnStop);
+			pnlTop.remove(lblStatus);
+			pnlTop.add(btnConnect);
+			pnlTop.add(lblStatus);
+			pnlTop.repaint();
+		}
 	}
 
 	private void btnReceiveActionPerformed(java.awt.event.ActionEvent evt) {
 		// TODO add your handling code here:
-		link.writeSerial("$_TRANSMIT_$");
-		lblStatus.setText("Receiving Data");
-		btnReceive.setEnabled(false);
-		btnStop.setEnabled(true);
+		if (link.isConnected()) {
+			link.writeSerial("$_TRANSMIT_$");
+			lblStatus.setText("Receiving Data");
+			btnReceive.setEnabled(false);
+			btnStop.setEnabled(true);
+		} else {
+			lblStatus.setText("Crinkle disconnected");
+			pnlTop.remove(btnSync);
+			pnlTop.remove(btnReceive);
+			pnlTop.remove(btnStop);
+			pnlTop.remove(lblStatus);
+			pnlTop.add(btnConnect);
+			pnlTop.add(lblStatus);
+			pnlTop.repaint();
+		}
 	}
 
 	private void btnStopActionPerformed(java.awt.event.ActionEvent evt) {
@@ -221,12 +246,11 @@ public class LaunchMode extends javax.swing.JFrame {
 		if (status) {
 			pnlTop.remove(lblStatus);
 			pnlTop.remove(btnConnect);
-			pnlTop.remove(comboPorts);
 			pnlTop.add(btnSync);
 			pnlTop.add(btnReceive);
 			pnlTop.add(btnStop);
 			pnlTop.add(lblStatus);
-			validate();
+			pnlTop.repaint();
 		} else {
 			lblStatus.setText("Crinkle not detected on " + comboPorts.getSelectedItem().toString());
 		}
@@ -389,14 +413,37 @@ public class LaunchMode extends javax.swing.JFrame {
 	 */
 	private boolean connect() {
 		boolean connected = false;
-
+		String port = "";
+		int count = 100;
+		portList = link.getPortList();
+		lblStatus.setText("Connecting");
 		try {
 			if (portList != null && portList.size() > 0) {
-				String port = comboPorts.getSelectedItem().toString();
-				System.out.println("Connecting to port " + port);
-				connected = link.connect(port);
+				//String port = comboPorts.getSelectedItem().toString();
+				for (int i = 0; i < portList.size(); i++) {
+					port = portList.get(i);
+					if (port.startsWith("/dev/cu.usbmodem") || port.startsWith("COM")) {
+						connected = link.connect(port);
+						//Check to see if Crinkle connected on port
+						link.writeSerial("$_CHECK_$");
+						//see if response received
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							 Thread.currentThread().interrupt();
+						}
+						if (connectedFlag) {
+							lblStatus.setText("Connected");
+							return true;
+						}
+					}
+				}
+				lblStatus.setText("Crinkle not connected");
+				System.out.println("Crinkle not connected");
+				connected = false;
 			} else {
-				System.out.println("No port found!");
+				lblStatus.setText("Crinkle not connected");
+				System.out.println("Crinkle not connected");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

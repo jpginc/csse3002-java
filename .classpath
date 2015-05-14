@@ -71,7 +71,7 @@
 	<classpathentry kind="lib" path="ardulink/lib/ch.ntb.usb-0.5.9.jar"/>
 	<classpathentry kind="lib" path="ardulink/lib/RXTXcomm.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="csse3002-java/ardulink/lib"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="jreality/ardulink/lib"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
