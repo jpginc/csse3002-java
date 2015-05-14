@@ -41,6 +41,7 @@ public class Canvas {
 	
 	//the current sphere points
     double[][] cachedPoints = new double[sphere.getNumPoints()][];
+    double[][] originalSphere = new double[sphere.getNumPoints()][];
     double[] prevCachedPoint;
     
     //indicates how many steps to break up a sensor reading into
@@ -63,6 +64,7 @@ public class Canvas {
 	    
 	    //populate the cached points
 		sphere.getVertexAttributes(Attribute.COORDINATES).toDoubleArrayArray(cachedPoints);
+		sphere.getVertexAttributes(Attribute.COORDINATES).toDoubleArrayArray(originalSphere);
 		//make the point hisotry array the same size as the color hisotry
 		double [] temp = cachedPoints[historyIndex];
         prevCachedPoint = new double[] {temp[0], temp[1], temp[2], pointIndex};
@@ -94,9 +96,9 @@ public class Canvas {
 		for(int i = 0; i < steps; i++) {
 			historyIndex--;
 			if(historyIndex < 0) {
-				setPoint(0);
-				setColor(0);
+				cachedPoints = originalSphere.clone();
 				reDraw();
+                setColor(0);
 				return false;
 			}
 			setPoint(historyIndex);
