@@ -1,6 +1,8 @@
 package visualiser;
 
 import java.awt.Color;
+import java.util.ArrayList;
+
 import data.AccelReading;
 import data.SensorReading;
 import de.jreality.geometry.Primitives;
@@ -19,58 +21,89 @@ public class Canvas {
 	static final boolean FORWARD = false;
 	static final boolean REVERSE = true;
 
-	//the shape to be changed
+	//the shape to form the visualisation
 	IndexedFaceSet sphere = Primitives.sphere(10);
 	
-	//TODO 
-	//remove these vars as they are only used for the demo
-	Integer pointsIndex = 0;
-	Integer pointsYIndex = 0;
-	Integer timer = 0;
-	double random;
-	double diff;
-
-	//@ Josh G
 	//when moving a point this value indicates which point will be moved
-	private int point = 0;
+	private int pointIndex = 0;
 	//this is the number of points in the sphere
 	private int pointMax = sphere.getNumPoints();
 	
-	//indicates whether to move backwards or forwards
-	private boolean reverse = false;
-
+	//the canvas that the sphere is painted on
 	private Viewer viewer;
 	private SceneGraphComponent world = SceneGraphUtility.createFullSceneGraphComponent("Crinkle");
-	//Initialise the color of the sphere to black. also used to keep track of the color of the sphere
-	private Color base = new Color(0,0,0);
 	
-	public Canvas() {
-		//SceneGraphComponent world = new SceneGraphComponent();
+	//an history of color values for the sphere
+	private ArrayList<double[]> colorHistory = new ArrayList<double[]>();
+	//an history of point values for the sphere
+	private ArrayList<double[]> pointHistory = new ArrayList<double[]>();
+	private int historyIndex = 0;
+	
+	//the current sphere points
+    double[][] cachedPoints = new double[sphere.getNumPoints()][];
+    double[] prevCachedPoint;
+    
+    //indicates how many steps to break up a sensor reading into
+    private int maxStepsPerMutation;
+
+	
+	public Canvas(int maxStepsPerMutation) {
+		this.maxStepsPerMutation = maxStepsPerMutation;
+
+	    //setup the jreality enviroment 
 		world.setGeometry(sphere);
 		JRViewer jrViewer = JRViewer.createJRViewer(world);
 		jrViewer.startupLocal();
 		viewer = jrViewer.getViewer();
-		//System.out.println(a == null);
-		this.changeColor(new AccelReading(0,0,0));
-		//this.changeColor(null);
-		
+
+        //Initialise the color of the sphere to black. (must be after initialising the enviroment?)
+	    double[] base = {0, 0, 0};
+	    colorHistory.add(base);
+	    this.setColor(historyIndex);
+	    
+	    //populate the cached points
+		sphere.getVertexAttributes(Attribute.COORDINATES).toDoubleArrayArray(cachedPoints);
+		//make the point hisotry array the same size as the color hisotry
+		double [] temp = cachedPoints[historyIndex];
+        prevCachedPoint = new double[] {temp[0], temp[1], temp[2], pointIndex};
+		pointHistory.add(prevCachedPoint);
+    }
+	
+	
+	public void appendCache(SensorReading reading) {
+        prevCachedPoint = generatePoint(prevCachedPoint, reading.getFlex1(), 
+        		reading.getAccel().getX(), reading.getAccel().getY());
+        generateColor(colorHistory.get(colorHistory.size() - 1), reading.getFlex2(), 
+        		reading.getFlex1() % 2 == 0);
 	}
 	
-	/**
-	 * This function is called by the visualizer to mutate the image one step
-	 * 
-	 * Whenever you want to use the next sensor reading call next()
-	 * 
-	 * @param reading
-	 *  The sensor reading to mutate with
-	 * @param stepCount
-	 *  The number of steps to break the sensor readings into
-	 */
-	public void mutate(SensorReading reading, int stepCount) {
-		movePoint(((double) reading.getFlex1()) / stepCount, 
-				((double) reading.getAccel().getX()) / stepCount,
-				((double) reading.getAccel().getY()) / stepCount);
-		//changeColor(reading.getFlex2(), stepCount);
+	public boolean next(int steps) {
+		for(int i = 0; i < steps; i++) {
+			historyIndex++;
+			if(historyIndex >= colorHistory.size()) {
+				return false;
+			}
+			setPoint(historyIndex);
+		}
+		setColor(historyIndex);
+		reDraw();
+		return true;
+	}
+	
+	public boolean previous(int steps) {
+		for(int i = 0; i < steps; i++) {
+			historyIndex--;
+			if(historyIndex < 0) {
+				setPoint(0);
+				setColor(0);
+				reDraw();
+				return false;
+			}
+			setPoint(historyIndex);
+		}
+		setColor(historyIndex);
+		reDraw();
+		return true;
 	}
 	
 	/**
@@ -80,162 +113,113 @@ public class Canvas {
 	 * 
 	 */
 	public void next() {
-		point += reverse ? -1 : 1;
-		if(point == -1){
-			point = pointMax -1 ;
-		} else if(point == pointMax) {
-			point = 0;
+		pointIndex++;
+		if(pointIndex == pointMax) {
+			pointIndex = 0;
 		}
-		
+		prevCachedPoint = cachedPoints[pointIndex];
 	}
 	
 	/**
-	 * sets the direction to go in.
+	 * generates the next position a point should be in based on the previous point 
 	 * 
-	 * true == go backwards
-	 * false == go forwards
-	 * 
-	 * @param newDirection
-	 * 	the new direction to be going
+	 * @param prev
+	 * 	previous point
+	 * @param x
+	 * 	the x distance to move (will be divided by maxstepsPerMutation)
+	 * @param y
+	 *  the y distance to move (will be divided by maxstepsPerMutation)
+	 * @param z
+	 *  the z distance to move (will be divided by maxstepsPerMutation)
 	 * @return
-	 *  the direction
+	 *  the next position of the point
 	 */
-	public boolean setDirection(boolean newDirection) {
-		reverse = newDirection;
-		return reverse;
+	private double[] generatePoint(double[] prev, double x, double y, double z) {
+		double[] point = {prev[0] + (x / maxStepsPerMutation),
+				prev[1] + (y / maxStepsPerMutation),
+				prev[2] + (z / maxStepsPerMutation),
+				pointIndex};
+		pointHistory.add(point);
+		return point;
 	}
 	
 	/**
-	 * Moves the point value distance on the current axis
-	 * 
-	 * @param value
-	 *  The distance to move the point
+	 * sets the spheres point based on the 
+	 * @param historyIndex
+	 *  the part of the history we are up to 
 	 */
-	private void movePoint(double x, double y, double z) {
-        double[][] points=new double[sphere.getNumPoints()][];
-		sphere.getVertexAttributes(Attribute.COORDINATES).toDoubleArrayArray(points);
-		points[point][0] += reverse ? -1 * x : x;
-		points[point][1] += reverse ? -1 * y : y;
-		points[point][2] += reverse ? -1 * z : z;
-		sphere.setVertexAttributes(Attribute.COORDINATES,StorageModel.DOUBLE_ARRAY.array(3).createReadOnly(points));
-
+	private void setPoint(int historyIndex) {
+		double [] toSet = pointHistory.get(historyIndex);
+		int index = (int) toSet[3];
+		double [] pointPos = {toSet[0], toSet[1], toSet[2]};
+		cachedPoints[index] = pointPos;
 	}
-
+	
 	/**
-	 * changes the color of the sphere easing the color change according to the number of steps
-	 * 
-	 * todo this functions doesn't scale as steps gets larger!
+	 * re-draws the sphere using cachedPoints
 	 */
-	public void changeColor(double reading, int steps) {
+	private void reDraw() {
+		sphere.setVertexAttributes(Attribute.COORDINATES,StorageModel.DOUBLE_ARRAY.array(3).createReadOnly(cachedPoints));
+	}
+	
+	/**
+	 * sets the color of the sphere using the color kept in colorHistory
+	 * @param index
+	 * 	the point in history to color to
+	 */
+	private void setColor(int index) {
 		Appearance ap = world.getAppearance();
-
-		int oldRed = base.getRed();
-		int oldGreen = base.getGreen();	
-        int oldBlue = base.getBlue();
-
-		int newBlue, newRed, newGreen;
-		/*
-        newRed = (oldRed + (reverse ? -1 * stepX : stepX)) % 255;
-        newGreen = (oldGreen + (reverse ? -1 * stepY : stepY)) % 255;					
-		newBlue = (oldBlue + (reverse ? -1 * stepZ : stepZ)) % 255;
-		
-		base = new Color(newRed, newGreen, newBlue);
-		*/
-		 
-		ap.setAttribute(POLYGON_SHADER+"."+DIFFUSE_COLOR, base);
+		double[] rgb = colorHistory.get(index);
+		Color newColor = new Color((int) rgb[0], (int) rgb[1], (int) rgb[2]);
+		ap.setAttribute(POLYGON_SHADER+"."+DIFFUSE_COLOR, newColor);
 	}
 
 	/**
-	 * moves a point and changes the color according to a random number
+	 * Gets the next color change and inserts it into the colorHistory array
+	 * 
+	 * @param base
+	 *  the previous color rgb values
+	 * @param reading
+	 *  the distance to move the color between 0 and 1024 is used
+	 * @param direction
+	 *  the direction to move the color. true goes towards white, false towards black
 	 */
-	public void mutate(int value) {
-        double[][] points=new double[sphere.getNumPoints()][];
-		sphere.getVertexAttributes(Attribute.COORDINATES).toDoubleArrayArray(points);
-		// Needs both positive and negative random number 
-		// and -3 <= random <= 3 (pattern is displayed in the canvas)
-		if(timer == 0) {
-			random = Math.random() * 6 - 3;
-			diff = random / 24;
-			random = diff;
-		}
-        //points[pointsIndex++][(int) Math.floor(Math.random() * 3)] = random;
-		points[pointsIndex][pointsYIndex] = random;
-		sphere.setVertexAttributes(Attribute.COORDINATES,StorageModel.DOUBLE_ARRAY.array(3).createReadOnly(points));
-		random += diff;
-
-		AccelReading a = new AccelReading((int) (Math.random() * 100),(int) (Math.random() * 100),(int) (Math.random() * 100));	
-		changeColor(a);
-
-		timer += 1;
-		if(timer == 25) {
-			pointsIndex += 1;
-			pointsYIndex += 1;
-			timer = 0;
-		}
-		if(pointsIndex > 99) {
-        	pointsIndex = 0;
+	public void generateColor(double[] base, int reading, boolean direction) {
+		
+		double oldRed = base[0];
+		double oldGreen = base[1];
+		double oldBlue = base[2];
+		
+		//Red is the three lease significant bits, Green is the middle 3 etc
+        double stepRed = (reading & 8);
+        double stepGreen = ((reading>>3) & 8);
+        double stepBlue = ((reading>>6) & 8);
+        
+        //we don't want the color to jump from 255 -> 0 as it will make a big jump in the color of the sphere
+        //as such we will leave the old color if it goes beyond these values
+		double newBlue, newRed, newGreen;
+		
+		//if we only add to the RGB values then every visualization will turn white
+		//the direction variable tells the values to go towards white or black
+		double modifier = direction ? 1 : -1;
+		
+        newRed = oldRed + (modifier * stepRed);
+        if(newRed < 1 || newRed > 253) {
+                newRed = oldRed;
         }
-        sphere.setVertexAttributes(Attribute.COORDINATES,StorageModel.DOUBLE_ARRAY.array(3).createReadOnly(points));			
-		if(pointsYIndex >= 3) {
-			pointsYIndex = 0;
-		}
+        newGreen = oldGreen + (modifier * stepGreen);
+        if(newGreen < 1 || newGreen > 253) {
+        	newGreen = oldGreen;
+        }
+		newBlue = oldBlue + (modifier * stepBlue);
+        if(newBlue < 1 || newBlue > 253) {
+            newBlue = oldBlue;
+        }
+        
+        //insert the new values into the color history
+        colorHistory.add(new double[] {newRed, newGreen, newBlue});
 	}
-	
-	public void changeColor(AccelReading accelReading) {
-		//test.getNumFaces();
-		//System.out.println(test.getFaceAttributes(Attribute.COLORS));
-		Appearance ap = world.getAppearance();
-		/*
-		ap.setAttribute(LINE_SHADER+"."+DIFFUSE_COLOR, Color.yellow);
-		ap.setAttribute(LINE_SHADER+"."+TUBE_RADIUS, .05);
-		ap.setAttribute(POINT_SHADER+"."+DIFFUSE_COLOR, Color.red);
-		ap.setAttribute(POINT_SHADER+"."+POINT_RADIUS, .1);
-		ap.setAttribute(POLYGON_SHADER+"."+SMOOTH_SHADING, false);
-		// turn on transparency for faces but keep tubes and spheres opaque
-		ap.setAttribute(TRANSPARENCY_ENABLED, true);
-		ap.setAttribute(OPAQUE_TUBES_AND_SPHERES, true);
-		ap.setAttribute(POLYGON_SHADER+"."+TRANSPARENCY, .4);
-		//accelReading = new AccellReading(0,0,0);
-		*/
-		
-		int stepZ = accelReading.getZ() / 24;
-		int leftoverZ = accelReading.getZ() % 24;
 
-		int stepX = accelReading.getX() / 24;
-		int leftoverX = accelReading.getX() % 24;
-		
-		int stepY = accelReading.getY() / 24;
-		int leftoverY = accelReading.getY() % 24;
-
-        int oldBlue = base.getBlue();
-		int oldRed = base.getRed();
-		int oldGreen = base.getGreen();	
-		int newBlue, newRed, newGreen;
-
-		if(timer == 0) {
-            newBlue = (oldBlue + leftoverZ) % 255;
-            newRed = (oldRed + leftoverX) % 255;
-            newGreen = (oldGreen + leftoverY) % 255;			
-		} else {
-			newBlue = (oldBlue + stepZ) % 255;
-            newRed = (oldRed + stepX) % 255;
-            newGreen = (oldGreen + stepY) % 255;					
-		}
-		
-		
-
-		/*
-        System.out.println(newBlue);
-        System.out.println(newRed);
-        System.out.println(newGreen);
-        */
-		base = new Color(newRed, newGreen, newBlue);
-		 
-		//Color newColor = new Color(000, 000, 000);
-		ap.setAttribute(POLYGON_SHADER+"."+DIFFUSE_COLOR, base);
-		//ap.setAttribute(POLYGON_SHADER+"."+DIFFUSE_COLOR, newColor);
-	}
-	
 	public Viewer getViewer() {
 		return viewer;
 	}

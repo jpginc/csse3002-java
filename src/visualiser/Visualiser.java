@@ -25,14 +25,10 @@ public class Visualiser {
 	private int playSpeed = 1;
 	//this value is how many sensor readings are currently being displayed per second
 	private int currentSpeed = playSpeed;
+	//the maximum playback speed
+	private int maxPlaySpeed = 8;
 	//how many frames per second
 	private int fps = 24;
-	//each sensor reading is split up fps times to make it look smooth
-	//currentFrame indicates how many times the sensor reading has ben split up already
-	private int currentFrame = fps;
-
-	//this is the sensor reading that we are using to mutate the sphere
-	private SensorReading currentReading;
 
 	//TODO 
 	//ensure thread safety
@@ -44,14 +40,15 @@ public class Visualiser {
 
 
 	public Visualiser() {
-		canvas = new Canvas();
+		canvas = new Canvas(maxPlaySpeed * fps);
 		initialise();
 	}
 
 	public Visualiser(File crinkleViewerFile) {
 		currentMovementData = new MovementData(crinkleViewerFile);
-		canvas = new Canvas();
+		canvas = new Canvas(maxPlaySpeed * fps);
 		initialise();
+		/*
 		System.out.println("<<<Test in Visualiser constructor>>>");
 		while(currentMovementData.hasNext()) {
 			SensorReading sr = currentMovementData.getNext();
@@ -62,10 +59,12 @@ public class Visualiser {
 			SensorReading sr = currentMovementData.getPrevious();
 			System.out.println(sr.toString());
 		}
+		*/
 	}
 
 	/** Load data**/
 	public void Load(MovementData movementData) {
+		canvas = new Canvas(maxPlaySpeed * fps);
 		currentMovementData = movementData;
 		initialise();
 	}
@@ -75,7 +74,13 @@ public class Visualiser {
 	 */
 	public void initialise(){
 		currentSpeed = playSpeed;
-		currentFrame = fps;
+		SensorReading next;
+		while((next = currentMovementData.getNext()) != null) {
+			for(int i = 0; i < maxPlaySpeed * fps; i++) {
+				canvas.appendCache(next);
+			}
+			canvas.next();
+		}
 	}
 
 	/**
@@ -89,28 +94,11 @@ public class Visualiser {
 	 *  true if a mutation occurred false if there are no mutations left
 	 */
 	private boolean run() {
-		if(currentMovementData == null) {
-			//do random mutations
-			canvas.mutate(1);
-			return true;
+		//mutate using movement data 
+		if(isReverse) {
+			return canvas.previous(maxPlaySpeed);
 		} else {
-			if(currentFrame++ == fps) {
-				canvas.next();
-				currentFrame = 1;
-				if(isReverse) { 
-					currentReading = currentMovementData.getPrevious();
-				} else {
-					currentReading = currentMovementData.getNext();
-				}
-
-			}	
-			if(currentReading == null) {
-				//stop
-				return false;
-			} else {
-				canvas.mutate(currentReading, fps * currentSpeed);
-				return true;
-			}
+			return canvas.next(maxPlaySpeed);
 		}
 	}	
 
@@ -121,7 +109,6 @@ public class Visualiser {
 	 */
 	public void play() {
 		isReverse = false;
-		canvas.setDirection(Canvas.FORWARD);
 		currentSpeed = playSpeed;
 		if(! startTimer()) {
 			//TODO
@@ -148,10 +135,11 @@ public class Visualiser {
 					//call itself after the timeout
 					startTimer();
 				}
-			}, 1000 / currentSpeed / fps);
+			}, 1000 / fps / currentSpeed);
 			return true;
 		}	
 		playing = false;
+		currentSpeed = playSpeed;
 		return false;
 	}
 
@@ -171,9 +159,8 @@ public class Visualiser {
 	 * 	the new speed
 	 */
 	public int fastForward() {
-		currentSpeed = playSpeed * 4;
+		currentSpeed = Math.min(currentSpeed * 2, maxPlaySpeed);
 		isReverse = false;
-		canvas.setDirection(Canvas.FORWARD);
 		if(! playing) {
 			startTimer();
 		}
@@ -186,9 +173,8 @@ public class Visualiser {
 	 *  the new speed
 	 */
 	public int rewind() {
-		currentSpeed = playSpeed * 4;
+		currentSpeed = Math.min(currentSpeed * 2, maxPlaySpeed);
 		isReverse = true;
-		canvas.setDirection(Canvas.REVERSE);
 		if(! playing) {
 			startTimer();
 		}
