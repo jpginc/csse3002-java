@@ -17,57 +17,60 @@ public class TestData {
 		File file = new File("src/sampleData/sample.crvf");
 		MovementData tMovementData = new MovementData(file);
 		assertTrue(tMovementData.validate());
+						
+		List<Integer> tempArr1 = createArray(123, 568, 890, 678, 555);
+		SensorReading nextMock1 = new SensorReading(tempArr1);
+		next = tMovementData.getNext();
+		compareEquals(nextMock1, next);
 		
-		prev = tMovementData.getPrevious();
-		assertNull(prev);
-				
-		List<Integer> tempArr2 = createArray(123, 568, 890, 678, 555);
+		List<Integer> tempArr2 = createArray(888, 900, 1020, 866, 545);
 		SensorReading nextMock2 = new SensorReading(tempArr2);
 		next = tMovementData.getNext();
 		compareEquals(nextMock2, next);
-		prev = tMovementData.getPrevious();
-		compareEquals(nextMock2, prev);
-		
-		List<Integer> tempArr3 = createArray(888, 900, 1020, 866, 545);
+	
+		List<Integer> tempArr3 = createArray(555, 132, 557, 899, 776);
 		SensorReading nextMock3 = new SensorReading(tempArr3);
 		next = tMovementData.getNext();
 		compareEquals(nextMock3, next);
-		prev = tMovementData.getPrevious();
-		compareEquals(nextMock3, prev);
-		
-		List<Integer> tempArr4 = createArray(555, 132, 557, 899, 776);
+	
+		List<Integer> tempArr4 = createArray(554, 898, 766, 343, 123);
 		SensorReading nextMock4 = new SensorReading(tempArr4);
 		next = tMovementData.getNext();
 		compareEquals(nextMock4, next);
-		prev = tMovementData.getPrevious();
-		compareEquals(nextMock4, prev);
-		
-		List<Integer> tempArr5 = createArray(554, 898, 766, 343, 123);
+	
+		List<Integer> tempArr5 = createArray(543, 887, 989, 22, 666);
 		SensorReading nextMock5 = new SensorReading(tempArr5);
 		next = tMovementData.getNext();
 		compareEquals(nextMock5, next);
-		prev = tMovementData.getPrevious();
-		compareEquals(nextMock5, prev);
 		
-		List<Integer> tempArr6 = createArray(543, 887, 989, 22, 666);
+		List<Integer> tempArr6 = createArray(666, 845, 274, 567, 787);
 		SensorReading nextMock6 = new SensorReading(tempArr6);
 		next = tMovementData.getNext();
 		compareEquals(nextMock6, next);
+		
+		next = tMovementData.getNext();
+		assertNull(next);
+		
 		prev = tMovementData.getPrevious();
 		compareEquals(nextMock6, prev);
 		
-		List<Integer> tempArr7 = createArray(666, 845, 274, 567, 787);
-		SensorReading nextMock7 = new SensorReading(tempArr7);
-		next = tMovementData.getNext();
-		compareEquals(nextMock7, next);
 		prev = tMovementData.getPrevious();
-		compareEquals(nextMock7, prev);
+		compareEquals(nextMock5, prev);
 		
-		// reaches the end of the list
-		next = tMovementData.getNext();
-		assertNull(next);
 		prev = tMovementData.getPrevious();
-		compareEquals(nextMock7, prev);
+		compareEquals(nextMock4, prev);
+		
+		prev = tMovementData.getPrevious();
+		compareEquals(nextMock3, prev);
+		
+		prev = tMovementData.getPrevious();
+		compareEquals(nextMock2, prev);
+		
+		prev = tMovementData.getPrevious();
+		compareEquals(nextMock1, prev);
+		
+		prev = tMovementData.getPrevious();
+		assertNull(prev);
 		
 	}
 	
