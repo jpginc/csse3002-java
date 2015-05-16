@@ -216,19 +216,16 @@ public class PlaybackMode extends javax.swing.JFrame {
 	private void btnRewindActionPerformed(ActionEvent evt) {
 		// TODO Auto-generated method stub
 		visualiser.rewind();
-		lblTimer.setText("Not implement yet!");
 	}
 	
 	private void btnSnapshotActionPerformed(ActionEvent evt) {
 		// TODO Auto-generated method stub
 		visualiser.snapshot();
-		lblTimer.setText("Not implement yet");
 	}
 	
 	private void btnForwardActionPerformed(ActionEvent evt) {
 		// TODO Auto-generated method stub
 		visualiser.fastForward();
-		lblTimer.setText("Not implement yet!");
 	}
 
 	public Visualiser getVisualiser() {
