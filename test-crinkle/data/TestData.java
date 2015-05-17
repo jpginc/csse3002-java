@@ -1,17 +1,21 @@
 package data;
 
-import static org.junit.Assert.*;
-
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.*; 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.*;
+import org.junit.Test;
 
 public class TestData {
 	
 	@Test
 	public void readData1() {
+		
 		SensorReading next;
 		SensorReading prev;
 		File file = new File("src/sampleData/sample.crvf");
@@ -78,7 +82,7 @@ public class TestData {
 	public void readData2() {
 		File file = new File("src/sampleData/sample2.crvf");
 		MovementData tMovementData = new MovementData(file);
-		assertFalse(tMovementData.validate());
+		assertTrue(tMovementData.validate());
 	}
 	
 	@Test
