@@ -362,11 +362,9 @@ public class LaunchMode extends javax.swing.JFrame {
 	 * @return absolute path of the recent directory, otherwise empty string */
 	private String getRecentDir(String absolutePath) {
 		String recentDir = "";
-		if(absolutePath != "") {
-			int i = absolutePath.lastIndexOf("/");
-			if(i > 0) {
-				recentDir = absolutePath.substring(0, i);
-			}
+		File f = new File(absolutePath);
+		if(f.exists()) {
+			recentDir = f.getParent();
 		}
 		return recentDir;
 	}
