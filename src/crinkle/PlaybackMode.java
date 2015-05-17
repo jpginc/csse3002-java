@@ -56,18 +56,20 @@ public class PlaybackMode extends javax.swing.JFrame {
 		this.addComponentToPnlViewer(visualiser.getViewerComponent());
 		CrinkleViewer.setAppIcon(CrinkleViewer.CRINKLE_ICON_MAC, CrinkleViewer.CRINKLE_ICON_WIN, this);
 		this.validate();
-		 
+
 	}
-	
+
 	public PlaybackMode(LaunchMode launchMode, File crinkleViewerFile) {
 		initComponents();
 		this.setTitle("Crinkle Viewer - " + crinkleViewerFile.getAbsolutePath());
 		this.launchMode = launchMode;
-		setVisualiser(new Visualiser(crinkleViewerFile));
+		setVisualiser(new Visualiser(crinkleViewerFile, this));
 		this.addComponentToPnlViewer(visualiser.getViewerComponent());
 		CrinkleViewer.setAppIcon(CrinkleViewer.CRINKLE_ICON_MAC, CrinkleViewer.CRINKLE_ICON_WIN, this);
+		btnForward.setEnabled(false);
+		btnRewind.setEnabled(false);
 		this.validate();
-		 
+
 	}
 
 	/**
@@ -182,8 +184,8 @@ public class PlaybackMode extends javax.swing.JFrame {
 		setSize(960, 720);
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setLocation(dim.width / 2 - this.getSize().width / 2, 0);
-		
-		
+
+
 		//validate();
 	}
 
@@ -192,6 +194,8 @@ public class PlaybackMode extends javax.swing.JFrame {
 		// TODO add your handling code here:
 		if(isPlay == false) {
 			btnPlay.setIcon(new ImageIcon(getClass().getResource(CrinkleViewer.PAUSE_ICON)));
+			btnForward.setEnabled(true);
+			btnRewind.setEnabled(true);
 			visualiser.play();
 			isPlay = true;
 			lblTimer.setText("00:00:00");
@@ -212,23 +216,28 @@ public class PlaybackMode extends javax.swing.JFrame {
 		pnlViewer.add(component);
 		validate();
 	}
-	
+
 	private void btnRewindActionPerformed(ActionEvent evt) {
 		// TODO Auto-generated method stub
 		visualiser.rewind();
-		lblTimer.setText("Not implement yet!");
+		setBtnPlayIcon(CrinkleViewer.PAUSE_ICON);
+		isPlay = true;
+		btnPlay.setEnabled(true);
+		btnForward.setEnabled(true);
 	}
-	
+
 	private void btnSnapshotActionPerformed(ActionEvent evt) {
 		// TODO Auto-generated method stub
 		visualiser.snapshot();
-		lblTimer.setText("Not implement yet");
 	}
-	
+
 	private void btnForwardActionPerformed(ActionEvent evt) {
 		// TODO Auto-generated method stub
 		visualiser.fastForward();
-		lblTimer.setText("Not implement yet!");
+		setBtnPlayIcon(CrinkleViewer.PAUSE_ICON);
+		isPlay = true;
+		btnPlay.setEnabled(true);
+		btnRewind.setEnabled(true);
 	}
 
 	public Visualiser getVisualiser() {
@@ -237,5 +246,25 @@ public class PlaybackMode extends javax.swing.JFrame {
 
 	public void setVisualiser(Visualiser visualiser) {
 		this.visualiser = visualiser;
+	}
+
+	public void setBtnForwardEnabled(boolean b) {
+		btnForward.setEnabled(b);
+	}
+
+	public void setBtnRewindEnabled(boolean b) {
+		btnRewind.setEnabled(b);
+	}
+
+	public void setBtnPlayEnabled(boolean b) {
+		btnPlay.setEnabled(b);
+	}
+
+	public void setBtnPlayIcon(String icon) {
+		btnPlay.setIcon(new ImageIcon(getClass().getResource(icon)));
+	}
+	
+	public void setIsPlay(boolean b) {
+		this.isPlay = b;
 	}
 }

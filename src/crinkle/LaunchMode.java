@@ -320,7 +320,6 @@ public class LaunchMode extends javax.swing.JFrame {
 			public Icon getIcon(File f) {
 				String extension = getFileExtension(f);
 				Icon icon = null;
-
 				if (extension != null) {
 					if (extension.equals(CrinkleViewer.FILE_EXTENSION)) {
 						icon = crinkleIcon;
@@ -363,11 +362,9 @@ public class LaunchMode extends javax.swing.JFrame {
 	 * @return absolute path of the recent directory, otherwise empty string */
 	private String getRecentDir(String absolutePath) {
 		String recentDir = "";
-		if(absolutePath != "") {
-			int i = absolutePath.lastIndexOf("/");
-			if(i > 0) {
-				recentDir = absolutePath.substring(0, i);
-			}
+		File f = new File(absolutePath);
+		if(f.exists()) {
+			recentDir = f.getParent();
 		}
 		return recentDir;
 	}
@@ -383,8 +380,11 @@ public class LaunchMode extends javax.swing.JFrame {
 		int status = sfc.showSaveDialog(LaunchMode.this);
 		System.out.println("status =" + status);
 		if (status == JFileChooser.APPROVE_OPTION) {
-			File fileToSave = sfc.getSelectedFile();
-			filePath = (fileToSave.getAbsolutePath() + "." + CrinkleViewer.FILE_EXTENSION);
+			filePath = sfc.getSelectedFile().getAbsolutePath();
+			// add file extension ".crvf" to file path
+			filePath += CrinkleViewer.FILE_EXTENSION;
+			File fileToSave = new File(filePath);
+			txfRecentFile.setText(filePath);
 			System.out.println("Saving file as: " + filePath);
 			try {
 				writer = new PrintWriter(fileToSave);

@@ -6,6 +6,8 @@ import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import crinkle.CrinkleViewer;
+import crinkle.PlaybackMode;
 import data.MovementData;
 import data.SensorReading;
 import de.jreality.scene.Viewer;
@@ -16,6 +18,7 @@ import de.jreality.util.ImageUtility;
 public class Visualiser {
 
 
+	private PlaybackMode playbackMode;
 	private Canvas canvas;
 	private MovementData currentMovementData;
 
@@ -44,7 +47,8 @@ public class Visualiser {
 		initialise();
 	}
 
-	public Visualiser(File crinkleViewerFile) {
+	public Visualiser(File crinkleViewerFile, PlaybackMode playbackMode) {
+		this.playbackMode = playbackMode;
 		currentMovementData = new MovementData(crinkleViewerFile);
 		canvas = new Canvas(maxPlaySpeed * fps);
 		initialise();
@@ -137,6 +141,17 @@ public class Visualiser {
 				}
 			}, 1000 / fps / currentSpeed);
 			return true;
+		} else {
+			if(isReverse) {
+				playbackMode.setBtnRewindEnabled(false);
+				playbackMode.setBtnForwardEnabled(false);
+				playbackMode.setBtnPlayIcon(CrinkleViewer.PLAY_ICON);
+				playbackMode.setBtnPlayEnabled(true);
+				playbackMode.setIsPlay(false);
+			} else {
+				playbackMode.setBtnForwardEnabled(false);
+				playbackMode.setBtnPlayEnabled(false);
+			}
 		}	
 		playing = false;
 		currentSpeed = playSpeed;

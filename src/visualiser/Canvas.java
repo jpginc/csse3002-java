@@ -73,8 +73,8 @@ public class Canvas {
 	
 	
 	public void appendCache(SensorReading reading) {
-        prevCachedPoint = generatePoint(prevCachedPoint, reading.getFlex1(), 
-        		reading.getAccel().getX(), reading.getAccel().getY());
+        prevCachedPoint = generatePoint(prevCachedPoint, reading.getAccel().getX(), 
+        		reading.getAccel().getY(), reading.getAccel().getZ());
         generateColor(colorHistory.get(colorHistory.size() - 1), reading.getFlex2(), 
         		reading.getFlex1() % 2 == 0);
 	}
