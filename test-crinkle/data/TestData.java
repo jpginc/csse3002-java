@@ -82,7 +82,7 @@ public class TestData {
 	public void readData2() {
 		File file = new File("src/sampleData/sample2.crvf");
 		MovementData tMovementData = new MovementData(file);
-		assertTrue(tMovementData.validate());
+		assertFalse(tMovementData.validate());
 	}
 	
 	@Test

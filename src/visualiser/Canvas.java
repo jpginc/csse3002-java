@@ -91,7 +91,7 @@ public class Canvas {
 		reDraw();
 		return true;
 	}
-	
+		
 	public boolean previous(int steps) {
 		for(int i = 0; i < steps; i++) {
 			historyIndex--;
@@ -121,7 +121,7 @@ public class Canvas {
 		}
 		prevCachedPoint = cachedPoints[pointIndex];
 	}
-	
+		
 	/**
 	 * generates the next position a point should be in based on the previous point 
 	 * 
@@ -228,5 +228,13 @@ public class Canvas {
 
 	public void setViewer(Viewer viewer) {
 		this.viewer = viewer;
+	}
+	
+	public int getHistroyIndex(){
+		return historyIndex;
+	}
+	
+	public int getPointIndex(){
+		return pointIndex;
 	}
 }
