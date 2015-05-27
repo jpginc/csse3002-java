@@ -252,7 +252,7 @@ public class LaunchMode extends javax.swing.JFrame {
 			pnlTop.add(lblStatus);
 			pnlTop.repaint();
 		} else {
-			lblStatus.setText("Crinkle not detected on " + comboPorts.getSelectedItem().toString());
+			//lblStatus.setText("Crinkle not detected on " + comboPorts.getSelectedItem().toString());
 		}
 	}
 
@@ -382,6 +382,7 @@ public class LaunchMode extends javax.swing.JFrame {
 		if (status == JFileChooser.APPROVE_OPTION) {
 			filePath = sfc.getSelectedFile().getAbsolutePath();
 			// add file extension ".crvf" to file path
+			filePath += ".";
 			filePath += CrinkleViewer.FILE_EXTENSION;
 			File fileToSave = new File(filePath);
 			txfRecentFile.setText(filePath);
