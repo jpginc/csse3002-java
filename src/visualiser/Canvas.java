@@ -14,6 +14,7 @@ import de.jreality.scene.Viewer;
 import de.jreality.scene.data.Attribute;
 import de.jreality.scene.data.StorageModel;
 import static de.jreality.shader.CommonAttributes.*;
+import de.jreality.util.CameraUtility;
 import de.jreality.util.SceneGraphUtility;
 
 /*
@@ -167,6 +168,7 @@ public class Canvas {
 	 */
 	private void reDraw() {
 		sphere.setVertexAttributes(Attribute.COORDINATES,StorageModel.DOUBLE_ARRAY.array(3).createReadOnly(cachedPoints));
+		CameraUtility.encompass(viewer);
 	}
 	
 	/**
