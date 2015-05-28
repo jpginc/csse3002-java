@@ -80,10 +80,7 @@ public class Visualiser {
 		currentSpeed = playSpeed;
 		SensorReading next;
 		while((next = currentMovementData.getNext()) != null) {
-			for(int i = 0; i < maxPlaySpeed * fps; i++) {
-				canvas.appendCache(next);
-			}
-			canvas.next();
+			canvas.appendCache(next);
 		}
 	}
 

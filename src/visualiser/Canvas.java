@@ -19,14 +19,19 @@ import de.jreality.util.CameraUtility;
 import de.jreality.util.SceneGraphUtility;
 
 /*
- * TODO 
- * overview of the classes.
+ * 
+ * This class contains the details of the visualisation itself ie. the sphere
+ * 
+ * This class is initialised with a 100 point sphere that is a dark grey color. 
+ * This sphere is then mutated depending on the SensorReading that are passed to it.
+ * 
+ * After you have created this class you should call appendCache with all of the 
+ * sensor readings. This constructs a cache of mutations that will be applied to
+ * the canvas whenever the next/previous functions are called.
  * 
  * 
  */
 public class Canvas {
-	static final boolean FORWARD = false;
-	static final boolean REVERSE = true;
 
 	//the shape to form the visualisation
 	IndexedFaceSet sphere = Primitives.sphere(10);
@@ -54,6 +59,11 @@ public class Canvas {
     private int maxStepsPerMutation;
 
 	
+    /**
+     * 
+     * @param maxStepsPerMutation
+     * 	the maximum number of mutations per second. ie fps * max play speed
+     */
 	public Canvas(int maxStepsPerMutation) {
 		this.maxStepsPerMutation = maxStepsPerMutation;
 
@@ -81,10 +91,17 @@ public class Canvas {
 	
 	
 	public void appendCache(SensorReading reading) {
-        prevCachedPoint = generatePoint(prevCachedPoint, reading.getFlex1(), 
-        		reading.getAccel().getX(), reading.getAccel().getY());
-        generateColor(colorHistory.get(colorHistory.size() - 1), reading.getFlex2(), 
-        		reading.getFlex1() % 2 == 0);
+		for(int i = 0; i < maxStepsPerMutation; i++) {
+			prevCachedPoint = generatePoint(prevCachedPoint, reading.getFlex1(), 
+					reading.getAccel().getX(), reading.getAccel().getY());
+			generateColor(colorHistory.get(colorHistory.size() - 1), reading.getFlex2(), 
+					reading.getFlex1() % 2 == 0);
+		}
+        pointIndex++;
+		if(pointIndex == pointMax) {
+			pointIndex = 0;
+		}
+		prevCachedPoint = cachedPoints[pointIndex];
 	}
 	
 	public boolean next(int steps) {
@@ -116,20 +133,6 @@ public class Canvas {
 		return true;
 	}
 	
-	/**
-	 * This function changes the point that the mutate function works on
-	 * 
-	 * Call this whenever you change sensor reading
-	 * 
-	 */
-	public void next() {
-		pointIndex++;
-		if(pointIndex == pointMax) {
-			pointIndex = 0;
-		}
-		prevCachedPoint = cachedPoints[pointIndex];
-	}
-		
 	/**
 	 * generates the next position a point should be in based on the previous point 
 	 * 
