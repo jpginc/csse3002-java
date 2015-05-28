@@ -37,16 +37,16 @@ public class JaggeredCanvas implements Canvas {
 	IndexedFaceSet sphere = Primitives.sphere(10);
 	
 	//when moving a point this value indicates which point will be moved
-	private int pointIndex = 0;
+	protected int pointIndex = 0;
 	//this is the number of points in the sphere
-	private int pointMax = sphere.getNumPoints();
+	protected int pointMax = sphere.getNumPoints();
 	
 	//the canvas that the sphere is painted on
 	private Viewer viewer;
 	private SceneGraphComponent world = SceneGraphUtility.createFullSceneGraphComponent("Crinkle");
 
 	//a history of color values for the sphere
-	private ArrayList<double[]> colorHistory = new ArrayList<double[]>();
+	protected ArrayList<double[]> colorHistory = new ArrayList<double[]>();
 	//a history of point values for the sphere
 	private ArrayList<double[]> pointHistory = new ArrayList<double[]>();
 	private int historyIndex = 0;
@@ -57,7 +57,7 @@ public class JaggeredCanvas implements Canvas {
     double[] prevCachedPoint;
     
     //indicates how many steps to break up a sensor reading into
-    private int maxStepsPerMutation;
+    protected int maxStepsPerMutation;
 
 	
     /**
@@ -164,7 +164,7 @@ public class JaggeredCanvas implements Canvas {
 	 * @return
 	 *  the next position of the point
 	 */
-	private double[] generatePoint(double[] prev, double x, double y, double z) {
+	protected double[] generatePoint(double[] prev, double x, double y, double z) {
 		double[] point = {prev[0] + (x / maxStepsPerMutation),
 				prev[1] + (y / maxStepsPerMutation),
 				prev[2] + (z / maxStepsPerMutation),
