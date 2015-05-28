@@ -13,6 +13,7 @@ import de.jreality.scene.SceneGraphComponent;
 import de.jreality.scene.Viewer;
 import de.jreality.scene.data.Attribute;
 import de.jreality.scene.data.StorageModel;
+import de.jreality.tools.ClickWheelCameraZoomTool;
 import static de.jreality.shader.CommonAttributes.*;
 import de.jreality.util.CameraUtility;
 import de.jreality.util.SceneGraphUtility;
@@ -38,7 +39,6 @@ public class Canvas {
 	//the canvas that the sphere is painted on
 	private Viewer viewer;
 	private SceneGraphComponent world = SceneGraphUtility.createFullSceneGraphComponent("Crinkle");
-	
 	//an history of color values for the sphere
 	private ArrayList<double[]> colorHistory = new ArrayList<double[]>();
 	//an history of point values for the sphere
@@ -62,6 +62,8 @@ public class Canvas {
 		JRViewer jrViewer = JRViewer.createJRViewer(world);
 		jrViewer.startupLocal();
 		viewer = jrViewer.getViewer();
+		
+		world.addTool(new ClickWheelCameraZoomTool());
 
         //Initialise the color of the sphere to black. (must be after initialising the enviroment?)
 	    double[] base = {70, 70, 70};
