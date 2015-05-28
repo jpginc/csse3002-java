@@ -67,6 +67,7 @@ public class RoundCanvas {
 		jrViewer.startupLocal();
 		viewer = jrViewer.getViewer();
 		
+		//setup the canvas to allow mousewheel zoom
 		viewer.getSceneRoot().addTool(new ClickWheelCameraZoomTool());
 
         //Initialise the color of the sphere to black. (must be after initialising the enviroment?)

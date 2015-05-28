@@ -7,7 +7,7 @@ import org.junit.Test;
 import data.SensorReading;
 import de.jreality.geometry.Primitives;
 import de.jreality.scene.IndexedFaceSet;
-import visualiser.Canvas;
+import visualiser.JaggeredCanvas;
 
 
 
@@ -18,7 +18,7 @@ public class TestCanvas {
 	
 	@Test
 	public void testNextPosition() {
-		Canvas sampleCanvas = new Canvas(8*24);
+		JaggeredCanvas sampleCanvas = new JaggeredCanvas(8*24);
 		List<Integer> listInt = createArray(3,100,2,25,6);
 		//SensorReading sampleReading = new SensorReading(listInt);
 		
@@ -29,7 +29,7 @@ public class TestCanvas {
 	
 	@Test
 	public void testPreviousPosition() {
-		Canvas sampleCanvas = new Canvas(8*24);
+		JaggeredCanvas sampleCanvas = new JaggeredCanvas(8*24);
 		List<Integer> listInt = createArray(3,100,2,25,6);
 		
 		assertEquals(0, sampleCanvas.getHistroyIndex());

@@ -31,7 +31,7 @@ import de.jreality.util.SceneGraphUtility;
  * 
  * 
  */
-public class Canvas {
+public class JaggeredCanvas {
 
 	//the shape to form the visualisation
 	IndexedFaceSet sphere = Primitives.sphere(10);
@@ -44,9 +44,10 @@ public class Canvas {
 	//the canvas that the sphere is painted on
 	private Viewer viewer;
 	private SceneGraphComponent world = SceneGraphUtility.createFullSceneGraphComponent("Crinkle");
-	//an history of color values for the sphere
+
+	//a history of color values for the sphere
 	private ArrayList<double[]> colorHistory = new ArrayList<double[]>();
-	//an history of point values for the sphere
+	//a history of point values for the sphere
 	private ArrayList<double[]> pointHistory = new ArrayList<double[]>();
 	private int historyIndex = 0;
 	
@@ -61,10 +62,12 @@ public class Canvas {
 	
     /**
      * 
+     * Create the canvas with a sphere
+     * 
      * @param maxStepsPerMutation
      * 	the maximum number of mutations per second. ie fps * max play speed
      */
-	public Canvas(int maxStepsPerMutation) {
+	public JaggeredCanvas(int maxStepsPerMutation) {
 		this.maxStepsPerMutation = maxStepsPerMutation;
 
 	    //setup the jreality enviroment 
@@ -73,9 +76,10 @@ public class Canvas {
 		jrViewer.startupLocal();
 		viewer = jrViewer.getViewer();
 		
-		world.addTool(new ClickWheelCameraZoomTool());
+		//setup the canvas to allow mousewheel zoom
+		viewer.getSceneRoot().addTool(new ClickWheelCameraZoomTool());
 
-        //Initialise the color of the sphere to black. (must be after initialising the enviroment?)
+        //Initialise the color of the sphere to dark grey. (must be after initialising the enviroment?)
 	    double[] base = {70, 70, 70};
 	    colorHistory.add(base);
 	    this.setColor(historyIndex);
@@ -83,13 +87,24 @@ public class Canvas {
 	    //populate the cached points
 		sphere.getVertexAttributes(Attribute.COORDINATES).toDoubleArrayArray(cachedPoints);
 		sphere.getVertexAttributes(Attribute.COORDINATES).toDoubleArrayArray(originalSphere);
-		//make the point hisotry array the same size as the color hisotry
+
+		//make the point history array the same size as the color history
 		double [] temp = cachedPoints[historyIndex];
         prevCachedPoint = new double[] {temp[0], temp[1], temp[2], pointIndex};
 		pointHistory.add(prevCachedPoint);
     }
 	
 	
+	/**
+	 * 
+	 * This function accepts a sensor reading and breaks it up into small steps
+	 * these steps are cached. you should cache all sensor readings before starting
+	 * the visualisation.
+	 * 
+	 * @param reading
+	 * the sensor reading to add to the cached points, must be a valid SensorReading
+	 * <pre> reading != null
+	 */
 	public void appendCache(SensorReading reading) {
 		for(int i = 0; i < maxStepsPerMutation; i++) {
 			prevCachedPoint = generatePoint(prevCachedPoint, reading.getFlex1(), 
@@ -104,6 +119,15 @@ public class Canvas {
 		prevCachedPoint = cachedPoints[pointIndex];
 	}
 	
+	/**
+	 * Applies the next mutation, if any, to the canvas. 
+	 * 
+	 * @param steps
+	 * the number of steps to mutate
+	 * @return
+	 * 	True if a mutation has occurred
+	 *  False if all mutations have occurred ie the end of the visualisation is reached
+	 */
 	public boolean next(int steps) {
 		for(int i = 0; i < steps; i++) {
 			historyIndex++;
@@ -117,6 +141,15 @@ public class Canvas {
 		return true;
 	}
 		
+	/**
+	 * reverses a mutation
+	 * 
+	 * @param steps
+	 * the number of steps to mutate
+	 * @return
+	 * 	True if a mutation has occurred
+	 *  False if all mutations have occurred ie the start of the visualisation is reached
+	 */
 	public boolean previous(int steps) {
 		for(int i = 0; i < steps; i++) {
 			historyIndex--;
@@ -157,7 +190,7 @@ public class Canvas {
 	}
 	
 	/**
-	 * sets the spheres point based on the 
+	 * sets the spheres point based on the cache
 	 * @param historyIndex
 	 *  the part of the history we are up to 
 	 */
@@ -170,6 +203,7 @@ public class Canvas {
 	
 	/**
 	 * re-draws the sphere using cachedPoints
+	 * adjusts the camera to fit the visualisation.
 	 */
 	private void reDraw() {
 		sphere.setVertexAttributes(Attribute.COORDINATES,StorageModel.DOUBLE_ARRAY.array(3).createReadOnly(cachedPoints));

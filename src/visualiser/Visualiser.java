@@ -19,7 +19,7 @@ public class Visualiser {
 
 
 	private PlaybackMode playbackMode;
-	private Canvas canvas;
+	private JaggeredCanvas canvas;
 	private MovementData currentMovementData;
 
 	private Timer timer = new Timer();
@@ -43,14 +43,14 @@ public class Visualiser {
 
 
 	public Visualiser() {
-		canvas = new Canvas(maxPlaySpeed * fps);
+		canvas = new JaggeredCanvas(maxPlaySpeed * fps);
 		initialise();
 	}
 
 	public Visualiser(File crinkleViewerFile, PlaybackMode playbackMode) {
 		this.playbackMode = playbackMode;
 		currentMovementData = new MovementData(crinkleViewerFile);
-		canvas = new Canvas(maxPlaySpeed * fps);
+		canvas = new JaggeredCanvas(maxPlaySpeed * fps);
 		initialise();
 		/*
 		System.out.println("<<<Test in Visualiser constructor>>>");
@@ -68,7 +68,7 @@ public class Visualiser {
 
 	/** Load data**/
 	public void Load(MovementData movementData) {
-		canvas = new Canvas(maxPlaySpeed * fps);
+		canvas = new JaggeredCanvas(maxPlaySpeed * fps);
 		currentMovementData = movementData;
 		initialise();
 	}
