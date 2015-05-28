@@ -168,7 +168,11 @@ public class Canvas {
 	 */
 	private void reDraw() {
 		sphere.setVertexAttributes(Attribute.COORDINATES,StorageModel.DOUBLE_ARRAY.array(3).createReadOnly(cachedPoints));
+		try {
 		CameraUtility.encompass(viewer);
+		} catch(Exception e) {
+			//no need to worry about the exception
+		}
 	}
 	
 	/**
