@@ -1,12 +1,16 @@
 package crinkle;
 
 import static org.junit.Assert.*;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.Test;
+
 import data.SensorReading;
 import de.jreality.geometry.Primitives;
 import de.jreality.scene.IndexedFaceSet;
+import visualiser.Canvas;
 import visualiser.JaggeredCanvas;
 
 
@@ -18,7 +22,7 @@ public class TestCanvas {
 	
 	@Test
 	public void testNextPosition() {
-		JaggeredCanvas sampleCanvas = new JaggeredCanvas(8*24);
+		Canvas sampleCanvas = new JaggeredCanvas(8*24);
 		List<Integer> listInt = createArray(3,100,2,25,6);
 		//SensorReading sampleReading = new SensorReading(listInt);
 		
@@ -29,7 +33,7 @@ public class TestCanvas {
 	
 	@Test
 	public void testPreviousPosition() {
-		JaggeredCanvas sampleCanvas = new JaggeredCanvas(8*24);
+		Canvas sampleCanvas = new JaggeredCanvas(8*24);
 		List<Integer> listInt = createArray(3,100,2,25,6);
 		
 		assertEquals(0, sampleCanvas.getHistroyIndex());

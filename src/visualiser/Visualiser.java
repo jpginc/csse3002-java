@@ -19,7 +19,7 @@ public class Visualiser {
 
 
 	private PlaybackMode playbackMode;
-	private JaggeredCanvas canvas;
+	private Canvas canvas;
 	private MovementData currentMovementData;
 
 	private Timer timer = new Timer();

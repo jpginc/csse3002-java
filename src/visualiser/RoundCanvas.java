@@ -31,7 +31,7 @@ import de.jreality.util.SceneGraphUtility;
  * 
  * 
  */
-public class RoundCanvas {
+public class RoundCanvas implements Canvas {
 	//the shape to form the visualisation
 	IndexedFaceSet sphere = Primitives.sphere(10);
 	

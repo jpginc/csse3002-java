@@ -31,7 +31,7 @@ import de.jreality.util.SceneGraphUtility;
  * 
  * 
  */
-public class JaggeredCanvas {
+public class JaggeredCanvas implements Canvas {
 
 	//the shape to form the visualisation
 	IndexedFaceSet sphere = Primitives.sphere(10);
@@ -95,16 +95,10 @@ public class JaggeredCanvas {
     }
 	
 	
-	/**
-	 * 
-	 * This function accepts a sensor reading and breaks it up into small steps
-	 * these steps are cached. you should cache all sensor readings before starting
-	 * the visualisation.
-	 * 
-	 * @param reading
-	 * the sensor reading to add to the cached points, must be a valid SensorReading
-	 * <pre> reading != null
+	/* (non-Javadoc)
+	 * @see visualiser.Canvas#appendCache(data.SensorReading)
 	 */
+	@Override
 	public void appendCache(SensorReading reading) {
 		for(int i = 0; i < maxStepsPerMutation; i++) {
 			prevCachedPoint = generatePoint(prevCachedPoint, reading.getFlex1(), 
@@ -119,15 +113,10 @@ public class JaggeredCanvas {
 		prevCachedPoint = cachedPoints[pointIndex];
 	}
 	
-	/**
-	 * Applies the next mutation, if any, to the canvas. 
-	 * 
-	 * @param steps
-	 * the number of steps to mutate
-	 * @return
-	 * 	True if a mutation has occurred
-	 *  False if all mutations have occurred ie the end of the visualisation is reached
+	/* (non-Javadoc)
+	 * @see visualiser.Canvas#next(int)
 	 */
+	@Override
 	public boolean next(int steps) {
 		for(int i = 0; i < steps; i++) {
 			historyIndex++;
@@ -141,15 +130,10 @@ public class JaggeredCanvas {
 		return true;
 	}
 		
-	/**
-	 * reverses a mutation
-	 * 
-	 * @param steps
-	 * the number of steps to mutate
-	 * @return
-	 * 	True if a mutation has occurred
-	 *  False if all mutations have occurred ie the start of the visualisation is reached
+	/* (non-Javadoc)
+	 * @see visualiser.Canvas#previous(int)
 	 */
+	@Override
 	public boolean previous(int steps) {
 		for(int i = 0; i < steps; i++) {
 			historyIndex--;
@@ -272,18 +256,34 @@ public class JaggeredCanvas {
         colorHistory.add(new double[] {newRed, newGreen, newBlue});
 	}
 
+	/* (non-Javadoc)
+	 * @see visualiser.Canvas#getViewer()
+	 */
+	@Override
 	public Viewer getViewer() {
 		return viewer;
 	}
 
+	/* (non-Javadoc)
+	 * @see visualiser.Canvas#setViewer(de.jreality.scene.Viewer)
+	 */
+	@Override
 	public void setViewer(Viewer viewer) {
 		this.viewer = viewer;
 	}
 	
+	/* (non-Javadoc)
+	 * @see visualiser.Canvas#getHistroyIndex()
+	 */
+	@Override
 	public int getHistroyIndex(){
 		return historyIndex;
 	}
 	
+	/* (non-Javadoc)
+	 * @see visualiser.Canvas#getPointIndex()
+	 */
+	@Override
 	public int getPointIndex(){
 		return pointIndex;
 	}
