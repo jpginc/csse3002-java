@@ -65,6 +65,29 @@ public class Visualiser {
 		}
 		*/
 	}
+	
+	/**
+	 * 
+	 * @param crinkleViewerFile
+	 * @param playbackMode
+	 * @param visMode
+	 */
+	public Visualiser(File crinkleViewerFile, PlaybackMode playbackMode, int visMode) {
+		this.playbackMode = playbackMode;
+		currentMovementData = new MovementData(crinkleViewerFile);
+		switch (visMode) {
+		case 0:
+			canvas = new JaggeredCanvas(maxPlaySpeed * fps);
+			break;
+		case 1:
+			canvas = new RoundCanvas(maxPlaySpeed *fps);
+			break;
+		default:
+			canvas = new JaggeredCanvas(maxPlaySpeed * fps);
+			break;
+		}
+		initialise();
+	}
 
 	/** Load data**/
 	public void Load(MovementData movementData) {
