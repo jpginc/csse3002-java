@@ -16,7 +16,12 @@ import de.jreality.scene.data.StorageModel;
 import static de.jreality.shader.CommonAttributes.*;
 import de.jreality.util.SceneGraphUtility;
 
-
+/*
+ * TODO 
+ * overview of the classes.
+ * 
+ * 
+ */
 public class Canvas {
 	static final boolean FORWARD = false;
 	static final boolean REVERSE = true;
@@ -58,7 +63,7 @@ public class Canvas {
 		viewer = jrViewer.getViewer();
 
         //Initialise the color of the sphere to black. (must be after initialising the enviroment?)
-	    double[] base = {0, 0, 0};
+	    double[] base = {70, 70, 70};
 	    colorHistory.add(base);
 	    this.setColor(historyIndex);
 	    
@@ -206,15 +211,15 @@ public class Canvas {
 		double modifier = direction ? 1 : -1;
 		
         newRed = oldRed + (modifier * stepRed);
-        if(newRed < 1 || newRed > 253) {
+        if(newRed < 70 || newRed > 253) {
                 newRed = oldRed;
         }
         newGreen = oldGreen + (modifier * stepGreen);
-        if(newGreen < 1 || newGreen > 253) {
+        if(newGreen < 70 || newGreen > 253) {
         	newGreen = oldGreen;
         }
 		newBlue = oldBlue + (modifier * stepBlue);
-        if(newBlue < 1 || newBlue > 253) {
+        if(newBlue < 70 || newBlue > 253) {
             newBlue = oldBlue;
         }
         
