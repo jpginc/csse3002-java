@@ -9,14 +9,11 @@ import de.jreality.geometry.Primitives;
 import de.jreality.plugin.JRViewer;
 import de.jreality.scene.Appearance;
 import de.jreality.scene.IndexedFaceSet;
-import de.jreality.scene.SceneGraphComponent;
-import de.jreality.scene.Viewer;
 import de.jreality.scene.data.Attribute;
 import de.jreality.scene.data.StorageModel;
 import de.jreality.tools.ClickWheelCameraZoomTool;
 import static de.jreality.shader.CommonAttributes.*;
 import de.jreality.util.CameraUtility;
-import de.jreality.util.SceneGraphUtility;
 
 /*
  * 
@@ -31,7 +28,7 @@ import de.jreality.util.SceneGraphUtility;
  * 
  * 
  */
-public class JaggeredCanvas implements Canvas {
+public class JaggeredCanvas extends GenericCanvas implements Canvas {
 
 	//the shape to form the visualisation
 	IndexedFaceSet sphere = Primitives.sphere(10);
@@ -41,25 +38,16 @@ public class JaggeredCanvas implements Canvas {
 	//this is the number of points in the sphere
 	protected int pointMax = sphere.getNumPoints();
 	
-	//the canvas that the sphere is painted on
-	private Viewer viewer;
-	private SceneGraphComponent world = SceneGraphUtility.createFullSceneGraphComponent("Crinkle");
-
 	//a history of color values for the sphere
 	protected ArrayList<double[]> colorHistory = new ArrayList<double[]>();
 	//a history of point values for the sphere
 	private ArrayList<double[]> pointHistory = new ArrayList<double[]>();
-	private int historyIndex = 0;
 	
 	//the current sphere points
     double[][] cachedPoints = new double[sphere.getNumPoints()][];
     double[][] originalSphere = new double[sphere.getNumPoints()][];
     double[] prevCachedPoint;
     
-    //indicates how many steps to break up a sensor reading into
-    protected int maxStepsPerMutation;
-
-	
     /**
      * 
      * Create the canvas with a sphere
@@ -68,16 +56,8 @@ public class JaggeredCanvas implements Canvas {
      * 	the maximum number of mutations per second. ie fps * max play speed
      */
 	public JaggeredCanvas(int maxStepsPerMutation) {
-		this.maxStepsPerMutation = maxStepsPerMutation;
-
-	    //setup the jreality enviroment 
+		super(maxStepsPerMutation);
 		world.setGeometry(sphere);
-		JRViewer jrViewer = JRViewer.createJRViewer(world);
-		jrViewer.startupLocal();
-		viewer = jrViewer.getViewer();
-		
-		//setup the canvas to allow mousewheel zoom
-		viewer.getSceneRoot().addTool(new ClickWheelCameraZoomTool());
 
         //Initialise the color of the sphere to dark grey. (must be after initialising the enviroment?)
 	    double[] base = {70, 70, 70};
@@ -256,30 +236,6 @@ public class JaggeredCanvas implements Canvas {
         colorHistory.add(new double[] {newRed, newGreen, newBlue});
 	}
 
-	/* (non-Javadoc)
-	 * @see visualiser.Canvas#getViewer()
-	 */
-	@Override
-	public Viewer getViewer() {
-		return viewer;
-	}
-
-	/* (non-Javadoc)
-	 * @see visualiser.Canvas#setViewer(de.jreality.scene.Viewer)
-	 */
-	@Override
-	public void setViewer(Viewer viewer) {
-		this.viewer = viewer;
-	}
-	
-	/* (non-Javadoc)
-	 * @see visualiser.Canvas#getHistroyIndex()
-	 */
-	@Override
-	public int getHistroyIndex(){
-		return historyIndex;
-	}
-	
 	/* (non-Javadoc)
 	 * @see visualiser.Canvas#getPointIndex()
 	 */
