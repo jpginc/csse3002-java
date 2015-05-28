@@ -16,7 +16,12 @@ import de.jreality.scene.data.StorageModel;
 import static de.jreality.shader.CommonAttributes.*;
 import de.jreality.util.SceneGraphUtility;
 
-
+/*
+ * TODO 
+ * overview of the classes.
+ * 
+ * 
+ */
 public class Canvas {
 	static final boolean FORWARD = false;
 	static final boolean REVERSE = true;
