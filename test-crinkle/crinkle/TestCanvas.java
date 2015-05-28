@@ -27,7 +27,6 @@ public class TestCanvas {
 		//SensorReading sampleReading = new SensorReading(listInt);
 		
 		assertEquals(0, sampleCanvas.getPointIndex());
-		sampleCanvas.next();
 		assertEquals(1, sampleCanvas.getPointIndex());
 	}
 	
@@ -37,13 +36,10 @@ public class TestCanvas {
 		List<Integer> listInt = createArray(3,100,2,25,6);
 		
 		assertEquals(0, sampleCanvas.getHistroyIndex());
-		sampleCanvas.next();
 		sampleCanvas.next(maxPlaySpeed);
 		assertEquals(1, sampleCanvas.getHistroyIndex());
-		sampleCanvas.next();
 		sampleCanvas.next(maxPlaySpeed);
 		assertEquals(2, sampleCanvas.getHistroyIndex());
-		sampleCanvas.next();
 		sampleCanvas.next(maxPlaySpeed);
 		assertEquals(3, sampleCanvas.getHistroyIndex());
 		
