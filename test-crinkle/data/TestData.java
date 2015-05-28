@@ -21,34 +21,36 @@ public class TestData {
 		File file = new File("src/sampleData/sample.crvf");
 		MovementData tMovementData = new MovementData(file);
 		assertTrue(tMovementData.validate());
+
 						
 		List<Integer> tempArr1 = createArray(123, 568, 890, 678, 555);
-		SensorReading nextMock1 = new SensorReading(tempArr1);
+		List<Integer> zero = createArray(0,0,0,0,0);
+		SensorReading nextMock1 = new SensorReading(tempArr1, zero);
 		next = tMovementData.getNext();
 		compareEquals(nextMock1, next);
 		
 		List<Integer> tempArr2 = createArray(888, 900, 1020, 866, 545);
-		SensorReading nextMock2 = new SensorReading(tempArr2);
+		SensorReading nextMock2 = new SensorReading(tempArr2, zero);
 		next = tMovementData.getNext();
 		compareEquals(nextMock2, next);
 	
 		List<Integer> tempArr3 = createArray(555, 132, 557, 899, 776);
-		SensorReading nextMock3 = new SensorReading(tempArr3);
+		SensorReading nextMock3 = new SensorReading(tempArr3, zero);
 		next = tMovementData.getNext();
 		compareEquals(nextMock3, next);
 	
 		List<Integer> tempArr4 = createArray(554, 898, 766, 343, 123);
-		SensorReading nextMock4 = new SensorReading(tempArr4);
+		SensorReading nextMock4 = new SensorReading(tempArr4, zero);
 		next = tMovementData.getNext();
 		compareEquals(nextMock4, next);
 	
 		List<Integer> tempArr5 = createArray(543, 887, 989, 22, 666);
-		SensorReading nextMock5 = new SensorReading(tempArr5);
+		SensorReading nextMock5 = new SensorReading(tempArr5, zero);
 		next = tMovementData.getNext();
 		compareEquals(nextMock5, next);
 		
 		List<Integer> tempArr6 = createArray(666, 845, 274, 567, 787);
-		SensorReading nextMock6 = new SensorReading(tempArr6);
+		SensorReading nextMock6 = new SensorReading(tempArr6, zero);
 		next = tMovementData.getNext();
 		compareEquals(nextMock6, next);
 		
