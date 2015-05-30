@@ -28,7 +28,7 @@ public class PlaybackMode extends javax.swing.JFrame {
 	private JButton btnPlay;
 	private JButton btnRewind;
 	private JButton btnSnapshot;
-	private JLabel lblTimer;
+	private JLabel lblStatus;
 	private JLabel lblStyle;
 	private JPanel pnlPlayback; // contain pnlPlaybackTop, Middle, Bottom
 	private JPanel pnlViewer;
@@ -86,7 +86,7 @@ public class PlaybackMode extends javax.swing.JFrame {
 		btnRewind = new javax.swing.JButton();
 		btnPlay = new javax.swing.JButton();
 		btnForward = new javax.swing.JButton();
-		lblTimer = new javax.swing.JLabel();
+		lblStatus = new javax.swing.JLabel();
 		lblStyle = new javax.swing.JLabel();
 		btnSnapshot = new javax.swing.JButton();
 		pnlLeft = new javax.swing.JPanel();
@@ -134,10 +134,9 @@ public class PlaybackMode extends javax.swing.JFrame {
 			}
 		});
 
-		lblTimer.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-		lblTimer.setText("Paused");
-		lblTimer.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-		lblTimer.setPreferredSize(new java.awt.Dimension(175, 16));
+		lblStatus.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+		lblStatus.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+		lblStatus.setPreferredSize(new java.awt.Dimension(175, 16));
 		
 		lblStyle.setText("Style: ");
 		
@@ -160,8 +159,8 @@ public class PlaybackMode extends javax.swing.JFrame {
 		pnlLeft.setPreferredSize(new Dimension(220, 150));
 
 		pnlPlaybackTop.setPreferredSize(new Dimension(190, 50));
-		pnlPlaybackMiddle.setPreferredSize(new Dimension(190, 60));
-		pnlPlaybackBottom.setPreferredSize(new Dimension(190, 50));
+		pnlPlaybackMiddle.setPreferredSize(new Dimension(190, 40));
+		pnlPlaybackBottom.setPreferredSize(new Dimension(190, 70));
 
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(pnlLeft, BorderLayout.LINE_START);
@@ -184,9 +183,9 @@ public class PlaybackMode extends javax.swing.JFrame {
 
 		pnlPlaybackMiddle.add(lblStyle);
 		pnlPlaybackMiddle.add(cbStyle);
-		pnlPlaybackMiddle.add(lblTimer);
 		
 		pnlPlaybackBottom.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 5));
+		pnlPlaybackBottom.add(lblStatus);
 		pnlPlaybackBottom.add(btnRewind);
 		pnlPlaybackBottom.add(btnPlay);
 		pnlPlaybackBottom.add(btnForward);
@@ -210,12 +209,13 @@ public class PlaybackMode extends javax.swing.JFrame {
 		} else { // isPlay == true;
 			btnPlay.setIcon(new ImageIcon(getClass().getResource(CrinkleViewer.PLAY_ICON)));
 			visualiser.pause();
+			lblStatus.setText("Paused");
 			isPlay = false;
 		}
 	}
 
 	private void updateLabel(int speed) {
-		lblTimer.setText(speed + "x Speed");
+		lblStatus.setText(speed + "x Speed");
 	}
 	private void formWindowClosed(java.awt.event.WindowEvent evt) {
 		launchMode.setEnabled(true);
@@ -288,11 +288,17 @@ public class PlaybackMode extends javax.swing.JFrame {
 		this.isPlay = b;
 	}
 	
-	private void initPlaybackButtons() {
+	public void setLblStatus(String status) {
+		this.lblStatus.setText(status);
+	}
+
+	/** Set initializing state for buttons in playback panel */
+	public void initPlaybackButtons() {
 		isPlay = false;
 		btnPlay.setIcon(new ImageIcon(getClass().getResource(CrinkleViewer.PLAY_ICON)));
 		btnPlay.setEnabled(true);
 		btnForward.setEnabled(false);
 		btnRewind.setEnabled(false);
+		lblStatus.setText("");
 	}
 }

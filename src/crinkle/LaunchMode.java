@@ -194,7 +194,6 @@ public class LaunchMode extends javax.swing.JFrame {
 	}
 
 	private void btnSyncActionPerformed(java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
 		if (link.isConnected()) {
 			lblStatus.setText("Synchronising...");
 			link.writeSerial("$_SYNC_$");
@@ -212,7 +211,6 @@ public class LaunchMode extends javax.swing.JFrame {
 	}
 
 	private void btnReceiveActionPerformed(java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
 		if (link.isConnected()) {
 			link.writeSerial("$_TRANSMIT_$");
 			lblStatus.setText("Receiving Data");
@@ -231,7 +229,6 @@ public class LaunchMode extends javax.swing.JFrame {
 	}
 
 	private void btnStopActionPerformed(java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
 		link.writeSerial("$_STOP_$");
 		btnStop.setEnabled(false);
 		btnReceive.setEnabled(true);
@@ -255,7 +252,6 @@ public class LaunchMode extends javax.swing.JFrame {
 	}
 
 	private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
 		System.err.println("<<<Browse sample file: [Your Workspace]/csse3002-java/src/sampleData/sample.crvf>>>");
 		String recentDir = getRecentDir(txfRecentFile.getText());
 		File selectedFile = chooseFile(recentDir);
