@@ -73,7 +73,6 @@ public class LaunchMode extends javax.swing.JFrame {
 				}
 				System.out.println(received.trim());
 				//load the recieved data into the realtime data object
-				realtimeData.recieve(received);
 				if ("$_STOP_$".equals(received.trim())) {
 					System.out.println("Saving data");
 					saveData();
@@ -84,6 +83,7 @@ public class LaunchMode extends javax.swing.JFrame {
 					dataArray.add(debugArray);
 				} else if (!("$_START_$".equals(received.trim()))) {
 					dataArray.add(received.trim());
+					realtimeData.recieve(received.trim());
 				}
 			}
 		});

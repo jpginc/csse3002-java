@@ -83,7 +83,7 @@ public class PlaybackMode extends javax.swing.JFrame {
 		this.setTitle("Crinkle Viewer - Real Time");
 		this.launchMode = launchMode;
 		//TODO add canvas type
-		setVisualiser(new Visualiser(m, this, 0));
+		setVisualiser(new Visualiser(m, this, 1));
 		this.addComponentToPnlViewer(visualiser.getViewerComponent());
 		CrinkleViewer.setAppIcon(CrinkleViewer.CRINKLE_ICON_MAC, CrinkleViewer.CRINKLE_ICON_WIN, this);
 		disableAllButtons();
