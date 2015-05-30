@@ -22,8 +22,7 @@ public class RoundCanvas extends JaggeredCanvas {
 		for(int i = 0; i < maxStepsPerMutation; i++) {
 			prevCachedPoint = generatePoint(prevCachedPoint, reading.getFlex1(), 
 					reading.getAccel().getX(), reading.getAccel().getY());
-			generateColor(colorHistory.get(colorHistory.size() - 1), reading.getFlex2(), 
-					reading.getFlex1() % 2 == 0);
+			generateColor(colorHistory.get(colorHistory.size() - 1), reading.getFlex2());
 		}
         pointIndex++;
 		if(pointIndex == pointMax) {

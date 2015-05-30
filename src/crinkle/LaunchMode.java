@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
@@ -21,6 +22,8 @@ import javax.swing.filechooser.FileView;
 
 import org.zu.ardulink.Link;
 import org.zu.ardulink.RawDataListener;
+
+import data.MovementData;
 
 /**
  *
@@ -45,6 +48,11 @@ public class LaunchMode extends javax.swing.JFrame {
 	private JFileChooser sfc = new JFileChooser();
 	private boolean connectedFlag = false;
 	private String debugArray = "1,0,0,0,0"; //change for debug purposes
+	
+	// the movemnt data object to load realtime data into
+	private MovementData realtimeData;
+	// the gui for watching the visualisation
+	PlaybackMode playbackMode;
 
 
 	/**
@@ -63,6 +71,7 @@ public class LaunchMode extends javax.swing.JFrame {
 					received += (char) message[i];
 				}
 				System.out.println(received.trim());
+				//load the recieved data into the realtime data object
 				if ("$_STOP_$".equals(received.trim())) {
 					System.out.println("Saving data");
 					saveData();
@@ -72,7 +81,13 @@ public class LaunchMode extends javax.swing.JFrame {
 				} else if ("$_START_$".equals(received.trim())) {
 					dataArray.add(debugArray);
 				} else if (!("$_START_$".equals(received.trim()))) {
+					if(! connectedFlag || realtimeData == null) {
+						//TODO fix the crinkle _STOP_ thing
+						//the crinkle is still sending data from the last time it was connected
+                        return;
+					}
 					dataArray.add(received.trim());
+					realtimeData.recieve(received.trim());
 				}
 			}
 		});
@@ -367,6 +382,9 @@ public class LaunchMode extends javax.swing.JFrame {
 	 * Saves the data received from the crinkle to a .crvf file
 	 */
 	private void saveData() {
+		if(dataArray.size() == 0) {
+			return;
+		}
 		String filePath = "";
 		PrintWriter writer = null;
 		System.out.println("Size of stored array = " + dataArray.size());
@@ -403,7 +421,6 @@ public class LaunchMode extends javax.swing.JFrame {
 	private boolean connect() {
 		boolean connected = false;
 		String port = "";
-		int count = 100;
 		portList = link.getPortList();
 		lblStatus.setText("Connecting");
 		try {
@@ -422,7 +439,14 @@ public class LaunchMode extends javax.swing.JFrame {
 							 Thread.currentThread().interrupt();
 						}
 						if (connectedFlag) {
+							//if the arduino wasn't stopped before the program closed last time it will
+							//still be transmitting. Stop it now
+                            dataArray.clear();
+							link.writeSerial("$_STOP_$");
 							lblStatus.setText("Connected");
+							realtimeData = new MovementData();
+                            playbackMode = new PlaybackMode(this, realtimeData);
+                            playbackMode.setVisible(true);
 							return true;
 						}
 					}
