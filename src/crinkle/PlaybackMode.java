@@ -29,9 +29,12 @@ public class PlaybackMode extends javax.swing.JFrame {
 	private JButton btnPlay;
 	private JButton btnRewind;
 	private JButton btnSnapshot;
+	private JButton btnReceive;
+	private JButton btnStop;
 	private JLabel lblStatus;
 	private JLabel lblStyle;
 	private JPanel pnlPlayback; // contain pnlPlaybackTop, Middle, Bottom
+	private JPanel pnlRealTime;
 	private JPanel pnlViewer;
 	private JPanel pnlLeft; // contain pnlPlayback;
 	private JPanel pnlRight; // contain pnlViewer;
@@ -109,9 +112,12 @@ public class PlaybackMode extends javax.swing.JFrame {
 
 		pnlViewer = new javax.swing.JPanel();
 		pnlPlayback = new javax.swing.JPanel();
+		pnlRealTime = new javax.swing.JPanel();
 		btnRewind = new javax.swing.JButton();
 		btnPlay = new javax.swing.JButton();
 		btnForward = new javax.swing.JButton();
+		btnReceive = new javax.swing.JButton();
+		btnStop = new javax.swing.JButton();
 		lblStatus = new javax.swing.JLabel();
 		lblStyle = new javax.swing.JLabel();
 		btnSnapshot = new javax.swing.JButton();
@@ -135,6 +141,9 @@ public class PlaybackMode extends javax.swing.JFrame {
 
 		pnlPlayback.setBorder(BorderFactory.createTitledBorder("Playback"));
 		pnlPlayback.setPreferredSize(new java.awt.Dimension(210, 190));
+		
+		pnlRealTime.setBorder(BorderFactory.createTitledBorder("RealTime"));
+		pnlRealTime.setPreferredSize(new java.awt.Dimension(210, 85));
 
 		btnRewind.setIcon(new ImageIcon(getClass().getResource(CrinkleViewer.REWIND_ICON)));
 		btnRewind.setPreferredSize(new java.awt.Dimension(40, 40));
@@ -160,6 +169,22 @@ public class PlaybackMode extends javax.swing.JFrame {
 			}
 		});
 
+		btnReceive.setText("Receive");
+		btnReceive.setPreferredSize(new java.awt.Dimension(80, 40));
+		btnReceive.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				btnReceiveActionPerformed(evt);
+			}
+		});
+		
+		btnStop.setText("Stop");
+		btnStop.setPreferredSize(new java.awt.Dimension(80, 40));
+		btnStop.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				btnStopActionPerformed(evt);
+			}
+		});
+		
 		lblStatus.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 		lblStatus.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 		lblStatus.setPreferredSize(new java.awt.Dimension(175, 16));
@@ -193,12 +218,17 @@ public class PlaybackMode extends javax.swing.JFrame {
 		getContentPane().add(pnlRight, BorderLayout.CENTER);
 
 		pnlLeft.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+		pnlLeft.add(pnlRealTime);
 		pnlLeft.add(pnlPlayback);
 		pnlRight.setLayout(new BorderLayout());
 		pnlRight.add(pnlViewer);
 		
 		pnlViewer.setLayout(new BorderLayout());
 
+		pnlRealTime.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 5));
+		pnlRealTime.add(btnReceive);
+		pnlRealTime.add(btnStop);
+		
 		pnlPlayback.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
 		pnlPlayback.add(pnlPlaybackTop);
 		pnlPlayback.add(pnlPlaybackMiddle);
@@ -285,7 +315,15 @@ public class PlaybackMode extends javax.swing.JFrame {
 		setVisualiser(new Visualiser(crinkleViewerFile, this, visualiseMode));
 		addComponentToPnlViewer(visualiser.getViewerComponent());
 	}
+	
+	private void btnStopActionPerformed(ActionEvent evt) {
+		// TODO
+	}
 
+	private void btnReceiveActionPerformed(ActionEvent evt) {
+		// TODO
+	}
+	
 	public Visualiser getVisualiser() {
 		return visualiser;
 	}

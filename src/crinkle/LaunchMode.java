@@ -421,7 +421,6 @@ public class LaunchMode extends javax.swing.JFrame {
 	private boolean connect() {
 		boolean connected = false;
 		String port = "";
-		int count = 100;
 		portList = link.getPortList();
 		lblStatus.setText("Connecting");
 		try {
