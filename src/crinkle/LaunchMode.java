@@ -49,6 +49,11 @@ public class LaunchMode extends javax.swing.JFrame {
 	private JFileChooser sfc = new JFileChooser();
 	private boolean connectedFlag = false;
 	private String debugArray = "1,0,0,0,0"; //change for debug purposes
+	
+	// the movemnt data object to load realtime data into
+	private MovementData realtimeData;
+	// the gui for watching the visualisation
+	PlaybackMode playbackMode;
 
 
 	/**
@@ -67,6 +72,8 @@ public class LaunchMode extends javax.swing.JFrame {
 					received += (char) message[i];
 				}
 				System.out.println(received.trim());
+				//load the recieved data into the realtime data object
+				realtimeData.recieve(received);
 				if ("$_STOP_$".equals(received.trim())) {
 					System.out.println("Saving data");
 					saveData();
@@ -432,9 +439,9 @@ public class LaunchMode extends javax.swing.JFrame {
 						}
 						if (connectedFlag) {
 							lblStatus.setText("Connected");
-							//TODO fix
-							MovementData m = new MovementData();
-                            PlaybackMode playbackMode = new PlaybackMode(this, m);
+							realtimeData = new MovementData();
+                            playbackMode = new PlaybackMode(this, realtimeData);
+                            playbackMode.setVisible(true);
 							return true;
 						}
 					}

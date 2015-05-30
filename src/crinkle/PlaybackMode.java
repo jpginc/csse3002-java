@@ -86,9 +86,16 @@ public class PlaybackMode extends javax.swing.JFrame {
 		setVisualiser(new Visualiser(m, this, 0));
 		this.addComponentToPnlViewer(visualiser.getViewerComponent());
 		CrinkleViewer.setAppIcon(CrinkleViewer.CRINKLE_ICON_MAC, CrinkleViewer.CRINKLE_ICON_WIN, this);
+		disableAllButtons();
+		lblTimer.setText("In Realtime mode");
+		this.validate();	
+	}
+	
+	private void disableAllButtons() {
 		btnForward.setEnabled(false);
 		btnRewind.setEnabled(false);
-		this.validate();	
+		btnPlay.setEnabled(false);
+		btnSnapshot.setEnabled(false);
 	}
 
 	/**

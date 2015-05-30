@@ -35,8 +35,8 @@ public class Visualiser implements MovementListener{
 	private int currentSpeed = playSpeed;
 	//the maximum playback speed
 	private int maxPlaySpeed = 20;
-	//The number of readings per second that are read by the crinkle device
-	private int realTimePlaySpeed = 10;
+	//The number of readings per second that are read by the crinkle device + 1
+	private int realTimePlaySpeed = 11;
 	//how many frames per second
 	private int fps = 24;
 
@@ -155,24 +155,39 @@ public class Visualiser implements MovementListener{
 	public void play() {
 		isReverse = false;
 		currentSpeed = playSpeed;
-		if(! startTimer()) {
+		if(! playing) {
+			if(! startTimer()) {
 			//TODO
 			//the play button was pushed but it's the end of the visualisation 
 			//should we start from the beginning again?
+			}
 		}
 	}
-
+	
+	/**
+	 * starts the visualsation playing in just above realtime speed
+	 * 
+	 * @return
+	 */
+	public int playRealtime() {
+		isReverse = false;
+		currentSpeed = realTimePlaySpeed; 
+		if(! playing) {
+            startTimer();
+		}
+		return currentSpeed;
+	}
+	
 	/**
 	 * does one mutation and starts the timer to call this function again
 	 * 
+	 * before calling this function check if the visualisation is already playing
+	 * 
 	 * @return
-	 * true if a step has occured false otherwise
+	 * 	true if a step has occured false otherwise
 	 */
 	private boolean startTimer() {
 		playing = true;
-		//TODO
-		//do we have to worry about threads?
-		//this can be called by play, ffwd and rwnd so cancel the timer first. 
 		if(run()) {
 			timer.schedule(new TimerTask() {
 				@Override
@@ -268,5 +283,10 @@ public class Visualiser implements MovementListener{
 	 */
 	@Override
 	public void movementNotify() {
+        SensorReading next;
+		while(currentMovementData != null && (next = currentMovementData.getNext()) != null) {
+			canvas.appendCache(next);
+		}
+		playRealtime();
 	}
 }
