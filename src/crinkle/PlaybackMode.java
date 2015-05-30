@@ -45,6 +45,8 @@ public class PlaybackMode extends javax.swing.JFrame {
 	private Visualiser visualiser;
 	private boolean isPlay = false; // default false
 	private File crinkleViewerFile;
+	
+	private MovementData movementData;
 
 	/**
 	 * Creates new form PlaybackMode
@@ -74,10 +76,10 @@ public class PlaybackMode extends javax.swing.JFrame {
 	 */
 	public PlaybackMode(LaunchMode launchMode, MovementData m) {
 		initComponents();
+		movementData = m;
 		this.setTitle("Crinkle Viewer - Real Time");
 		this.launchMode = launchMode;
-		//TODO add canvas type
-		setVisualiser(new Visualiser(m, this, 1));
+		setVisualiser(new Visualiser(m, this, cbStyle.getSelectedIndex()));
 		this.addComponentToPnlViewer(visualiser.getViewerComponent());
 		CrinkleViewer.setAppIcon(CrinkleViewer.CRINKLE_ICON_MAC, CrinkleViewer.CRINKLE_ICON_WIN, this);
 		disableAllButtons();
@@ -282,7 +284,11 @@ public class PlaybackMode extends javax.swing.JFrame {
 		int visualiseMode = cbStyle.getSelectedIndex();
 		initPlaybackButtons();
 		removeComponentFromPnlViewer(visualiser.getViewerComponent()); 
-		setVisualiser(new Visualiser(crinkleViewerFile, this, visualiseMode));
+		if(movementData != null) {
+			setVisualiser(new Visualiser(movementData, this, visualiseMode));
+		} else {
+			setVisualiser(new Visualiser(crinkleViewerFile, this, visualiseMode));
+		}
 		addComponentToPnlViewer(visualiser.getViewerComponent());
 	}
 

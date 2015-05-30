@@ -96,6 +96,7 @@ public class Visualiser implements MovementListener{
 	 * 	The type of canvas (see public static int's at the top of this class)
 	 */
 	private void setCanvasFromType(int type) {
+		System.out.println("type is " + type);
 		switch (type) {
 		case 0:
 			canvas = new JaggeredCanvas(maxPlaySpeed * fps);
