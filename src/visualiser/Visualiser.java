@@ -200,14 +200,11 @@ public class Visualiser implements MovementListener{
 			return true;
 		} else {
 			if(isReverse) {
-				playbackMode.setBtnRewindEnabled(false);
-				playbackMode.setBtnForwardEnabled(false);
-				playbackMode.setBtnPlayIcon(CrinkleViewer.PLAY_ICON);
-				playbackMode.setBtnPlayEnabled(true);
-				playbackMode.setIsPlay(false);
+				playbackMode.initPlaybackButtons();
 			} else {
 				playbackMode.setBtnForwardEnabled(false);
 				playbackMode.setBtnPlayEnabled(false);
+				playbackMode.setLblStatus("End");
 			}
 		}	
 		playing = false;

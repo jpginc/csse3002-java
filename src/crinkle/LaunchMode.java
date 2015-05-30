@@ -44,7 +44,6 @@ public class LaunchMode extends javax.swing.JFrame {
 	private javax.swing.JButton btnConnect;
 	private Link link;
 	private List<String> portList = new ArrayList<String>();
-	private JComboBox comboPorts;
 	private List<String> dataArray = new ArrayList<String>();
 	private JFileChooser sfc = new JFileChooser();
 	private boolean connectedFlag = false;
@@ -118,7 +117,6 @@ public class LaunchMode extends javax.swing.JFrame {
 		btnReceive = new javax.swing.JButton();
 		btnStop = new javax.swing.JButton();
 		btnConnect = new javax.swing.JButton();
-		comboPorts = new javax.swing.JComboBox(portList.toArray());
 
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -206,7 +204,6 @@ public class LaunchMode extends javax.swing.JFrame {
 	}
 
 	private void btnSyncActionPerformed(java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
 		if (link.isConnected()) {
 			lblStatus.setText("Synchronising...");
 			link.writeSerial("$_SYNC_$");
@@ -224,7 +221,6 @@ public class LaunchMode extends javax.swing.JFrame {
 	}
 
 	private void btnReceiveActionPerformed(java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
 		if (link.isConnected()) {
 			link.writeSerial("$_TRANSMIT_$");
 			lblStatus.setText("Receiving Data");
@@ -243,7 +239,6 @@ public class LaunchMode extends javax.swing.JFrame {
 	}
 
 	private void btnStopActionPerformed(java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
 		link.writeSerial("$_STOP_$");
 		btnStop.setEnabled(false);
 		btnReceive.setEnabled(true);
@@ -267,7 +262,6 @@ public class LaunchMode extends javax.swing.JFrame {
 	}
 
 	private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
 		System.err.println("<<<Browse sample file: [Your Workspace]/csse3002-java/src/sampleData/sample.crvf>>>");
 		String recentDir = getRecentDir(txfRecentFile.getText());
 		File selectedFile = chooseFile(recentDir);
