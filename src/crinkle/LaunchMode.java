@@ -12,7 +12,6 @@ import java.util.List;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -52,7 +51,7 @@ public class LaunchMode extends javax.swing.JFrame {
 	// the movemnt data object to load realtime data into
 	private MovementData realtimeData;
 	// the gui for watching the visualisation
-	PlaybackMode playbackMode;
+	VisualizingFrame visulizingFrame;
 
 
 	/**
@@ -252,8 +251,11 @@ public class LaunchMode extends javax.swing.JFrame {
 	}
 
 	private void btnConnectActionPerformed(java.awt.event.ActionEvent evt) {
-		boolean status = connect();
-		if (status) {
+		//boolean status = connect();
+		MovementData m = new MovementData();
+		RealTimeMode realTimeMode = new RealTimeMode(this, m);
+		realTimeMode.setVisible(true);
+/*		if (status) {
 			pnlTop.remove(lblStatus);
 			pnlTop.remove(btnConnect);
 			pnlTop.add(btnSync);
@@ -263,7 +265,7 @@ public class LaunchMode extends javax.swing.JFrame {
 			pnlTop.repaint();
 		} else {
 			//lblStatus.setText("Crinkle not detected on " + comboPorts.getSelectedItem().toString());
-		}
+		}*/
 	}
 
 	private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {
@@ -445,8 +447,8 @@ public class LaunchMode extends javax.swing.JFrame {
 							link.writeSerial("$_STOP_$");
 							lblStatus.setText("Connected");
 							realtimeData = new MovementData();
-                            playbackMode = new PlaybackMode(this, realtimeData);
-                            playbackMode.setVisible(true);
+                            visulizingFrame = new RealTimeMode(this, realtimeData);
+                            visulizingFrame.setVisible(true);
 							return true;
 						}
 					}
