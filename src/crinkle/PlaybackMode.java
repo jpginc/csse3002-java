@@ -28,6 +28,7 @@ public class PlaybackMode extends javax.swing.JFrame {
 	private JButton btnPlay;
 	private JButton btnRewind;
 	private JButton btnSnapshot;
+	private JLabel lblTimer;
 	private JLabel lblStyle;
 	private JPanel pnlPlayback; // contain pnlPlaybackTop, Middle, Bottom
 	private JPanel pnlViewer;
@@ -85,6 +86,7 @@ public class PlaybackMode extends javax.swing.JFrame {
 		btnRewind = new javax.swing.JButton();
 		btnPlay = new javax.swing.JButton();
 		btnForward = new javax.swing.JButton();
+		lblTimer = new javax.swing.JLabel();
 		lblStyle = new javax.swing.JLabel();
 		btnSnapshot = new javax.swing.JButton();
 		pnlLeft = new javax.swing.JPanel();
@@ -106,7 +108,7 @@ public class PlaybackMode extends javax.swing.JFrame {
 		pnlViewer.setBorder(BorderFactory.createTitledBorder("Viewer"));
 
 		pnlPlayback.setBorder(BorderFactory.createTitledBorder("Playback"));
-		pnlPlayback.setPreferredSize(new java.awt.Dimension(210, 170));
+		pnlPlayback.setPreferredSize(new java.awt.Dimension(210, 190));
 
 		btnRewind.setIcon(new ImageIcon(getClass().getResource(CrinkleViewer.REWIND_ICON)));
 		btnRewind.setPreferredSize(new java.awt.Dimension(40, 40));
@@ -132,11 +134,13 @@ public class PlaybackMode extends javax.swing.JFrame {
 			}
 		});
 
-		lblStyle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-		lblStyle.setText("Style: ");
-		lblStyle.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+		lblTimer.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+		lblTimer.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+		lblTimer.setPreferredSize(new java.awt.Dimension(175, 16));
 		
-		cbStyle.setPreferredSize(new java.awt.Dimension(115, 25));
+		lblStyle.setText("Style: ");
+		
+		cbStyle.setPreferredSize(new java.awt.Dimension(120, 25));
 		cbStyle.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				cbStyleActionPerformed(evt);
@@ -155,7 +159,7 @@ public class PlaybackMode extends javax.swing.JFrame {
 		pnlLeft.setPreferredSize(new Dimension(220, 150));
 
 		pnlPlaybackTop.setPreferredSize(new Dimension(190, 50));
-		pnlPlaybackMiddle.setPreferredSize(new Dimension(190, 40));
+		pnlPlaybackMiddle.setPreferredSize(new Dimension(190, 60));
 		pnlPlaybackBottom.setPreferredSize(new Dimension(190, 50));
 
 		getContentPane().setLayout(new BorderLayout());
@@ -179,6 +183,7 @@ public class PlaybackMode extends javax.swing.JFrame {
 
 		pnlPlaybackMiddle.add(lblStyle);
 		pnlPlaybackMiddle.add(cbStyle);
+		pnlPlaybackMiddle.add(lblTimer);
 		
 		pnlPlaybackBottom.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 5));
 		pnlPlaybackBottom.add(btnRewind);
