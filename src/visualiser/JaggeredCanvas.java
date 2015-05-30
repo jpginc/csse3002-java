@@ -83,8 +83,7 @@ public class JaggeredCanvas extends GenericCanvas implements Canvas {
 		for(int i = 0; i < maxStepsPerMutation; i++) {
 			prevCachedPoint = generatePoint(prevCachedPoint, reading.getFlex1(), 
 					reading.getAccel().getX(), reading.getAccel().getY());
-			generateColor(colorHistory.get(colorHistory.size() - 1), reading.getFlex2(), 
-					reading.getFlex1() % 2 == 0);
+			generateColor(colorHistory.get(colorHistory.size() - 1), reading.getFlex2());
 		}
         pointIndex++;
 		if(pointIndex == pointMax) {
@@ -200,12 +199,19 @@ public class JaggeredCanvas extends GenericCanvas implements Canvas {
 	 * @param direction
 	 *  the direction to move the color. true goes towards white, false towards black
 	 */
-	public void generateColor(double[] base, int reading, boolean direction) {
+	public void generateColor(double[] base, int reading) {
+		boolean direction = true;
 		
 		double oldRed = base[0];
 		double oldGreen = base[1];
 		double oldBlue = base[2];
 		
+		if(reading < 0) {
+			reading *= -1;
+			direction = false;
+		}
+		
+		//a flex sensor reading is normally between -200 and +150
 		//Red is the three lease significant bits, Green is the middle 3 etc
         double stepRed = (reading & 8);
         double stepGreen = ((reading>>3) & 8);
