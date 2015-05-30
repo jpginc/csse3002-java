@@ -194,6 +194,7 @@ public class Visualiser implements MovementListener{
 	private boolean startTimer() {
 		playing = true;
 		if(run()) {
+			try {
 			timer.schedule(new TimerTask() {
 				@Override
 				public void run() {
@@ -201,6 +202,10 @@ public class Visualiser implements MovementListener{
 					startTimer();
 				}
 			}, 1000 / fps / currentSpeed);
+			} catch (Exception e) {
+				//the timer was already cancelled 
+				return false;
+			}
 			return true;
 		} else {
 			if(isReverse) {
