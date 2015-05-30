@@ -68,6 +68,9 @@ public class Visualiser {
 			canvas = new JaggeredCanvas(maxPlaySpeed * fps);
 			break;
 		case 1:
+			canvas = new RodCanvas(maxPlaySpeed *fps);
+			break;
+		case 2:
 			canvas = new RoundCanvas(maxPlaySpeed *fps);
 			break;
 		default:

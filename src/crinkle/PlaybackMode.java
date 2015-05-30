@@ -94,7 +94,7 @@ public class PlaybackMode extends javax.swing.JFrame {
 		pnlPlaybackTop = new javax.swing.JPanel();
 		pnlPlaybackMiddle = new javax.swing.JPanel();
 		pnlPlaybackBottom = new javax.swing.JPanel();
-		cbStyle = new javax.swing.JComboBox(new String[] {"Jagged", "Round"});
+		cbStyle = new javax.swing.JComboBox(new String[] {"Jagged", "Rod", "Round"});
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setTitle("Crinkle Viewer");
