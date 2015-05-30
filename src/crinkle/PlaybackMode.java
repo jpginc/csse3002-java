@@ -165,7 +165,7 @@ public class PlaybackMode extends javax.swing.JFrame {
 		});
 
 		lblTimer.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-		lblTimer.setText("00:00:00");
+		lblTimer.setText("Paused");
 		lblTimer.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 		lblTimer.setPreferredSize(new java.awt.Dimension(175, 16));
 
@@ -217,14 +217,12 @@ public class PlaybackMode extends javax.swing.JFrame {
 
 
 	private void btnPlayActionPerformed(java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
 		if(isPlay == false) {
 			btnPlay.setIcon(new ImageIcon(getClass().getResource(CrinkleViewer.PAUSE_ICON)));
 			btnForward.setEnabled(true);
 			btnRewind.setEnabled(true);
-			visualiser.play();
+			updateLabel(visualiser.play());
 			isPlay = true;
-			lblTimer.setText("00:00:00");
 		} else { // isPlay == true;
 			btnPlay.setIcon(new ImageIcon(getClass().getResource(CrinkleViewer.PLAY_ICON)));
 			visualiser.pause();
@@ -232,6 +230,9 @@ public class PlaybackMode extends javax.swing.JFrame {
 		}
 	}
 
+	private void updateLabel(int speed) {
+		lblTimer.setText(speed + "x Speed");
+	}
 	private void formWindowClosed(java.awt.event.WindowEvent evt) {
 		launchMode.setEnabled(true);
 		launchMode.setVisible(true);
@@ -244,8 +245,7 @@ public class PlaybackMode extends javax.swing.JFrame {
 	}
 
 	private void btnRewindActionPerformed(ActionEvent evt) {
-		// TODO Auto-generated method stub
-		visualiser.rewind();
+		updateLabel(visualiser.rewind());
 		setBtnPlayIcon(CrinkleViewer.PAUSE_ICON);
 		isPlay = true;
 		btnPlay.setEnabled(true);
@@ -253,13 +253,11 @@ public class PlaybackMode extends javax.swing.JFrame {
 	}
 
 	private void btnSnapshotActionPerformed(ActionEvent evt) {
-		// TODO Auto-generated method stub
 		visualiser.snapshot();
 	}
 
 	private void btnForwardActionPerformed(ActionEvent evt) {
-		// TODO Auto-generated method stub
-		visualiser.fastForward();
+		updateLabel(visualiser.fastForward());
 		setBtnPlayIcon(CrinkleViewer.PAUSE_ICON);
 		isPlay = true;
 		btnPlay.setEnabled(true);

@@ -152,7 +152,7 @@ public class Visualiser implements MovementListener{
 	 * until there are no more sensor readings to mutate with
 	 * 
 	 */
-	public void play() {
+	public int play() {
 		isReverse = false;
 		currentSpeed = playSpeed;
 		if(! playing) {
@@ -162,6 +162,7 @@ public class Visualiser implements MovementListener{
 			//should we start from the beginning again?
 			}
 		}
+		return currentSpeed;
 	}
 	
 	/**
