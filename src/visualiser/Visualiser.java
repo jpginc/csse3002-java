@@ -29,7 +29,7 @@ public class Visualiser {
 	//this value is how many sensor readings are currently being displayed per second
 	private int currentSpeed = playSpeed;
 	//the maximum playback speed
-	private int maxPlaySpeed = 8;
+	private int maxPlaySpeed = 20;
 	//how many frames per second
 	private int fps = 24;
 
@@ -119,7 +119,7 @@ public class Visualiser {
 	 * until there are no more sensor readings to mutate with
 	 * 
 	 */
-	public void play() {
+	public int play() {
 		isReverse = false;
 		currentSpeed = playSpeed;
 		if(! startTimer()) {
@@ -127,6 +127,7 @@ public class Visualiser {
 			//the play button was pushed but it's the end of the visualisation 
 			//should we start from the beginning again?
 		}
+		return currentSpeed;
 	}
 
 	/**
