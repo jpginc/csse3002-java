@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
+import data.MovementData;
 import visualiser.Visualiser;
 
 /**
@@ -64,6 +65,31 @@ public class PlaybackMode extends javax.swing.JFrame {
 		CrinkleViewer.setAppIcon(CrinkleViewer.CRINKLE_ICON_MAC, CrinkleViewer.CRINKLE_ICON_WIN, this);
 		initPlaybackButtons();
 		this.validate();
+	}
+	
+	/**
+	 * This constructor creates a player that displays the data in real time
+	 * @param launchMode
+	 * @param m
+	 */
+	public PlaybackMode(LaunchMode launchMode, MovementData m) {
+		initComponents();
+		this.setTitle("Crinkle Viewer - Real Time");
+		this.launchMode = launchMode;
+		//TODO add canvas type
+		setVisualiser(new Visualiser(m, this, 1));
+		this.addComponentToPnlViewer(visualiser.getViewerComponent());
+		CrinkleViewer.setAppIcon(CrinkleViewer.CRINKLE_ICON_MAC, CrinkleViewer.CRINKLE_ICON_WIN, this);
+		disableAllButtons();
+		lblStatus.setText("In Realtime mode");
+		this.validate();	
+	}
+	
+	private void disableAllButtons() {
+		btnForward.setEnabled(false);
+		btnRewind.setEnabled(false);
+		btnPlay.setEnabled(false);
+		btnSnapshot.setEnabled(false);
 	}
 
 	/**
