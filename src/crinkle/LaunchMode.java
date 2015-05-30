@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
@@ -21,6 +22,8 @@ import javax.swing.filechooser.FileView;
 
 import org.zu.ardulink.Link;
 import org.zu.ardulink.RawDataListener;
+
+import data.MovementData;
 
 /**
  *
@@ -429,6 +432,9 @@ public class LaunchMode extends javax.swing.JFrame {
 						}
 						if (connectedFlag) {
 							lblStatus.setText("Connected");
+							//TODO fix
+							MovementData m = new MovementData();
+                            PlaybackMode playbackMode = new PlaybackMode(this, m);
 							return true;
 						}
 					}

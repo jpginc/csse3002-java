@@ -9,13 +9,18 @@ import java.util.TimerTask;
 import crinkle.CrinkleViewer;
 import crinkle.PlaybackMode;
 import data.MovementData;
+import data.MovementListener;
 import data.SensorReading;
 import de.jreality.scene.Viewer;
 import de.jreality.ui.viewerapp.FileFilter;
 import de.jreality.ui.viewerapp.FileLoaderDialog;
 import de.jreality.util.ImageUtility;
 
-public class Visualiser {
+public class Visualiser implements MovementListener{
+	
+	// the different types of canvases
+	public static int JAGGAREDCANVAS = 0;
+	public static int ROUNTCANVAS = 1;
 
 
 	private PlaybackMode playbackMode;
@@ -29,7 +34,9 @@ public class Visualiser {
 	//this value is how many sensor readings are currently being displayed per second
 	private int currentSpeed = playSpeed;
 	//the maximum playback speed
-	private int maxPlaySpeed = 8;
+	private int maxPlaySpeed = 20;
+	//The number of readings per second that are read by the crinkle device
+	private int realTimePlaySpeed = 10;
 	//how many frames per second
 	private int fps = 24;
 
@@ -43,39 +50,53 @@ public class Visualiser {
 
 
 	public Visualiser() {
-		canvas = new JaggeredCanvas(maxPlaySpeed * fps);
-		initialise();
+		initialise(0);
 	}
 
 	public Visualiser(File crinkleViewerFile, PlaybackMode playbackMode) {
 		this.playbackMode = playbackMode;
 		currentMovementData = new MovementData(crinkleViewerFile);
-		canvas = new JaggeredCanvas(maxPlaySpeed * fps);
-		initialise();
-		/*
-		System.out.println("<<<Test in Visualiser constructor>>>");
-		while(currentMovementData.hasNext()) {
-			SensorReading sr = currentMovementData.getNext();
-			System.out.println(sr.toString());
-		}
-		System.out.println("Print backward");
-		while(currentMovementData.hasPrevious()) {
-			SensorReading sr = currentMovementData.getPrevious();
-			System.out.println(sr.toString());
-		}
-		*/
+		initialise(0);
 	}
 	
 	/**
-	 * 
-	 * @param crinkleViewerFile
-	 * @param playbackMode
-	 * @param visMode
+	 * creates a Visualiser that displays the visualisation in real time
+	 * @param m
+	 *  the movement data to listen to
+	 * @param p
+	 *  the playback gui
+	 * @param canvasType
+	 *  the type of canvas to use
 	 */
-	public Visualiser(File crinkleViewerFile, PlaybackMode playbackMode, int visMode) {
+	public Visualiser(MovementData m, PlaybackMode p, int canvasType) {
+		this.playbackMode = p;
+		currentMovementData = m;
+		initialise(canvasType);
+		m.addListener(this);
+	}
+	
+	/**
+	 * Creates a visualisation using the given canvasType
+	 * @param crinkleViewerFile
+	 * 	the file to use for the movemnt data
+	 * @param playbackMode
+	 * 	they playback gui
+	 * @param canvasType
+	 * 	the type of canvas to use
+	 */
+	public Visualiser(File crinkleViewerFile, PlaybackMode playbackMode, int canvasType) {
 		this.playbackMode = playbackMode;
 		currentMovementData = new MovementData(crinkleViewerFile);
-		switch (visMode) {
+		initialise(canvasType);
+	}
+	
+	/**
+	 * assigns the appropriate canvas from the type given
+	 * @param type
+	 * 	The type of canvas (see public static int's at the top of this class)
+	 */
+	private void setCanvasFromType(int type) {
+		switch (type) {
 		case 0:
 			canvas = new JaggeredCanvas(maxPlaySpeed * fps);
 			break;
@@ -85,24 +106,24 @@ public class Visualiser {
 		default:
 			canvas = new JaggeredCanvas(maxPlaySpeed * fps);
 			break;
-		}
-		initialise();
+		}	
 	}
 
 	/** Load data**/
 	public void Load(MovementData movementData) {
 		canvas = new JaggeredCanvas(maxPlaySpeed * fps);
 		currentMovementData = movementData;
-		initialise();
+		initialise(0);
 	}
 
 	/**
 	 * resets the play settings
 	 */
-	public void initialise(){
+	public void initialise(int canvasType){
+		setCanvasFromType(canvasType);
 		currentSpeed = playSpeed;
 		SensorReading next;
-		while((next = currentMovementData.getNext()) != null) {
+		while(currentMovementData != null && (next = currentMovementData.getNext()) != null) {
 			canvas.appendCache(next);
 		}
 	}
@@ -240,5 +261,12 @@ public class Visualiser {
 	public Component getViewerComponent() {
 		return (Component) this.canvas.getViewer().getViewingComponent();
 	}
-
+	
+	/**
+	 * 
+	 * Called in real time mode when the currentMovementData object has recieved another reading
+	 */
+	@Override
+	public void movementNotify() {
+	}
 }
