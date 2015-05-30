@@ -11,6 +11,7 @@ import java.io.File;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
@@ -27,7 +28,7 @@ public class PlaybackMode extends javax.swing.JFrame {
 	private JButton btnPlay;
 	private JButton btnRewind;
 	private JButton btnSnapshot;
-	private JLabel lblTimer;
+	private JLabel lblStyle;
 	private JPanel pnlPlayback; // contain pnlPlaybackTop, Middle, Bottom
 	private JPanel pnlViewer;
 	private JPanel pnlLeft; // contain pnlPlayback;
@@ -35,11 +36,13 @@ public class PlaybackMode extends javax.swing.JFrame {
 	private JPanel pnlPlaybackTop;
 	private JPanel pnlPlaybackMiddle;
 	private JPanel pnlPlaybackBottom;
+	private JComboBox cbStyle;
 
 	private LaunchMode launchMode;
 
 	private Visualiser visualiser;
-	private boolean isPlay = false;
+	private boolean isPlay = false; // default false
+	private File crinkleViewerFile;
 
 	/**
 	 * Creates new form PlaybackMode
@@ -49,27 +52,17 @@ public class PlaybackMode extends javax.swing.JFrame {
 		setVisualiser(new Visualiser());
 	}
 
-	public PlaybackMode(LaunchMode launchMode) {
-		initComponents();
-		this.launchMode = launchMode;
-		setVisualiser(new Visualiser());
-		this.addComponentToPnlViewer(visualiser.getViewerComponent());
-		CrinkleViewer.setAppIcon(CrinkleViewer.CRINKLE_ICON_MAC, CrinkleViewer.CRINKLE_ICON_WIN, this);
-		this.validate();
-
-	}
 
 	public PlaybackMode(LaunchMode launchMode, File crinkleViewerFile) {
 		initComponents();
 		this.setTitle("Crinkle Viewer - " + crinkleViewerFile.getAbsolutePath());
 		this.launchMode = launchMode;
+		this.crinkleViewerFile = crinkleViewerFile;
 		setVisualiser(new Visualiser(crinkleViewerFile, this));
 		this.addComponentToPnlViewer(visualiser.getViewerComponent());
 		CrinkleViewer.setAppIcon(CrinkleViewer.CRINKLE_ICON_MAC, CrinkleViewer.CRINKLE_ICON_WIN, this);
-		btnForward.setEnabled(false);
-		btnRewind.setEnabled(false);
+		initPlaybackButtons();
 		this.validate();
-
 	}
 
 	/**
@@ -92,13 +85,14 @@ public class PlaybackMode extends javax.swing.JFrame {
 		btnRewind = new javax.swing.JButton();
 		btnPlay = new javax.swing.JButton();
 		btnForward = new javax.swing.JButton();
-		lblTimer = new javax.swing.JLabel();
+		lblStyle = new javax.swing.JLabel();
 		btnSnapshot = new javax.swing.JButton();
 		pnlLeft = new javax.swing.JPanel();
 		pnlRight = new javax.swing.JPanel();
 		pnlPlaybackTop = new javax.swing.JPanel();
 		pnlPlaybackMiddle = new javax.swing.JPanel();
 		pnlPlaybackBottom = new javax.swing.JPanel();
+		cbStyle = new javax.swing.JComboBox(new String[] {"Jagged", "Round"});
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setTitle("Crinkle Viewer");
@@ -112,7 +106,7 @@ public class PlaybackMode extends javax.swing.JFrame {
 		pnlViewer.setBorder(BorderFactory.createTitledBorder("Viewer"));
 
 		pnlPlayback.setBorder(BorderFactory.createTitledBorder("Playback"));
-		pnlPlayback.setPreferredSize(new java.awt.Dimension(210, 150));
+		pnlPlayback.setPreferredSize(new java.awt.Dimension(210, 170));
 
 		btnRewind.setIcon(new ImageIcon(getClass().getResource(CrinkleViewer.REWIND_ICON)));
 		btnRewind.setPreferredSize(new java.awt.Dimension(40, 40));
@@ -138,10 +132,17 @@ public class PlaybackMode extends javax.swing.JFrame {
 			}
 		});
 
-		lblTimer.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-		lblTimer.setText("00:00:00");
-		lblTimer.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-		lblTimer.setPreferredSize(new java.awt.Dimension(175, 16));
+		lblStyle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+		lblStyle.setText("Style: ");
+		lblStyle.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+		
+		cbStyle.setPreferredSize(new java.awt.Dimension(115, 25));
+		cbStyle.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				cbStyleActionPerformed(evt);
+			}
+			
+		});
 
 		btnSnapshot.setIcon(new ImageIcon(getClass().getResource(CrinkleViewer.CAMERA_ICON))); // NOI18N
 		btnSnapshot.setPreferredSize(new java.awt.Dimension(40, 40));
@@ -154,7 +155,7 @@ public class PlaybackMode extends javax.swing.JFrame {
 		pnlLeft.setPreferredSize(new Dimension(220, 150));
 
 		pnlPlaybackTop.setPreferredSize(new Dimension(190, 50));
-		pnlPlaybackMiddle.setPreferredSize(new Dimension(190, 20));
+		pnlPlaybackMiddle.setPreferredSize(new Dimension(190, 40));
 		pnlPlaybackBottom.setPreferredSize(new Dimension(190, 50));
 
 		getContentPane().setLayout(new BorderLayout());
@@ -165,6 +166,8 @@ public class PlaybackMode extends javax.swing.JFrame {
 		pnlLeft.add(pnlPlayback);
 		pnlRight.setLayout(new BorderLayout());
 		pnlRight.add(pnlViewer);
+		
+		pnlViewer.setLayout(new BorderLayout());
 
 		pnlPlayback.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
 		pnlPlayback.add(pnlPlaybackTop);
@@ -174,8 +177,9 @@ public class PlaybackMode extends javax.swing.JFrame {
 		pnlPlaybackTop.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 0));
 		pnlPlaybackTop.add(btnSnapshot);
 
-		pnlPlaybackMiddle.add(lblTimer);
-
+		pnlPlaybackMiddle.add(lblStyle);
+		pnlPlaybackMiddle.add(cbStyle);
+		
 		pnlPlaybackBottom.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 5));
 		pnlPlaybackBottom.add(btnRewind);
 		pnlPlaybackBottom.add(btnPlay);
@@ -198,7 +202,6 @@ public class PlaybackMode extends javax.swing.JFrame {
 			btnRewind.setEnabled(true);
 			visualiser.play();
 			isPlay = true;
-			lblTimer.setText("00:00:00");
 		} else { // isPlay == true;
 			btnPlay.setIcon(new ImageIcon(getClass().getResource(CrinkleViewer.PLAY_ICON)));
 			visualiser.pause();
@@ -212,8 +215,12 @@ public class PlaybackMode extends javax.swing.JFrame {
 	}
 
 	private void addComponentToPnlViewer(Component component) {
-		pnlViewer.setLayout(new BorderLayout());
 		pnlViewer.add(component);
+		validate();
+	}
+	
+	private void removeComponentFromPnlViewer(Component component) {
+		pnlViewer.remove(component);
 		validate();
 	}
 
@@ -238,6 +245,14 @@ public class PlaybackMode extends javax.swing.JFrame {
 		isPlay = true;
 		btnPlay.setEnabled(true);
 		btnRewind.setEnabled(true);
+	}
+	
+	private void cbStyleActionPerformed(ActionEvent evt) {
+		int visualiseMode = cbStyle.getSelectedIndex();
+		initPlaybackButtons();
+		removeComponentFromPnlViewer(visualiser.getViewerComponent()); 
+		setVisualiser(new Visualiser(crinkleViewerFile, this, visualiseMode));
+		addComponentToPnlViewer(visualiser.getViewerComponent());
 	}
 
 	public Visualiser getVisualiser() {
@@ -266,5 +281,13 @@ public class PlaybackMode extends javax.swing.JFrame {
 	
 	public void setIsPlay(boolean b) {
 		this.isPlay = b;
+	}
+	
+	private void initPlaybackButtons() {
+		isPlay = false;
+		btnPlay.setIcon(new ImageIcon(getClass().getResource(CrinkleViewer.PLAY_ICON)));
+		btnPlay.setEnabled(true);
+		btnForward.setEnabled(false);
+		btnRewind.setEnabled(false);
 	}
 }

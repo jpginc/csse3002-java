@@ -41,7 +41,6 @@ public class LaunchMode extends javax.swing.JFrame {
 	private javax.swing.JButton btnConnect;
 	private Link link;
 	private List<String> portList = new ArrayList<String>();
-	private JComboBox comboPorts;
 	private List<String> dataArray = new ArrayList<String>();
 	private JFileChooser sfc = new JFileChooser();
 	private boolean connectedFlag = false;
@@ -108,7 +107,6 @@ public class LaunchMode extends javax.swing.JFrame {
 		btnReceive = new javax.swing.JButton();
 		btnStop = new javax.swing.JButton();
 		btnConnect = new javax.swing.JButton();
-		comboPorts = new javax.swing.JComboBox(portList.toArray());
 
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);

@@ -52,18 +52,6 @@ public class Visualiser {
 		currentMovementData = new MovementData(crinkleViewerFile);
 		canvas = new JaggeredCanvas(maxPlaySpeed * fps);
 		initialise();
-		/*
-		System.out.println("<<<Test in Visualiser constructor>>>");
-		while(currentMovementData.hasNext()) {
-			SensorReading sr = currentMovementData.getNext();
-			System.out.println(sr.toString());
-		}
-		System.out.println("Print backward");
-		while(currentMovementData.hasPrevious()) {
-			SensorReading sr = currentMovementData.getPrevious();
-			System.out.println(sr.toString());
-		}
-		*/
 	}
 	
 	/**
