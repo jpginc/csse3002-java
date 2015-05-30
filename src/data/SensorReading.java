@@ -9,7 +9,11 @@ public class SensorReading {
 	
 	private List<Integer> sensorValue;
 	
-	public SensorReading(List<Integer> sensorValue) {
+	public SensorReading(List<Integer> sensorValue, List<Integer> zeroValues) {
+		sensorValue.set(0, sensorValue.get(0) - zeroValues.get(0));
+		sensorValue.set(1, sensorValue.get(1) - zeroValues.get(1));
+		sensorValue.set(2, sensorValue.get(2) - zeroValues.get(2));
+		sensorValue.set(3, sensorValue.get(3) - zeroValues.get(3));
 		this.sensorValue = sensorValue;
 	}
 	

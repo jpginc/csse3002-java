@@ -29,7 +29,7 @@ public class Visualiser {
 	//this value is how many sensor readings are currently being displayed per second
 	private int currentSpeed = playSpeed;
 	//the maximum playback speed
-	private int maxPlaySpeed = 8;
+	private int maxPlaySpeed = 20;
 	//how many frames per second
 	private int fps = 24;
 
@@ -43,32 +43,43 @@ public class Visualiser {
 
 
 	public Visualiser() {
-		canvas = new Canvas(maxPlaySpeed * fps);
+		canvas = new JaggeredCanvas(maxPlaySpeed * fps);
 		initialise();
 	}
 
 	public Visualiser(File crinkleViewerFile, PlaybackMode playbackMode) {
 		this.playbackMode = playbackMode;
 		currentMovementData = new MovementData(crinkleViewerFile);
-		canvas = new Canvas(maxPlaySpeed * fps);
+		canvas = new JaggeredCanvas(maxPlaySpeed * fps);
 		initialise();
-		/*
-		System.out.println("<<<Test in Visualiser constructor>>>");
-		while(currentMovementData.hasNext()) {
-			SensorReading sr = currentMovementData.getNext();
-			System.out.println(sr.toString());
+	}
+	
+	/**
+	 * 
+	 * @param crinkleViewerFile
+	 * @param playbackMode
+	 * @param visMode
+	 */
+	public Visualiser(File crinkleViewerFile, PlaybackMode playbackMode, int visMode) {
+		this.playbackMode = playbackMode;
+		currentMovementData = new MovementData(crinkleViewerFile);
+		switch (visMode) {
+		case 0:
+			canvas = new JaggeredCanvas(maxPlaySpeed * fps);
+			break;
+		case 1:
+			canvas = new RoundCanvas(maxPlaySpeed *fps);
+			break;
+		default:
+			canvas = new JaggeredCanvas(maxPlaySpeed * fps);
+			break;
 		}
-		System.out.println("Print backward");
-		while(currentMovementData.hasPrevious()) {
-			SensorReading sr = currentMovementData.getPrevious();
-			System.out.println(sr.toString());
-		}
-		*/
+		initialise();
 	}
 
 	/** Load data**/
 	public void Load(MovementData movementData) {
-		canvas = new Canvas(maxPlaySpeed * fps);
+		canvas = new JaggeredCanvas(maxPlaySpeed * fps);
 		currentMovementData = movementData;
 		initialise();
 	}
@@ -80,10 +91,7 @@ public class Visualiser {
 		currentSpeed = playSpeed;
 		SensorReading next;
 		while((next = currentMovementData.getNext()) != null) {
-			for(int i = 0; i < maxPlaySpeed * fps; i++) {
-				canvas.appendCache(next);
-			}
-			canvas.next();
+			canvas.appendCache(next);
 		}
 	}
 
@@ -111,7 +119,7 @@ public class Visualiser {
 	 * until there are no more sensor readings to mutate with
 	 * 
 	 */
-	public void play() {
+	public int play() {
 		isReverse = false;
 		currentSpeed = playSpeed;
 		if(! startTimer()) {
@@ -119,6 +127,7 @@ public class Visualiser {
 			//the play button was pushed but it's the end of the visualisation 
 			//should we start from the beginning again?
 		}
+		return currentSpeed;
 	}
 
 	/**
@@ -143,14 +152,11 @@ public class Visualiser {
 			return true;
 		} else {
 			if(isReverse) {
-				playbackMode.setBtnRewindEnabled(false);
-				playbackMode.setBtnForwardEnabled(false);
-				playbackMode.setBtnPlayIcon(CrinkleViewer.PLAY_ICON);
-				playbackMode.setBtnPlayEnabled(true);
-				playbackMode.setIsPlay(false);
+				playbackMode.initPlaybackButtons();
 			} else {
 				playbackMode.setBtnForwardEnabled(false);
 				playbackMode.setBtnPlayEnabled(false);
+				playbackMode.setLblStatus("End");
 			}
 		}	
 		playing = false;

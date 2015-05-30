@@ -41,7 +41,6 @@ public class LaunchMode extends javax.swing.JFrame {
 	private javax.swing.JButton btnConnect;
 	private Link link;
 	private List<String> portList = new ArrayList<String>();
-	private JComboBox comboPorts;
 	private List<String> dataArray = new ArrayList<String>();
 	private JFileChooser sfc = new JFileChooser();
 	private boolean connectedFlag = false;
@@ -108,7 +107,6 @@ public class LaunchMode extends javax.swing.JFrame {
 		btnReceive = new javax.swing.JButton();
 		btnStop = new javax.swing.JButton();
 		btnConnect = new javax.swing.JButton();
-		comboPorts = new javax.swing.JComboBox(portList.toArray());
 
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -196,7 +194,6 @@ public class LaunchMode extends javax.swing.JFrame {
 	}
 
 	private void btnSyncActionPerformed(java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
 		if (link.isConnected()) {
 			lblStatus.setText("Synchronising...");
 			link.writeSerial("$_SYNC_$");
@@ -214,7 +211,6 @@ public class LaunchMode extends javax.swing.JFrame {
 	}
 
 	private void btnReceiveActionPerformed(java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
 		if (link.isConnected()) {
 			link.writeSerial("$_TRANSMIT_$");
 			lblStatus.setText("Receiving Data");
@@ -233,7 +229,6 @@ public class LaunchMode extends javax.swing.JFrame {
 	}
 
 	private void btnStopActionPerformed(java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
 		link.writeSerial("$_STOP_$");
 		btnStop.setEnabled(false);
 		btnReceive.setEnabled(true);
@@ -252,12 +247,11 @@ public class LaunchMode extends javax.swing.JFrame {
 			pnlTop.add(lblStatus);
 			pnlTop.repaint();
 		} else {
-			lblStatus.setText("Crinkle not detected on " + comboPorts.getSelectedItem().toString());
+			//lblStatus.setText("Crinkle not detected on " + comboPorts.getSelectedItem().toString());
 		}
 	}
 
 	private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
 		System.err.println("<<<Browse sample file: [Your Workspace]/csse3002-java/src/sampleData/sample.crvf>>>");
 		String recentDir = getRecentDir(txfRecentFile.getText());
 		File selectedFile = chooseFile(recentDir);
@@ -382,6 +376,7 @@ public class LaunchMode extends javax.swing.JFrame {
 		if (status == JFileChooser.APPROVE_OPTION) {
 			filePath = sfc.getSelectedFile().getAbsolutePath();
 			// add file extension ".crvf" to file path
+			filePath += ".";
 			filePath += CrinkleViewer.FILE_EXTENSION;
 			File fileToSave = new File(filePath);
 			txfRecentFile.setText(filePath);
@@ -422,7 +417,7 @@ public class LaunchMode extends javax.swing.JFrame {
 						link.writeSerial("$_CHECK_$");
 						//see if response received
 						try {
-							Thread.sleep(1000);
+							Thread.sleep(1500);
 						} catch (InterruptedException e) {
 							 Thread.currentThread().interrupt();
 						}
