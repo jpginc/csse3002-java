@@ -47,7 +47,7 @@ public class LaunchMode extends javax.swing.JFrame {
 	private List<String> dataArray = new ArrayList<String>();
 	private JFileChooser sfc = new JFileChooser();
 	private boolean connectedFlag = false;
-	private String debugArray = "1,0,0,0,0"; //change for debug purposes
+	//private String debugArray = "1,0,0,0,0"; //change for debug purposes
 	
 	// the movemnt data object to load realtime data into
 	private MovementData realtimeData;
@@ -79,7 +79,8 @@ public class LaunchMode extends javax.swing.JFrame {
 				} else if ("$_YES_$".equals(received.trim())) {
 					connectedFlag = true;
 				} else if ("$_START_$".equals(received.trim())) {
-					dataArray.add(debugArray);
+					//no longer userd
+					//dataArray.add(debugArray);
 				} else if (!("$_START_$".equals(received.trim()))) {
 					if(! connectedFlag || realtimeData == null) {
 						//TODO fix the crinkle _STOP_ thing
