@@ -30,11 +30,11 @@ public class Visualiser implements MovementListener{
 	private Timer timer = new Timer();
 
 	//this value is how many sensor readings to play displays per second 
-	private int playSpeed = 10;
+	private int playSpeed = 1;
 	//this value is how many sensor readings are currently being displayed per second
 	private int currentSpeed = playSpeed;
 	//the maximum playback speed
-	private int maxPlaySpeed = 10;
+	private int maxPlaySpeed = 20;
 	//The number of readings per second that are read by the crinkle device + 1
 	private int realTimePlaySpeed = 11;
 	//how many frames per second

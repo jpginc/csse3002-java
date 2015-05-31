@@ -197,7 +197,7 @@ public class JaggeredCanvas extends GenericCanvas implements Canvas {
 	 * re-draws the sphere using cachedPoints
 	 * adjusts the camera to fit the visualisation.
 	 */
-	private void reDraw() {
+	protected void reDraw() {
 		sphere.setVertexAttributes(Attribute.COORDINATES,StorageModel.DOUBLE_ARRAY.array(3).createReadOnly(cachedPoints));
 		try {
 		CameraUtility.encompass(viewer);
