@@ -39,6 +39,7 @@ public class MovementData {
 	 * @param reading
 	 */
 	public void recieve(String reading) {
+		System.out.println("recieving");
 		if(zeroValues == null) {
 			setZeroValues(reading);
 			return;

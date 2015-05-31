@@ -38,7 +38,10 @@ public class RealTimeMode extends VisualizingFrame {
 	private JFileChooser sfc = new JFileChooser();
 	private boolean connectedFlag = false;
 	private String debugArray = "1,0,0,0,0"; //change for debug purposes
-	MovementData realtimeData = new MovementData();
+	MovementData realtimeData;
+	
+	
+	
 	/**
 	 * Creates new form PlaybackMode
 	 */
@@ -56,7 +59,10 @@ public class RealTimeMode extends VisualizingFrame {
 	public RealTimeMode(LaunchMode launchMode) {
 		super(launchMode);
 		initComponents();
-		setVisualiser(new Visualiser(new MovementData(), this, 0));
+		//TODO the third paramater to new Visualiser needs to be the selected index of 
+		//the drop down box
+		realtimeData = new MovementData();
+		setVisualiser(new Visualiser(realtimeData, this, 0));
 		this.addComponentToPnlViewer(visualiser.getViewerComponent());
 
 		link = Link.getDefaultInstance();
@@ -72,6 +78,10 @@ public class RealTimeMode extends VisualizingFrame {
 				System.out.println(received.trim());
 				//load the recieved data into the realtime data object
 				if ("$_STOP_$".equals(received.trim())) {
+					if(dataArray.size() < 10) {
+						//too small
+						return;
+					}
 					System.out.println("Saving data");
 					saveData();
 					dataArray.clear();
@@ -240,6 +250,7 @@ public class RealTimeMode extends VisualizingFrame {
                             dataArray.clear();
 							link.writeSerial("$_STOP_$");
 							lblStatus.setText("Connected");
+                            dataArray.clear();
 							return true;
 						}
 					}

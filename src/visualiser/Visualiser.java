@@ -203,20 +203,26 @@ public class Visualiser implements MovementListener{
 			}, 1000 / fps);
 			} catch (Exception e) {
 				//the timer was already cancelled 
+                playing = false;
 				return false;
 			}
 			return true;
 		} else {
 			if(isReverse) {
+				//TODO T these cause exceptions
+				/*
 				((PlaybackMode) visualizingFrame).initPlaybackButtons();
+				*/
 			} else {
+				//TODO T these cause exceptions
+				/*
 				((PlaybackMode) visualizingFrame).setBtnForwardEnabled(false);
 				((PlaybackMode) visualizingFrame).setBtnPlayEnabled(false);
 				((PlaybackMode) visualizingFrame).setLblStatus("End");
+				*/
 			}
 		}	
 		playing = false;
-		currentSpeed = playSpeed;
 		return false;
 	}
 
