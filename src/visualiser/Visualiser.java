@@ -17,7 +17,7 @@ import de.jreality.ui.viewerapp.FileLoaderDialog;
 import de.jreality.util.ImageUtility;
 
 public class Visualiser implements MovementListener{
-	
+
 	// the different types of canvases
 	public static int JAGGAREDCANVAS = 0;
 	public static int ROUNTCANVAS = 1;
@@ -58,7 +58,7 @@ public class Visualiser implements MovementListener{
 		currentMovementData = new MovementData(crinkleViewerFile);
 		initialise(0);
 	}
-	
+
 	/**
 	 * creates a Visualiser that displays the visualisation in real time
 	 * @param m
@@ -74,7 +74,7 @@ public class Visualiser implements MovementListener{
 		initialise(canvasType);
 		m.addListener(this);
 	}
-	
+
 	/**
 	 * Creates a visualization using the given canvasType
 	 * @param crinkleViewerFile
@@ -89,7 +89,7 @@ public class Visualiser implements MovementListener{
 		currentMovementData = new MovementData(crinkleViewerFile);
 		initialise(canvasType);
 	}
-	
+
 	/**
 	 * assigns the appropriate canvas from the type given
 	 * @param type
@@ -166,14 +166,14 @@ public class Visualiser implements MovementListener{
 		currentSpeed = playSpeed;
 		if(! playing) {
 			if(! startTimer()) {
-			//TODO
-			//the play button was pushed but it's the end of the visualisation 
-			//should we start from the beginning again?
+				//TODO
+				//the play button was pushed but it's the end of the visualisation 
+				//should we start from the beginning again?
 			}
 		}
 		return currentSpeed;
 	}
-	
+
 	/**
 	 * starts the visualsation playing in just above realtime speed
 	 * 
@@ -183,11 +183,11 @@ public class Visualiser implements MovementListener{
 		isReverse = false;
 		currentSpeed = realTimePlaySpeed; 
 		if(! playing) {
-            startTimer();
+			startTimer();
 		}
 		return currentSpeed;
 	}
-	
+
 	/**
 	 * does one mutation and starts the timer to call this function again
 	 * 
@@ -200,32 +200,29 @@ public class Visualiser implements MovementListener{
 		playing = true;
 		if(run()) {
 			try {
-			timer.schedule(new TimerTask() {
-				@Override
-				public void run() {
-					//call itself after the timeout
-					startTimer();
-				}
-			}, 1000 / fps);
+				timer.schedule(new TimerTask() {
+					@Override
+					public void run() {
+						//call itself after the timeout
+						startTimer();
+					}
+				}, 1000 / fps);
 			} catch (Exception e) {
 				//the timer was already cancelled 
-                playing = false;
+				playing = false;
 				return false;
 			}
 			return true;
 		} else {
-			if(isReverse) {
-				//TODO T these cause exceptions
-				/*
-				((PlaybackMode) visualizingFrame).initPlaybackButtons();
-				*/
-			} else {
-				//TODO T these cause exceptions
-				/*
-				((PlaybackMode) visualizingFrame).setBtnForwardEnabled(false);
-				((PlaybackMode) visualizingFrame).setBtnPlayEnabled(false);
-				((PlaybackMode) visualizingFrame).setLblStatus("End");
-				*/
+			if(visualizingFrame instanceof PlaybackMode) {
+				PlaybackMode pbm = (PlaybackMode) visualizingFrame;
+				if(isReverse) {
+					pbm.initPlaybackButtons();
+				} else {
+					pbm.setBtnForwardEnabled(false);
+					pbm.setBtnPlayEnabled(false);
+					pbm.setLblStatus("End");
+				}
 			}
 		}	
 		playing = false;
@@ -294,7 +291,7 @@ public class Visualiser implements MovementListener{
 	public Component getViewerComponent() {
 		return (Component) this.canvas.getViewer().getViewingComponent();
 	}
-	
+
 	/**
 	 * 
 	 * Called in real time mode when the currentMovementData object has recieved another reading
