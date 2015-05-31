@@ -37,7 +37,6 @@ public class RealTimeMode extends VisualizingFrame {
 	private List<String> dataArray = new ArrayList<String>();
 	private JFileChooser sfc = new JFileChooser();
 	private boolean connectedFlag = false;
-	private String debugArray = "1,0,0,0,0"; //change for debug purposes
 	MovementData realtimeData;
 	
 	
@@ -88,7 +87,6 @@ public class RealTimeMode extends VisualizingFrame {
 				} else if ("$_YES_$".equals(received.trim())) {
 					connectedFlag = true;
 				} else if ("$_START_$".equals(received.trim())) {
-					dataArray.add(debugArray);
 				} else if (!("$_START_$".equals(received.trim()))) {
 					if(! connectedFlag || realtimeData == null) {
 						//TODO fix the crinkle _STOP_ thing

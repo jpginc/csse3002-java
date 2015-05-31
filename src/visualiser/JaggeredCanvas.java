@@ -75,8 +75,8 @@ public class JaggeredCanvas extends GenericCanvas implements Canvas {
     }
 	
 	
-	/* (non-Javadoc)
-	 * @see visualiser.Canvas#appendCache(data.SensorReading)
+	/**
+	 * 
 	 */
 	@Override
 	public void appendCache(SensorReading reading) {
@@ -89,20 +89,33 @@ public class JaggeredCanvas extends GenericCanvas implements Canvas {
 		if(pointIndex == pointMax) {
 			pointIndex = 0;
 		}
-		prevCachedPoint = getPreviousCachedPoint(pointIndex);
+		prevCachedPoint = cachedPoints[pointIndex];
 	}
 	
-	private double[] getPreviousCachedPoint(int pointIndex) {
-		double [] point;
-        int multiplier = pointHistory.size() / (maxStepsPerMutation * pointMax);
-		if(pointHistory.size() >= maxStepsPerMutation * pointMax) {
-			point = pointHistory.get(multiplier * maxStepsPerMutation 
-					+ pointIndex * maxStepsPerMutation);
-			// we have wrapped around and are back at the first point again
-		} else { 
-            point = cachedPoints[pointIndex];
+	/**
+	 * 
+	 * @param reading
+	 */
+	public void appendCacheOffline(SensorReading reading) {
+        for(int i = 0; i < maxStepsPerMutation; i++) {
+			prevCachedPoint = generatePoint(prevCachedPoint, reading.getFlex1(), 
+					reading.getAccel().getX(), reading.getAccel().getY());
+            setPoint(historyIndex++);
 		}
-		return point;
+		generateColor(colorHistory.get(colorHistory.size() - 1), reading.getFlex2());
+        pointIndex++;
+		if(pointIndex == pointMax) {
+			pointIndex = 0;
+		}
+		prevCachedPoint = cachedPoints[pointIndex];
+	}
+	
+	/**
+	 * call after appending all the sensor readings using appendCache (or to restart the canvas)
+	 */
+	public void reset() {
+		historyIndex = 0;
+        cachedPoints = originalSphere.clone();
 	}
 	
 	/**

@@ -94,5 +94,16 @@ public class RodCanvas extends GenericCanvas implements Canvas{
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	
+	public void reset() {
+		return;
+	}
+
+
+	@Override
+	public void appendCacheOffline(SensorReading reading) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

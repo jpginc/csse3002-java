@@ -127,8 +127,9 @@ public class Visualiser implements MovementListener{
 		currentSpeed = playSpeed;
 		SensorReading next;
 		while(currentMovementData != null && ((next = currentMovementData.getNext())) != null) {
-			canvas.appendCache(next);
+			canvas.appendCacheOffline(next);
 		}
+		canvas.reset();
 	}
 
 	/**
