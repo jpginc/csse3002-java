@@ -128,7 +128,7 @@ public class RealTimeMode extends VisualizingFrame {
 		btnStop = new javax.swing.JButton();
 		lblStatus = new javax.swing.JLabel();
 		lblDesc = new javax.swing.JLabel();
-		cbStyle = new javax.swing.JComboBox(new String[] {"Jagged", "Rod", "Round", "Jaggered Greyscale"});
+		cbStyle = new javax.swing.JComboBox(new String[] {"Jagged", "Rod", "Round", "Jagged Greyscale"});
 		lblDesc.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 		lblDesc.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 		lblDesc.setPreferredSize(new java.awt.Dimension(175, 16));
