@@ -232,11 +232,7 @@ public class PlaybackMode extends VisualizingFrame {
 		int visualiseMode = cbStyle.getSelectedIndex();
 		initPlaybackButtons();
 		removeComponentFromPnlViewer(visualiser.getViewerComponent()); 
-		if(movementData != null) {
-			setVisualiser(new Visualiser(movementData, this, visualiseMode));
-		} else {
-			setVisualiser(new Visualiser(crinkleViewerFile, this, visualiseMode));
-		}
+		setVisualiser(new Visualiser(crinkleViewerFile, this, visualiseMode));
 		addComponentToPnlViewer(visualiser.getViewerComponent());
 	}
 	

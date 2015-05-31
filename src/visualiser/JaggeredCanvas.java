@@ -186,7 +186,7 @@ public class JaggeredCanvas extends GenericCanvas implements Canvas {
 	 * @param historyIndex
 	 *  the part of the history we are up to 
 	 */
-	private void setPoint(int historyIndex) {
+	protected void setPoint(int historyIndex) {
 		double [] toSet = pointHistory.get(historyIndex);
 		int index = (int) toSet[3];
 		double [] pointPos = {toSet[0], toSet[1], toSet[2]};
