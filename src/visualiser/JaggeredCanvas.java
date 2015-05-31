@@ -41,7 +41,7 @@ public class JaggeredCanvas extends GenericCanvas implements Canvas {
 	//a history of color values for the sphere
 	protected ArrayList<double[]> colorHistory = new ArrayList<double[]>();
 	//a history of point values for the sphere
-	private ArrayList<double[]> pointHistory = new ArrayList<double[]>();
+	protected ArrayList<double[]> pointHistory = new ArrayList<double[]>();
 	
 	//the current sphere points
     double[][] cachedPoints = new double[sphere.getNumPoints()][];
@@ -211,7 +211,7 @@ public class JaggeredCanvas extends GenericCanvas implements Canvas {
 	 * @param index
 	 * 	the point in history to color to
 	 */
-	private void setColor(int index) {
+	protected void setColor(int index) {
 		index = index / maxStepsPerMutation;
 		Appearance ap = world.getAppearance();
 		double[] rgb = colorHistory.get(index);

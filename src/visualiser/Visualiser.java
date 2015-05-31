@@ -107,6 +107,9 @@ public class Visualiser implements MovementListener{
 		case 2:
 			canvas = new RoundCanvas(maxPlaySpeed *fps);
 			break;
+		case 3:
+			canvas = new JaggeredGreyCanvas(maxPlaySpeed *fps);
+			break;
 		default:
 			canvas = new JaggeredCanvas(maxPlaySpeed * fps);
 			break;
