@@ -83,24 +83,40 @@ public class JaggeredCanvas extends GenericCanvas implements Canvas {
 		for(int i = 0; i < maxStepsPerMutation; i++) {
 			prevCachedPoint = generatePoint(prevCachedPoint, reading.getFlex1(), 
 					reading.getAccel().getX(), reading.getAccel().getY());
-			generateColor(colorHistory.get(colorHistory.size() - 1), reading.getFlex2());
 		}
+		generateColor(colorHistory.get(colorHistory.size() - 1), reading.getFlex2());
         pointIndex++;
 		if(pointIndex == pointMax) {
 			pointIndex = 0;
 		}
-		prevCachedPoint = cachedPoints[pointIndex];
+		prevCachedPoint = getPreviousCachedPoint(pointIndex);
 	}
 	
-	/* (non-Javadoc)
-	 * @see visualiser.Canvas#next(int)
+	private double[] getPreviousCachedPoint(int pointIndex) {
+		double [] point;
+        int multiplier = pointHistory.size() / (maxStepsPerMutation * pointMax);
+		if(pointHistory.size() >= maxStepsPerMutation * pointMax) {
+			point = pointHistory.get(multiplier * maxStepsPerMutation 
+					+ pointIndex * maxStepsPerMutation);
+			// we have wrapped around and are back at the first point again
+		} else { 
+            point = cachedPoints[pointIndex];
+		}
+		return point;
+	}
+	
+	/**
+	 * 
 	 */
 	@Override
 	public boolean next(int steps) {
+		if(historyIndex >= pointHistory.size()) {
+			return false;
+		}
 		for(int i = 0; i < steps; i++) {
 			historyIndex++;
-			if(historyIndex >= colorHistory.size()) {
-				return false;
+			if(historyIndex >= pointHistory.size()) {
+				break;
 			}
 			setPoint(historyIndex);
 		}
@@ -183,6 +199,7 @@ public class JaggeredCanvas extends GenericCanvas implements Canvas {
 	 * 	the point in history to color to
 	 */
 	private void setColor(int index) {
+		index = index / maxStepsPerMutation;
 		Appearance ap = world.getAppearance();
 		double[] rgb = colorHistory.get(index);
 		Color newColor = new Color((int) rgb[0], (int) rgb[1], (int) rgb[2]);
@@ -200,30 +217,30 @@ public class JaggeredCanvas extends GenericCanvas implements Canvas {
 	 *  the direction to move the color. true goes towards white, false towards black
 	 */
 	public void generateColor(double[] base, int reading) {
-		boolean direction = true;
+		double modifier = 1.0;
 		
 		double oldRed = base[0];
 		double oldGreen = base[1];
 		double oldBlue = base[2];
 		
+		//if we only add to the RGB values then every visualization will turn white
+		//the direction variable tells the values to go towards white or black
 		if(reading < 0) {
 			reading *= -1;
-			direction = false;
+			modifier = -1.0;
 		}
 		
 		//a flex sensor reading is normally between -200 and +150
 		//Red is the three lease significant bits, Green is the middle 3 etc
-        double stepRed = (reading & 8);
-        double stepGreen = ((reading>>3) & 8);
-        double stepBlue = ((reading>>6) & 8);
+        double stepRed = (reading & 4);
+        double stepGreen = ((reading>>2) & 4 );
+        double stepBlue = ((reading>>5) & 4);
         
         //we don't want the color to jump from 255 -> 0 as it will make a big jump in the color of the sphere
         //as such we will leave the old color if it goes beyond these values
 		double newBlue, newRed, newGreen;
 		
-		//if we only add to the RGB values then every visualization will turn white
-		//the direction variable tells the values to go towards white or black
-		double modifier = direction ? 1 : -1;
+		//System.out.println("red " + (stepRed * modifier) + " green " + (stepGreen * modifier) + " blue " + (stepBlue * modifier));
 		
         newRed = oldRed + (modifier * stepRed);
         if(newRed < 70 || newRed > 253) {

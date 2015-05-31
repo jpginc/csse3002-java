@@ -30,11 +30,11 @@ public class Visualiser implements MovementListener{
 	private Timer timer = new Timer();
 
 	//this value is how many sensor readings to play displays per second 
-	private int playSpeed = 1;
+	private int playSpeed = 10;
 	//this value is how many sensor readings are currently being displayed per second
 	private int currentSpeed = playSpeed;
 	//the maximum playback speed
-	private int maxPlaySpeed = 20;
+	private int maxPlaySpeed = 10;
 	//The number of readings per second that are read by the crinkle device + 1
 	private int realTimePlaySpeed = 11;
 	//how many frames per second
@@ -96,7 +96,6 @@ public class Visualiser implements MovementListener{
 	 * 	The type of canvas (see public static int's at the top of this class)
 	 */
 	private void setCanvasFromType(int type) {
-		System.out.println("type is " + type);
 		switch (type) {
 		case 0:
 			canvas = new JaggeredCanvas(maxPlaySpeed * fps);
@@ -127,7 +126,7 @@ public class Visualiser implements MovementListener{
 		setCanvasFromType(canvasType);
 		currentSpeed = playSpeed;
 		SensorReading next;
-		while(currentMovementData != null && (next = currentMovementData.getNext()) != null) {
+		while(currentMovementData != null && ((next = currentMovementData.getNext())) != null) {
 			canvas.appendCache(next);
 		}
 	}
@@ -145,9 +144,9 @@ public class Visualiser implements MovementListener{
 	private boolean run() {
 		//mutate using movement data 
 		if(isReverse) {
-			return canvas.previous(maxPlaySpeed);
+			return canvas.previous(fps * currentSpeed);
 		} else {
-			return canvas.next(maxPlaySpeed);
+			return canvas.next(fps * currentSpeed);
 		}
 	}	
 
@@ -201,7 +200,7 @@ public class Visualiser implements MovementListener{
 					//call itself after the timeout
 					startTimer();
 				}
-			}, 1000 / fps / currentSpeed);
+			}, 1000 / fps);
 			} catch (Exception e) {
 				//the timer was already cancelled 
 				return false;
@@ -289,11 +288,8 @@ public class Visualiser implements MovementListener{
 	 * Called in real time mode when the currentMovementData object has recieved another reading
 	 */
 	@Override
-	public void movementNotify() {
-        SensorReading next;
-		while(currentMovementData != null && (next = currentMovementData.getNext()) != null) {
-			canvas.appendCache(next);
-		}
+	public void movementNotify(SensorReading s) {
+		canvas.appendCache(s);
 		playRealtime();
 	}
 }

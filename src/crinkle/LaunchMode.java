@@ -73,6 +73,10 @@ public class LaunchMode extends javax.swing.JFrame {
 				System.out.println(received.trim());
 				//load the recieved data into the realtime data object
 				if ("$_STOP_$".equals(received.trim())) {
+					if(dataArray.size() < 10) {
+						//not enough data, probably a mistake
+						return;
+					}
 					System.out.println("Saving data");
 					saveData();
 					dataArray.clear();
@@ -83,7 +87,6 @@ public class LaunchMode extends javax.swing.JFrame {
 					//dataArray.add(debugArray);
 				} else if (!("$_START_$".equals(received.trim()))) {
 					if(! connectedFlag || realtimeData == null) {
-						//TODO fix the crinkle _STOP_ thing
 						//the crinkle is still sending data from the last time it was connected
                         return;
 					}
@@ -388,7 +391,8 @@ public class LaunchMode extends javax.swing.JFrame {
 		}
 		String filePath = "";
 		PrintWriter writer = null;
-		System.out.println("Size of stored array = " + dataArray.size());
+		System.out.println("Size of stored array = " + dataArray.size()
+				+ " realtime data" + realtimeData.size());
 		sfc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		int status = sfc.showSaveDialog(LaunchMode.this);
 		System.out.println("status =" + status);
@@ -443,10 +447,10 @@ public class LaunchMode extends javax.swing.JFrame {
 						if (connectedFlag) {
 							//if the arduino wasn't stopped before the program closed last time it will
 							//still be transmitting. Stop it now
-                            dataArray.clear();
 							link.writeSerial("$_STOP_$");
 							lblStatus.setText("Connected");
 							realtimeData = new MovementData();
+                            dataArray.clear();
                             playbackMode = new PlaybackMode(this, realtimeData);
                             playbackMode.setVisible(true);
 							return true;
