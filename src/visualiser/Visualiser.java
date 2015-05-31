@@ -6,8 +6,8 @@ import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import crinkle.CrinkleViewer;
 import crinkle.PlaybackMode;
+import crinkle.VisualizingFrame;
 import data.MovementData;
 import data.MovementListener;
 import data.SensorReading;
@@ -23,7 +23,7 @@ public class Visualiser implements MovementListener{
 	public static int ROUNTCANVAS = 1;
 
 
-	private PlaybackMode playbackMode;
+	private VisualizingFrame visualizingFrame;
 	private Canvas canvas;
 	private MovementData currentMovementData;
 
@@ -53,8 +53,8 @@ public class Visualiser implements MovementListener{
 		initialise(0);
 	}
 
-	public Visualiser(File crinkleViewerFile, PlaybackMode playbackMode) {
-		this.playbackMode = playbackMode;
+	public Visualiser(File crinkleViewerFile, VisualizingFrame visualizingFrame) {
+		this.visualizingFrame = visualizingFrame;
 		currentMovementData = new MovementData(crinkleViewerFile);
 		initialise(0);
 	}
@@ -68,24 +68,24 @@ public class Visualiser implements MovementListener{
 	 * @param canvasType
 	 *  the type of canvas to use
 	 */
-	public Visualiser(MovementData m, PlaybackMode p, int canvasType) {
-		this.playbackMode = p;
+	public Visualiser(MovementData m, VisualizingFrame visualizingFrame, int canvasType) {
+		this.visualizingFrame = visualizingFrame;
 		currentMovementData = m;
 		initialise(canvasType);
 		m.addListener(this);
 	}
 	
 	/**
-	 * Creates a visualisation using the given canvasType
+	 * Creates a visualization using the given canvasType
 	 * @param crinkleViewerFile
-	 * 	the file to use for the movemnt data
-	 * @param playbackMode
+	 * 	the file to use for the movement data
+	 * @param visualizingFrame
 	 * 	they playback gui
 	 * @param canvasType
 	 * 	the type of canvas to use
 	 */
-	public Visualiser(File crinkleViewerFile, PlaybackMode playbackMode, int canvasType) {
-		this.playbackMode = playbackMode;
+	public Visualiser(File crinkleViewerFile, VisualizingFrame visualizingFrame, int canvasType) {
+		this.visualizingFrame = visualizingFrame;
 		currentMovementData = new MovementData(crinkleViewerFile);
 		initialise(canvasType);
 	}
@@ -208,11 +208,11 @@ public class Visualiser implements MovementListener{
 			return true;
 		} else {
 			if(isReverse) {
-				playbackMode.initPlaybackButtons();
+				((PlaybackMode) visualizingFrame).initPlaybackButtons();
 			} else {
-				playbackMode.setBtnForwardEnabled(false);
-				playbackMode.setBtnPlayEnabled(false);
-				playbackMode.setLblStatus("End");
+				((PlaybackMode) visualizingFrame).setBtnForwardEnabled(false);
+				((PlaybackMode) visualizingFrame).setBtnPlayEnabled(false);
+				((PlaybackMode) visualizingFrame).setLblStatus("End");
 			}
 		}	
 		playing = false;

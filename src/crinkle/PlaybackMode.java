@@ -1,10 +1,7 @@
 package crinkle;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.io.File;
 
@@ -23,7 +20,7 @@ import visualiser.Visualiser;
  *
  * @author ToanHo
  */
-public class PlaybackMode extends javax.swing.JFrame {
+public class PlaybackMode extends VisualizingFrame {
 
 	private JButton btnForward;
 	private JButton btnPlay;
@@ -32,17 +29,11 @@ public class PlaybackMode extends javax.swing.JFrame {
 	private JLabel lblStatus;
 	private JLabel lblStyle;
 	private JPanel pnlPlayback; // contain pnlPlaybackTop, Middle, Bottom
-	private JPanel pnlViewer;
-	private JPanel pnlLeft; // contain pnlPlayback;
-	private JPanel pnlRight; // contain pnlViewer;
 	private JPanel pnlPlaybackTop;
 	private JPanel pnlPlaybackMiddle;
 	private JPanel pnlPlaybackBottom;
 	private JComboBox cbStyle;
 
-	private LaunchMode launchMode;
-
-	private Visualiser visualiser;
 	private boolean isPlay = false; // default false
 	private File crinkleViewerFile;
 	
@@ -52,15 +43,15 @@ public class PlaybackMode extends javax.swing.JFrame {
 	 * Creates new form PlaybackMode
 	 */
 	public PlaybackMode() {
+		super();
 		initComponents();
-		setVisualiser(new Visualiser());
 	}
 
 
 	public PlaybackMode(LaunchMode launchMode, File crinkleViewerFile) {
+		super(launchMode);
 		initComponents();
 		this.setTitle("Crinkle Viewer - " + crinkleViewerFile.getAbsolutePath());
-		this.launchMode = launchMode;
 		this.crinkleViewerFile = crinkleViewerFile;
 		setVisualiser(new Visualiser(crinkleViewerFile, this));
 		this.addComponentToPnlViewer(visualiser.getViewerComponent());
@@ -109,7 +100,6 @@ public class PlaybackMode extends javax.swing.JFrame {
 			ex.printStackTrace();
 		}
 
-		pnlViewer = new javax.swing.JPanel();
 		pnlPlayback = new javax.swing.JPanel();
 		btnRewind = new javax.swing.JButton();
 		btnPlay = new javax.swing.JButton();
@@ -117,8 +107,6 @@ public class PlaybackMode extends javax.swing.JFrame {
 		lblStatus = new javax.swing.JLabel();
 		lblStyle = new javax.swing.JLabel();
 		btnSnapshot = new javax.swing.JButton();
-		pnlLeft = new javax.swing.JPanel();
-		pnlRight = new javax.swing.JPanel();
 		pnlPlaybackTop = new javax.swing.JPanel();
 		pnlPlaybackMiddle = new javax.swing.JPanel();
 		pnlPlaybackBottom = new javax.swing.JPanel();
@@ -127,17 +115,10 @@ public class PlaybackMode extends javax.swing.JFrame {
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setTitle("Crinkle Viewer");
 		setMinimumSize(new Dimension(960, 720));
-		addWindowListener(new java.awt.event.WindowAdapter() {
-			public void windowClosed(java.awt.event.WindowEvent evt) {
-				formWindowClosed(evt);
-			}
-		});
-
-		pnlViewer.setBorder(BorderFactory.createTitledBorder("Viewer"));
 
 		pnlPlayback.setBorder(BorderFactory.createTitledBorder("Playback"));
 		pnlPlayback.setPreferredSize(new java.awt.Dimension(210, 190));
-
+		
 		btnRewind.setIcon(new ImageIcon(getClass().getResource(CrinkleViewer.REWIND_ICON)));
 		btnRewind.setPreferredSize(new java.awt.Dimension(40, 40));
 		btnRewind.addActionListener(new java.awt.event.ActionListener() {
@@ -161,7 +142,7 @@ public class PlaybackMode extends javax.swing.JFrame {
 				btnForwardActionPerformed(evt);
 			}
 		});
-
+		
 		lblStatus.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 		lblStatus.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 		lblStatus.setPreferredSize(new java.awt.Dimension(175, 16));
@@ -184,22 +165,9 @@ public class PlaybackMode extends javax.swing.JFrame {
 			}
 		});
 
-		pnlLeft.setPreferredSize(new Dimension(220, 150));
-
 		pnlPlaybackTop.setPreferredSize(new Dimension(190, 50));
 		pnlPlaybackMiddle.setPreferredSize(new Dimension(190, 40));
 		pnlPlaybackBottom.setPreferredSize(new Dimension(190, 70));
-
-		getContentPane().setLayout(new BorderLayout());
-		getContentPane().add(pnlLeft, BorderLayout.LINE_START);
-		getContentPane().add(pnlRight, BorderLayout.CENTER);
-
-		pnlLeft.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
-		pnlLeft.add(pnlPlayback);
-		pnlRight.setLayout(new BorderLayout());
-		pnlRight.add(pnlViewer);
-		
-		pnlViewer.setLayout(new BorderLayout());
 
 		pnlPlayback.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
 		pnlPlayback.add(pnlPlaybackTop);
@@ -217,13 +185,7 @@ public class PlaybackMode extends javax.swing.JFrame {
 		pnlPlaybackBottom.add(btnRewind);
 		pnlPlaybackBottom.add(btnPlay);
 		pnlPlaybackBottom.add(btnForward);
-
-		setSize(960, 720);
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		this.setLocation(dim.width / 2 - this.getSize().width / 2, 0);
-
-
-		//validate();
+		super.addComponentToPnlLeft(pnlPlayback);
 	}
 
 
@@ -245,21 +207,7 @@ public class PlaybackMode extends javax.swing.JFrame {
 	private void updateLabel(int speed) {
 		lblStatus.setText(speed + "x Speed");
 	}
-	private void formWindowClosed(java.awt.event.WindowEvent evt) {
-		launchMode.setEnabled(true);
-		launchMode.setVisible(true);
-	}
-
-	private void addComponentToPnlViewer(Component component) {
-		pnlViewer.add(component);
-		validate();
-	}
 	
-	private void removeComponentFromPnlViewer(Component component) {
-		pnlViewer.remove(component);
-		validate();
-	}
-
 	private void btnRewindActionPerformed(ActionEvent evt) {
 		updateLabel(visualiser.rewind());
 		setBtnPlayIcon(CrinkleViewer.PAUSE_ICON);
@@ -291,15 +239,7 @@ public class PlaybackMode extends javax.swing.JFrame {
 		}
 		addComponentToPnlViewer(visualiser.getViewerComponent());
 	}
-
-	public Visualiser getVisualiser() {
-		return visualiser;
-	}
-
-	public void setVisualiser(Visualiser visualiser) {
-		this.visualiser = visualiser;
-	}
-
+	
 	public void setBtnForwardEnabled(boolean b) {
 		btnForward.setEnabled(b);
 	}

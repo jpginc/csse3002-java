@@ -12,7 +12,6 @@ import java.util.List;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -31,7 +30,7 @@ import data.MovementData;
  */
 public class LaunchMode extends javax.swing.JFrame {
 
-	private javax.swing.JButton btnSync;
+	//private javax.swing.JButton btnSync;
 	private javax.swing.JButton btnOpen;
 	private javax.swing.JSeparator jSeparator1;
 	private javax.swing.JLabel lblRecentFile;
@@ -39,7 +38,8 @@ public class LaunchMode extends javax.swing.JFrame {
 	private javax.swing.JTextField txfRecentFile;
 	private javax.swing.JLabel pnlTop; // contain btnConnect
 	private javax.swing.JLabel pnlBottom; // contain lblRecentFile, txfRecentFile, btnOpen
-	private javax.swing.JButton btnReceive; //button that starts receiving live data from the crinkle
+	private javax.swing.JButton btnConnect;
+/*	private javax.swing.JButton btnReceive; //button that starts receiving live data from the crinkle
 	private javax.swing.JButton btnStop; 
 	private javax.swing.JButton btnConnect;
 	private Link link;
@@ -52,7 +52,7 @@ public class LaunchMode extends javax.swing.JFrame {
 	// the movemnt data object to load realtime data into
 	private MovementData realtimeData;
 	// the gui for watching the visualisation
-	PlaybackMode playbackMode;
+	RealTimeMode realTimeMode;*/
 
 
 	/**
@@ -60,7 +60,7 @@ public class LaunchMode extends javax.swing.JFrame {
 	 */
 	public LaunchMode() {
 
-		link = Link.getDefaultInstance();
+/*		link = Link.getDefaultInstance();
 
 		//Add data received from crinkle to data array or store the data as a file
 		link.addRawDataListener(new RawDataListener() {
@@ -94,7 +94,7 @@ public class LaunchMode extends javax.swing.JFrame {
 					realtimeData.recieve(received.trim());
 				}
 			}
-		});
+		});*/
 
 		initComponents();
 	}
@@ -115,7 +115,7 @@ public class LaunchMode extends javax.swing.JFrame {
 			ex.printStackTrace();;
 		}
 
-		btnSync = new javax.swing.JButton();
+		//btnSync = new javax.swing.JButton();
 		jSeparator1 = new javax.swing.JSeparator();
 		txfRecentFile = new javax.swing.JTextField();
 		btnOpen = new javax.swing.JButton();
@@ -123,34 +123,35 @@ public class LaunchMode extends javax.swing.JFrame {
 		lblStatus = new javax.swing.JLabel();
 		pnlTop = new JLabel();
 		pnlBottom = new JLabel();
-		btnReceive = new javax.swing.JButton();
-		btnStop = new javax.swing.JButton();
 		btnConnect = new javax.swing.JButton();
+/*		btnReceive = new javax.swing.JButton();
+		btnStop = new javax.swing.JButton();
+		btnConnect = new javax.swing.JButton();*/
 
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		setTitle("Crinkle Viewer");
 		setResizable(false);
 
-		btnSync.setFont(new java.awt.Font("Tahoma", 1, 14));
+/*		btnSync.setFont(new java.awt.Font("Tahoma", 1, 14));
 		btnSync.setText("Sync");
 		btnSync.setPreferredSize(new java.awt.Dimension(140, 40));
 		btnSync.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				btnSyncActionPerformed(evt);
 			}
-		});
+		});*/
 
-		btnReceive.setFont(new java.awt.Font("Tahoma", 1, 14));
+/*		btnReceive.setFont(new java.awt.Font("Tahoma", 1, 14));
 		btnReceive.setText("Receive");
 		btnReceive.setPreferredSize(new java.awt.Dimension(140, 40));
 		btnReceive.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				btnReceiveActionPerformed(evt);
 			}
-		});
+		});*/
 
-		btnStop.setFont(new java.awt.Font("Tahoma", 1, 14));
+/*		btnStop.setFont(new java.awt.Font("Tahoma", 1, 14));
 		btnStop.setText("Stop");
 		btnStop.setEnabled(false);
 		btnStop.setPreferredSize(new java.awt.Dimension(140, 40));
@@ -158,7 +159,7 @@ public class LaunchMode extends javax.swing.JFrame {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				btnStopActionPerformed(evt);
 			}
-		});
+		});*/
 
 		btnConnect.setFont(new java.awt.Font("Tahoma", 1, 14));
 		btnConnect.setText("Connect");
@@ -212,7 +213,7 @@ public class LaunchMode extends javax.swing.JFrame {
 		validate();
 	}
 
-	private void btnSyncActionPerformed(java.awt.event.ActionEvent evt) {
+/*	private void btnSyncActionPerformed(java.awt.event.ActionEvent evt) {
 		if (link.isConnected()) {
 			lblStatus.setText("Synchronising...");
 			link.writeSerial("$_SYNC_$");
@@ -227,9 +228,9 @@ public class LaunchMode extends javax.swing.JFrame {
 			pnlTop.add(lblStatus);
 			pnlTop.repaint();
 		}
-	}
+	}*/
 
-	private void btnReceiveActionPerformed(java.awt.event.ActionEvent evt) {
+/*	private void btnReceiveActionPerformed(java.awt.event.ActionEvent evt) {
 		if (link.isConnected()) {
 			link.writeSerial("$_TRANSMIT_$");
 			lblStatus.setText("Receiving Data");
@@ -245,29 +246,26 @@ public class LaunchMode extends javax.swing.JFrame {
 			pnlTop.add(lblStatus);
 			pnlTop.repaint();
 		}
-	}
+	}*/
 
-	private void btnStopActionPerformed(java.awt.event.ActionEvent evt) {
+/*	private void btnStopActionPerformed(java.awt.event.ActionEvent evt) {
 		link.writeSerial("$_STOP_$");
 		btnStop.setEnabled(false);
 		btnReceive.setEnabled(true);
 		lblStatus.setText("Receive Completed");
 		//save the data set received
-	}
+	}*/
 
 	private void btnConnectActionPerformed(java.awt.event.ActionEvent evt) {
-		boolean status = connect();
-		if (status) {
-			pnlTop.remove(lblStatus);
+			this.setEnabled(false);
+			RealTimeMode realTimeMode = new RealTimeMode(this);
+/*			pnlTop.remove(lblStatus);
 			pnlTop.remove(btnConnect);
 			pnlTop.add(btnSync);
 			pnlTop.add(btnReceive);
 			pnlTop.add(btnStop);
 			pnlTop.add(lblStatus);
-			pnlTop.repaint();
-		} else {
-			//lblStatus.setText("Crinkle not detected on " + comboPorts.getSelectedItem().toString());
-		}
+			pnlTop.repaint();*/
 	}
 
 	private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {
@@ -385,7 +383,7 @@ public class LaunchMode extends javax.swing.JFrame {
 	/**
 	 * Saves the data received from the crinkle to a .crvf file
 	 */
-	private void saveData() {
+/*	private void saveData() {
 		if(dataArray.size() == 0) {
 			return;
 		}
@@ -417,16 +415,15 @@ public class LaunchMode extends javax.swing.JFrame {
 			}
 			writer.close();
 		}
-	}
+	}*/
 
 	/**
 	 * Establishes a link to the Crinkle device on the specified port
 	 * @return
 	 */
-	private boolean connect() {
+/*	private boolean connect() {
 		boolean connected = false;
 		String port = "";
-		int count = 100;
 		portList = link.getPortList();
 		lblStatus.setText("Connecting");
 		try {
@@ -468,6 +465,6 @@ public class LaunchMode extends javax.swing.JFrame {
 			e.printStackTrace();
 		}
 		return connected;
-	}
+	}*/
 
 }
