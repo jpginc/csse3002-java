@@ -97,6 +97,7 @@ public class RealTimeMode extends VisualizingFrame {
 			this.setVisible(true);
 		} else {
 			launchMode.setEnabled(true);
+			launchMode.setVisible(true);
 			this.dispose();
 		}
 	}
@@ -166,9 +167,9 @@ public class RealTimeMode extends VisualizingFrame {
 			btnReceive.setEnabled(false);
 			btnStop.setEnabled(true);
 		} else {
-			this.dispose();
 			launchMode.setEnabled(true);
 			launchMode.setVisible(true);
+			this.dispose();
 		}
 	}
 	
@@ -192,6 +193,7 @@ public class RealTimeMode extends VisualizingFrame {
 			filePath += ".";
 			filePath += CrinkleViewer.FILE_EXTENSION;
 			File fileToSave = new File(filePath);
+			launchMode.setTxfRecentFile(filePath);
 			System.out.println("Saving file as: " + filePath);
 			try {
 				writer = new PrintWriter(fileToSave);

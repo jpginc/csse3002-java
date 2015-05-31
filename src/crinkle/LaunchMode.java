@@ -379,6 +379,11 @@ public class LaunchMode extends javax.swing.JFrame {
 		}
 		return recentDir;
 	}
+	
+	/** Set text for txfRecentFile field */
+	public void setTxfRecentFile(String string) {
+		txfRecentFile.setText(string);
+	}
 
 	/**
 	 * Saves the data received from the crinkle to a .crvf file
