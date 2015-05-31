@@ -96,18 +96,19 @@ public class Visualiser implements MovementListener{
 	 * 	The type of canvas (see public static int's at the top of this class)
 	 */
 	private void setCanvasFromType(int type) {
-		System.out.println("setting canvas type to " + type);
 		switch (type) {
 		case 0:
 			canvas = new JaggeredCanvas(maxPlaySpeed * fps);
 			break;
+			/*
 		case 1:
 			canvas = new RodCanvas(maxPlaySpeed *fps);
 			break;
-		case 2:
+			*/
+		case 1:
 			canvas = new RoundCanvas(maxPlaySpeed *fps);
 			break;
-		case 3:
+		case 2:
 			canvas = new JaggeredGreyCanvas(maxPlaySpeed *fps);
 			break;
 		default:
@@ -302,5 +303,9 @@ public class Visualiser implements MovementListener{
 	public void movementNotify(SensorReading s) {
 		canvas.appendCache(s);
 		playRealtime();
+	}
+
+	public void destroy() {
+		this.pause();
 	}
 }

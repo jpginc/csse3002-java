@@ -40,37 +40,10 @@ public class RealTimeMode extends VisualizingFrame {
 	private JFileChooser sfc = new JFileChooser();
 	private JComboBox cbStyle;
 	private boolean connectedFlag = false;
+
 	MovementData realtimeData;
 	
-	
-	
-	/**
-	 * Creates new form PlaybackMode
-	 */
-	public RealTimeMode() {
-		initComponents();
-		setVisualiser(new Visualiser());
-	}
-
-	
-	/**
-	 * This constructor creates a player that displays the data in real time
-	 * @param launchMode
-	 * @param m
-	 */
-	public RealTimeMode(LaunchMode launchMode) {
-		super(launchMode);
-		initComponents();
-		//TODO the third paramater to new Visualiser needs to be the selected index of 
-		//the drop down box
-		realtimeData = new MovementData();
-		setVisualiser(new Visualiser(realtimeData, this, 0));
-		this.addComponentToPnlViewer(visualiser.getViewerComponent());
-
-		link = Link.getDefaultInstance();
-
-		//Add data received from crinkle to data array or store the data as a file
-		link.addRawDataListener(new RawDataListener() {
+	RawDataListener listener = new RawDataListener() {
 			@Override
 			public void parseInput(String id, int numBytes, int[] message) {
 				String received = "";
@@ -101,7 +74,37 @@ public class RealTimeMode extends VisualizingFrame {
 					realtimeData.recieve(received.trim());
 				}
 			}
-		});
+		};
+	
+	/**
+	 * Creates new form PlaybackMode
+	 */
+	public RealTimeMode() {
+		System.out.println("in constructor");
+		initComponents();
+		setVisualiser(new Visualiser());
+	}
+
+	
+	/**
+	 * This constructor creates a player that displays the data in real time
+	 * @param launchMode
+	 * @param m
+	 */
+	public RealTimeMode(LaunchMode launchMode) {
+		super(launchMode);
+		initComponents();
+		System.out.println("in constructor");
+		//TODO the third paramater to new Visualiser needs to be the selected index of 
+		//the drop down box
+		realtimeData = new MovementData();
+		setVisualiser(new Visualiser(realtimeData, this, 0));
+		this.addComponentToPnlViewer(visualiser.getViewerComponent());
+
+		link = Link.getDefaultInstance();
+
+		//Add data received from crinkle to data array or store the data as a file
+		link.addRawDataListener(listener);
 		
 		boolean status = connect();
 		if(status == true) {
@@ -128,7 +131,7 @@ public class RealTimeMode extends VisualizingFrame {
 		btnStop = new javax.swing.JButton();
 		lblStatus = new javax.swing.JLabel();
 		lblDesc = new javax.swing.JLabel();
-		cbStyle = new javax.swing.JComboBox(new String[] {"Jagged", "Rod", "Round", "Jagged Greyscale"});
+		cbStyle = new javax.swing.JComboBox(new String[] {"Jagged", "Round", "Jagged Greyscale"});
 		lblDesc.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 		lblDesc.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 		lblDesc.setPreferredSize(new java.awt.Dimension(175, 16));
@@ -153,7 +156,7 @@ public class RealTimeMode extends VisualizingFrame {
 			}
 		});
 		
-		btnStop.setText("Stop");
+		btnStop.setText("Cancel");
 		btnStop.setPreferredSize(new java.awt.Dimension(80, 40));
 		btnStop.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -187,6 +190,13 @@ public class RealTimeMode extends VisualizingFrame {
 
 	
 	private void btnStopActionPerformed(ActionEvent evt) {
+		if(btnStop.getText().equals("Cancel")) {
+			launchMode.setEnabled(true);
+			launchMode.setVisible(true);
+			launchMode.setFeedback("Cancelled");
+			this.dispose();
+			return;
+		}
 		link.writeSerial("$_STOP_$");
 		btnStop.setEnabled(false);
 		btnReceive.setEnabled(true);
@@ -194,6 +204,7 @@ public class RealTimeMode extends VisualizingFrame {
 	}
 
 	private void btnReceiveActionPerformed(ActionEvent evt) {
+		btnStop.setText("Stop");
 		cbStyle.setEnabled(false);
 		lblDesc.setText("Visualisation style locked");
 		if (link.isConnected()) {
@@ -297,4 +308,25 @@ public class RealTimeMode extends VisualizingFrame {
 		}
 		return connected;
 	}
+	
+	/**
+	 * call when the window is dispatched
+	 */
+	public void destroy() {
+		//stop the connection with the crinkle
+		if(link != null && link.isConnected()) {
+			link.writeSerial("$_STOP_$");
+			link.disconnect();
+			//stops us recieveing double data
+			link.removeRawDataListener(listener);
+		}
+		link = null;
+		realtimeData = null;
+		//not really necessary i don't think 
+		if(getVisualiser() != null) {
+            getVisualiser().destroy();
+		}
+		setVisualiser(null);
+	}
+
 }

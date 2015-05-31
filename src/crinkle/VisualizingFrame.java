@@ -115,4 +115,10 @@ public class VisualizingFrame extends javax.swing.JFrame {
 	public void setVisualiser(Visualiser visualiser) {
 		this.visualiser = visualiser;
 	}
+	
+	/**
+	 * called when the window is destoryed
+	 */
+	public void destroy() {
+	}
 }

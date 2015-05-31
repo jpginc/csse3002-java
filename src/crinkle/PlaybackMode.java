@@ -110,7 +110,7 @@ public class PlaybackMode extends VisualizingFrame {
 		pnlPlaybackTop = new javax.swing.JPanel();
 		pnlPlaybackMiddle = new javax.swing.JPanel();
 		pnlPlaybackBottom = new javax.swing.JPanel();
-		cbStyle = new javax.swing.JComboBox(new String[] {"Jagged", "Rod", "Round", "Jaggered Greyscale"});
+		cbStyle = new javax.swing.JComboBox(new String[] {"Jagged", "Round", "Jaggered Greyscale"});
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setTitle("Crinkle Viewer");
@@ -268,5 +268,17 @@ public class PlaybackMode extends VisualizingFrame {
 		btnForward.setEnabled(false);
 		btnRewind.setEnabled(false);
 		lblStatus.setText("");
+	}
+
+	/**
+	 * call when the window is dispatched
+	 */
+	public void destroy() {
+		//not really necessary i don't think 
+		if(getVisualiser() != null) {
+		
+            getVisualiser().destroy();
+		}
+		setVisualiser(null);
 	}
 }
