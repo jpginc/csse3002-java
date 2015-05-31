@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -36,6 +37,7 @@ public class RealTimeMode extends VisualizingFrame {
 	private List<String> portList = new ArrayList<String>();
 	private List<String> dataArray = new ArrayList<String>();
 	private JFileChooser sfc = new JFileChooser();
+	private JComboBox cbStyle;
 	private boolean connectedFlag = false;
 	MovementData realtimeData;
 	
@@ -123,6 +125,7 @@ public class RealTimeMode extends VisualizingFrame {
 		btnReceive = new javax.swing.JButton();
 		btnStop = new javax.swing.JButton();
 		lblStatus = new javax.swing.JLabel();
+		cbStyle = new javax.swing.JComboBox(new String[] {"Jagged", "Rod", "Round", "Jaggered Greyscale"});
 		
 		lblStatus.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 		lblStatus.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -133,7 +136,7 @@ public class RealTimeMode extends VisualizingFrame {
 		setMinimumSize(new Dimension(960, 720));
 
 		pnlRealTime.setBorder(BorderFactory.createTitledBorder("RealTime"));
-		pnlRealTime.setPreferredSize(new java.awt.Dimension(210, 110));
+		pnlRealTime.setPreferredSize(new java.awt.Dimension(210, 210));
 
 		btnReceive.setText("Receive");
 		btnReceive.setPreferredSize(new java.awt.Dimension(80, 40));
@@ -150,12 +153,27 @@ public class RealTimeMode extends VisualizingFrame {
 				btnStopActionPerformed(evt);
 			}
 		});
+        cbStyle.setPreferredSize(new java.awt.Dimension(120, 25));
+		cbStyle.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				cbStyleActionPerformed(evt);
+			}
+			
+		});
 
 		pnlRealTime.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
 		pnlRealTime.add(lblStatus);
 		pnlRealTime.add(btnReceive);
 		pnlRealTime.add(btnStop);
+		pnlRealTime.add(cbStyle);
 		addComponentToPnlLeft(pnlRealTime);
+	}
+
+    private void cbStyleActionPerformed(ActionEvent evt) {
+		int visualiseMode = cbStyle.getSelectedIndex();
+		removeComponentFromPnlViewer(visualiser.getViewerComponent()); 
+		setVisualiser(new Visualiser(realtimeData, this, visualiseMode));
+		addComponentToPnlViewer(visualiser.getViewerComponent());
 	}
 
 
