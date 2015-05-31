@@ -243,6 +243,11 @@ public class RealTimeMode extends VisualizingFrame {
 			}
 			writer.close();
 		}
+		//after displaying the save message return to launch mode
+		launchMode.setEnabled(true);
+		launchMode.setVisible(true);
+		launchMode.setFeedback(status == JFileChooser.APPROVE_OPTION ? "Data Saved" : "Cancelled - Data not saved");
+		this.dispose();
 	}
 
 	/**

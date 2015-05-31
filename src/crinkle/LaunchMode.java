@@ -15,6 +15,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileView;
@@ -257,8 +258,23 @@ public class LaunchMode extends javax.swing.JFrame {
 	}*/
 
 	private void btnConnectActionPerformed(java.awt.event.ActionEvent evt) {
+			setFeedback("Attempting to connect crinkle...");
 			this.setEnabled(false);
-			RealTimeMode realTimeMode = new RealTimeMode(this);
+			final LaunchMode that = this;
+            // allows the feedback message to be drawn
+            SwingWorker worker = new SwingWorker<String,Void>() {
+            	@Override
+                protected String doInBackground() throws Exception {
+                    RealTimeMode realTimeMode = new RealTimeMode(that);
+                    return null;
+            	}
+                    
+                    @Override
+                    protected void done()
+                    {   
+                    }
+            };
+            worker.execute();
 /*			pnlTop.remove(lblStatus);
 			pnlTop.remove(btnConnect);
 			pnlTop.add(btnSync);
@@ -353,6 +369,11 @@ public class LaunchMode extends javax.swing.JFrame {
 			lblStatus.setText("");
 			return null;
 		}
+	}
+	
+	public void setFeedback(String s) {
+		lblStatus.setText(s);
+		lblStatus.updateUI();
 	}
 
 	/** Get the file extension
