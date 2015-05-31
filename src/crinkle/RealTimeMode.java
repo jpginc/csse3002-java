@@ -32,6 +32,7 @@ public class RealTimeMode extends VisualizingFrame {
 	private JButton btnStop;
 	private JPanel pnlRealTime;
 	private JLabel lblStatus;
+	private JLabel lblDesc;
 
 	private Link link;
 	private List<String> portList = new ArrayList<String>();
@@ -95,6 +96,7 @@ public class RealTimeMode extends VisualizingFrame {
 						//the crinkle is still sending data from the last time it was connected
                         return;
 					}
+                    lblStatus.setText("Receiving Data");
 					dataArray.add(received.trim());
 					realtimeData.recieve(received.trim());
 				}
@@ -125,7 +127,12 @@ public class RealTimeMode extends VisualizingFrame {
 		btnReceive = new javax.swing.JButton();
 		btnStop = new javax.swing.JButton();
 		lblStatus = new javax.swing.JLabel();
+		lblDesc = new javax.swing.JLabel();
 		cbStyle = new javax.swing.JComboBox(new String[] {"Jagged", "Rod", "Round", "Jaggered Greyscale"});
+		lblDesc.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+		lblDesc.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+		lblDesc.setPreferredSize(new java.awt.Dimension(175, 16));
+		lblDesc.setText("Select Visualisation Style");
 		
 		lblStatus.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 		lblStatus.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -165,6 +172,7 @@ public class RealTimeMode extends VisualizingFrame {
 		pnlRealTime.add(lblStatus);
 		pnlRealTime.add(btnReceive);
 		pnlRealTime.add(btnStop);
+		pnlRealTime.add(lblDesc);
 		pnlRealTime.add(cbStyle);
 		addComponentToPnlLeft(pnlRealTime);
 	}
@@ -186,10 +194,11 @@ public class RealTimeMode extends VisualizingFrame {
 	}
 
 	private void btnReceiveActionPerformed(ActionEvent evt) {
-		// TODO
+		cbStyle.setEnabled(false);
+		lblDesc.setText("Visualisation style locked");
 		if (link.isConnected()) {
 			link.writeSerial("$_TRANSMIT_$");
-			lblStatus.setText("Receiving Data");
+            lblStatus.setText("Move Crinkle to start data transfer");
 			btnReceive.setEnabled(false);
 			btnStop.setEnabled(true);
 		} else {
