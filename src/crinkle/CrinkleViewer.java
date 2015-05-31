@@ -7,8 +7,6 @@ import java.lang.reflect.Method;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
-import visualiser.Visualiser;
-
 /**
  *
  * @author ToanHo

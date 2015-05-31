@@ -5,18 +5,11 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.io.File;
 
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
-import data.MovementData;
 import visualiser.Visualiser;
 
 /**
@@ -39,7 +32,6 @@ public class VisualizingFrame extends javax.swing.JFrame {
 	public VisualizingFrame(LaunchMode launchMode) {
 		initComponents();
 		this.launchMode = launchMode;
-		setVisualiser(new Visualiser());
 	}
 
 	/**
