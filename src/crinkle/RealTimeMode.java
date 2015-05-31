@@ -285,11 +285,11 @@ public class RealTimeMode extends VisualizingFrame {
 						}
 					}
 				}
-				lblStatus.setText("Crinkle not connected");
+				launchMode.setFeedback("Unable to connect");
 				System.out.println("Crinkle not connected");
 				connected = false;
 			} else {
-				lblStatus.setText("Crinkle not connected");
+				launchMode.setFeedback("Unable to connect - No Crinkle found");
 				System.out.println("Crinkle not connected");
 			}
 		} catch (Exception e) {
