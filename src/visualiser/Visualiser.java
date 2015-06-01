@@ -6,19 +6,24 @@ import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import crinkle.CrinkleViewer;
 import crinkle.PlaybackMode;
+import crinkle.VisualizingFrame;
 import data.MovementData;
+import data.MovementListener;
 import data.SensorReading;
 import de.jreality.scene.Viewer;
 import de.jreality.ui.viewerapp.FileFilter;
 import de.jreality.ui.viewerapp.FileLoaderDialog;
 import de.jreality.util.ImageUtility;
 
-public class Visualiser {
+public class Visualiser implements MovementListener{
+
+	// the different types of canvases
+	public static int JAGGAREDCANVAS = 0;
+	public static int ROUNTCANVAS = 1;
 
 
-	private PlaybackMode playbackMode;
+	private VisualizingFrame visualizingFrame;
 	private Canvas canvas;
 	private MovementData currentMovementData;
 
@@ -29,7 +34,9 @@ public class Visualiser {
 	//this value is how many sensor readings are currently being displayed per second
 	private int currentSpeed = playSpeed;
 	//the maximum playback speed
-	private int maxPlaySpeed = 8;
+	private int maxPlaySpeed = 20;
+	//The number of readings per second that are read by the crinkle device + 1
+	private int realTimePlaySpeed = 11;
 	//how many frames per second
 	private int fps = 24;
 
@@ -43,68 +50,91 @@ public class Visualiser {
 
 
 	public Visualiser() {
-		canvas = new JaggeredCanvas(maxPlaySpeed * fps);
-		initialise();
+		initialise(0);
 	}
 
-	public Visualiser(File crinkleViewerFile, PlaybackMode playbackMode) {
-		this.playbackMode = playbackMode;
+	public Visualiser(File crinkleViewerFile, VisualizingFrame visualizingFrame) {
+		this.visualizingFrame = visualizingFrame;
 		currentMovementData = new MovementData(crinkleViewerFile);
-		canvas = new JaggeredCanvas(maxPlaySpeed * fps);
-		initialise();
-		/*
-		System.out.println("<<<Test in Visualiser constructor>>>");
-		while(currentMovementData.hasNext()) {
-			SensorReading sr = currentMovementData.getNext();
-			System.out.println(sr.toString());
-		}
-		System.out.println("Print backward");
-		while(currentMovementData.hasPrevious()) {
-			SensorReading sr = currentMovementData.getPrevious();
-			System.out.println(sr.toString());
-		}
-		*/
+		initialise(0);
 	}
-	
+
 	/**
-	 * 
-	 * @param crinkleViewerFile
-	 * @param playbackMode
-	 * @param visMode
+	 * creates a Visualiser that displays the visualisation in real time
+	 * @param m
+	 *  the movement data to listen to
+	 * @param p
+	 *  the playback gui
+	 * @param canvasType
+	 *  the type of canvas to use
 	 */
-	public Visualiser(File crinkleViewerFile, PlaybackMode playbackMode, int visMode) {
-		this.playbackMode = playbackMode;
+	public Visualiser(MovementData m, VisualizingFrame visualizingFrame, int canvasType) {
+		this.visualizingFrame = visualizingFrame;
+		currentMovementData = m;
+		initialise(canvasType);
+		m.addListener(this);
+	}
+
+	/**
+	 * Creates a visualization using the given canvasType
+	 * @param crinkleViewerFile
+	 * 	the file to use for the movement data
+	 * @param visualizingFrame
+	 * 	they playback gui
+	 * @param canvasType
+	 * 	the type of canvas to use
+	 */
+	public Visualiser(File crinkleViewerFile, VisualizingFrame visualizingFrame, int canvasType) {
+		this.visualizingFrame = visualizingFrame;
 		currentMovementData = new MovementData(crinkleViewerFile);
-		switch (visMode) {
+		initialise(canvasType);
+	}
+
+	/**
+	 * assigns the appropriate canvas from the type given
+	 * @param type
+	 * 	The type of canvas (see public static int's at the top of this class)
+	 */
+	private void setCanvasFromType(int type) {
+		switch (type) {
 		case 0:
 			canvas = new JaggeredCanvas(maxPlaySpeed * fps);
 			break;
+			/*
+		case 1:
+			canvas = new RodCanvas(maxPlaySpeed *fps);
+			break;
+			*/
 		case 1:
 			canvas = new RoundCanvas(maxPlaySpeed *fps);
+			break;
+		case 2:
+			canvas = new JaggeredGreyCanvas(maxPlaySpeed *fps);
 			break;
 		default:
 			canvas = new JaggeredCanvas(maxPlaySpeed * fps);
 			break;
-		}
-		initialise();
+		}	
 	}
 
 	/** Load data**/
 	public void Load(MovementData movementData) {
 		canvas = new JaggeredCanvas(maxPlaySpeed * fps);
 		currentMovementData = movementData;
-		initialise();
+		initialise(0);
 	}
 
 	/**
 	 * resets the play settings
 	 */
-	public void initialise(){
+	public void initialise(int canvasType){
+		setCanvasFromType(canvasType);
 		currentSpeed = playSpeed;
 		SensorReading next;
-		while((next = currentMovementData.getNext()) != null) {
-			canvas.appendCache(next);
+		while(currentMovementData != null && ((next = currentMovementData.getNext())) != null) {
+			canvas.appendCacheOffline(next);
 		}
+		canvas.reset();
 	}
 
 	/**
@@ -120,9 +150,9 @@ public class Visualiser {
 	private boolean run() {
 		//mutate using movement data 
 		if(isReverse) {
-			return canvas.previous(maxPlaySpeed);
+			return canvas.previous(fps * currentSpeed);
 		} else {
-			return canvas.next(maxPlaySpeed);
+			return canvas.next(fps * currentSpeed);
 		}
 	}	
 
@@ -131,50 +161,71 @@ public class Visualiser {
 	 * until there are no more sensor readings to mutate with
 	 * 
 	 */
-	public void play() {
+	public int play() {
 		isReverse = false;
 		currentSpeed = playSpeed;
-		if(! startTimer()) {
-			//TODO
-			//the play button was pushed but it's the end of the visualisation 
-			//should we start from the beginning again?
+		if(! playing) {
+			if(! startTimer()) {
+				//TODO
+				//the play button was pushed but it's the end of the visualisation 
+				//should we start from the beginning again?
+			}
 		}
+		return currentSpeed;
+	}
+
+	/**
+	 * starts the visualsation playing in just above realtime speed
+	 * 
+	 * @return
+	 */
+	public int playRealtime() {
+		isReverse = false;
+		currentSpeed = realTimePlaySpeed; 
+		if(! playing) {
+			startTimer();
+		}
+		return currentSpeed;
 	}
 
 	/**
 	 * does one mutation and starts the timer to call this function again
 	 * 
+	 * before calling this function check if the visualisation is already playing
+	 * 
 	 * @return
-	 * true if a step has occured false otherwise
+	 * 	true if a step has occured false otherwise
 	 */
 	private boolean startTimer() {
 		playing = true;
-		//TODO
-		//do we have to worry about threads?
-		//this can be called by play, ffwd and rwnd so cancel the timer first. 
 		if(run()) {
-			timer.schedule(new TimerTask() {
-				@Override
-				public void run() {
-					//call itself after the timeout
-					startTimer();
-				}
-			}, 1000 / fps / currentSpeed);
+			try {
+				timer.schedule(new TimerTask() {
+					@Override
+					public void run() {
+						//call itself after the timeout
+						startTimer();
+					}
+				}, 1000 / fps);
+			} catch (Exception e) {
+				//the timer was already cancelled 
+				playing = false;
+				return false;
+			}
 			return true;
 		} else {
-			if(isReverse) {
-				playbackMode.setBtnRewindEnabled(false);
-				playbackMode.setBtnForwardEnabled(false);
-				playbackMode.setBtnPlayIcon(CrinkleViewer.PLAY_ICON);
-				playbackMode.setBtnPlayEnabled(true);
-				playbackMode.setIsPlay(false);
-			} else {
-				playbackMode.setBtnForwardEnabled(false);
-				playbackMode.setBtnPlayEnabled(false);
+			if(visualizingFrame instanceof PlaybackMode) {
+				PlaybackMode pbm = (PlaybackMode) visualizingFrame;
+				if(isReverse) {
+					pbm.initPlaybackButtons();
+				} else {
+					pbm.setBtnForwardEnabled(false);
+					pbm.setBtnPlayEnabled(false);
+					pbm.setLblStatus("End");
+				}
 			}
 		}	
 		playing = false;
-		currentSpeed = playSpeed;
 		return false;
 	}
 
@@ -241,4 +292,17 @@ public class Visualiser {
 		return (Component) this.canvas.getViewer().getViewingComponent();
 	}
 
+	/**
+	 * 
+	 * Called in real time mode when the currentMovementData object has recieved another reading
+	 */
+	@Override
+	public void movementNotify(SensorReading s) {
+		canvas.appendCache(s);
+		playRealtime();
+	}
+
+	public void destroy() {
+		this.pause();
+	}
 }

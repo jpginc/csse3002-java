@@ -25,7 +25,7 @@ public class GenericCanvas {
 	}
 
 	public Viewer getViewer() {
-		System.out.println("here");
+		//System.out.println("here");
 		return viewer;
 	}
 

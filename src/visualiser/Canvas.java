@@ -16,6 +16,7 @@ public interface Canvas {
 	 * <pre> reading != null
 	 */
 	public abstract void appendCache(SensorReading reading);
+	public abstract void appendCacheOffline(SensorReading reading);
 
 	/**
 	 * Applies the next mutation, if any, to the canvas. 
@@ -46,5 +47,7 @@ public interface Canvas {
 	public abstract int getHistroyIndex();
 
 	public abstract int getPointIndex();
+	
+	public abstract void reset();
 
 }
