@@ -1,4 +1,4 @@
-package visualisation;
+package crinkle;
 
 import static org.junit.Assert.*;
 
