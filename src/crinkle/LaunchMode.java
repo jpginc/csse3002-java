@@ -4,17 +4,20 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Toolkit;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileView;
@@ -22,13 +25,15 @@ import javax.swing.filechooser.FileView;
 import org.zu.ardulink.Link;
 import org.zu.ardulink.RawDataListener;
 
+import data.MovementData;
+
 /**
  *
  * @author ToanHo
  */
 public class LaunchMode extends javax.swing.JFrame {
 
-	private javax.swing.JButton btnSync;
+	//private javax.swing.JButton btnSync;
 	private javax.swing.JButton btnOpen;
 	private javax.swing.JSeparator jSeparator1;
 	private javax.swing.JLabel lblRecentFile;
@@ -36,48 +41,13 @@ public class LaunchMode extends javax.swing.JFrame {
 	private javax.swing.JTextField txfRecentFile;
 	private javax.swing.JLabel pnlTop; // contain btnConnect
 	private javax.swing.JLabel pnlBottom; // contain lblRecentFile, txfRecentFile, btnOpen
-	private javax.swing.JButton btnReceive; //button that starts receiving live data from the crinkle
-	private javax.swing.JButton btnStop; 
 	private javax.swing.JButton btnConnect;
-	private Link link;
-	private List<String> portList = new ArrayList<String>();
-	private JComboBox comboPorts;
-	private List<String> dataArray = new ArrayList<String>();
-	private JFileChooser sfc = new JFileChooser();
-	private boolean connectedFlag = false;
-	private String debugArray = "1,0,0,0,0"; //change for debug purposes
-
+	private VisualizingFrame currentFrame;
 
 	/**
 	 * Creates new form LaunchMode
 	 */
 	public LaunchMode() {
-
-		link = Link.getDefaultInstance();
-
-		//Add data received from crinkle to data array or store the data as a file
-		link.addRawDataListener(new RawDataListener() {
-			@Override
-			public void parseInput(String id, int numBytes, int[] message) {
-				String received = "";
-				for (int i = 0; i < numBytes; i++) {
-					received += (char) message[i];
-				}
-				System.out.println(received.trim());
-				if ("$_STOP_$".equals(received.trim())) {
-					System.out.println("Saving data");
-					saveData();
-					dataArray.clear();
-				} else if ("$_YES_$".equals(received.trim())) {
-					connectedFlag = true;
-				} else if ("$_START_$".equals(received.trim())) {
-					dataArray.add(debugArray);
-				} else if (!("$_START_$".equals(received.trim()))) {
-					dataArray.add(received.trim());
-				}
-			}
-		});
-
 		initComponents();
 	}
 
@@ -97,7 +67,7 @@ public class LaunchMode extends javax.swing.JFrame {
 			ex.printStackTrace();;
 		}
 
-		btnSync = new javax.swing.JButton();
+		//btnSync = new javax.swing.JButton();
 		jSeparator1 = new javax.swing.JSeparator();
 		txfRecentFile = new javax.swing.JTextField();
 		btnOpen = new javax.swing.JButton();
@@ -105,43 +75,15 @@ public class LaunchMode extends javax.swing.JFrame {
 		lblStatus = new javax.swing.JLabel();
 		pnlTop = new JLabel();
 		pnlBottom = new JLabel();
-		btnReceive = new javax.swing.JButton();
-		btnStop = new javax.swing.JButton();
 		btnConnect = new javax.swing.JButton();
-		comboPorts = new javax.swing.JComboBox(portList.toArray());
+/*		btnReceive = new javax.swing.JButton();
+		btnStop = new javax.swing.JButton();
+		btnConnect = new javax.swing.JButton();*/
 
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		setTitle("Crinkle Viewer");
 		setResizable(false);
-
-		btnSync.setFont(new java.awt.Font("Tahoma", 1, 14));
-		btnSync.setText("Sync");
-		btnSync.setPreferredSize(new java.awt.Dimension(140, 40));
-		btnSync.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				btnSyncActionPerformed(evt);
-			}
-		});
-
-		btnReceive.setFont(new java.awt.Font("Tahoma", 1, 14));
-		btnReceive.setText("Receive");
-		btnReceive.setPreferredSize(new java.awt.Dimension(140, 40));
-		btnReceive.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				btnReceiveActionPerformed(evt);
-			}
-		});
-
-		btnStop.setFont(new java.awt.Font("Tahoma", 1, 14));
-		btnStop.setText("Stop");
-		btnStop.setEnabled(false);
-		btnStop.setPreferredSize(new java.awt.Dimension(140, 40));
-		btnStop.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				btnStopActionPerformed(evt);
-			}
-		});
 
 		btnConnect.setFont(new java.awt.Font("Tahoma", 1, 14));
 		btnConnect.setText("Connect");
@@ -195,69 +137,27 @@ public class LaunchMode extends javax.swing.JFrame {
 		validate();
 	}
 
-	private void btnSyncActionPerformed(java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
-		if (link.isConnected()) {
-			lblStatus.setText("Synchronising...");
-			link.writeSerial("$_SYNC_$");
-			lblStatus.setText("Finished Sync");
-		} else {
-			lblStatus.setText("Crinkle disconnected");
-			pnlTop.remove(btnSync);
-			pnlTop.remove(btnReceive);
-			pnlTop.remove(btnStop);
-			pnlTop.remove(lblStatus);
-			pnlTop.add(btnConnect);
-			pnlTop.add(lblStatus);
-			pnlTop.repaint();
-		}
-	}
-
-	private void btnReceiveActionPerformed(java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
-		if (link.isConnected()) {
-			link.writeSerial("$_TRANSMIT_$");
-			lblStatus.setText("Receiving Data");
-			btnReceive.setEnabled(false);
-			btnStop.setEnabled(true);
-		} else {
-			lblStatus.setText("Crinkle disconnected");
-			pnlTop.remove(btnSync);
-			pnlTop.remove(btnReceive);
-			pnlTop.remove(btnStop);
-			pnlTop.remove(lblStatus);
-			pnlTop.add(btnConnect);
-			pnlTop.add(lblStatus);
-			pnlTop.repaint();
-		}
-	}
-
-	private void btnStopActionPerformed(java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
-		link.writeSerial("$_STOP_$");
-		btnStop.setEnabled(false);
-		btnReceive.setEnabled(true);
-		lblStatus.setText("Receive Completed");
-		//save the data set received
-	}
-
 	private void btnConnectActionPerformed(java.awt.event.ActionEvent evt) {
-		boolean status = connect();
-		if (status) {
-			pnlTop.remove(lblStatus);
-			pnlTop.remove(btnConnect);
-			pnlTop.add(btnSync);
-			pnlTop.add(btnReceive);
-			pnlTop.add(btnStop);
-			pnlTop.add(lblStatus);
-			pnlTop.repaint();
-		} else {
-			//lblStatus.setText("Crinkle not detected on " + comboPorts.getSelectedItem().toString());
-		}
+			setFeedback("Attempting to connect crinkle...");
+			this.setEnabled(false);
+			final LaunchMode that = this;
+            // allows the feedback message to be drawn
+            SwingWorker worker = new SwingWorker<String,Void>() {
+            	@Override
+                protected String doInBackground() throws Exception {
+                    that.setCurrentFrame(new RealTimeMode(that));
+                    return null;
+            	}
+                    
+                    @Override
+                    protected void done()
+                    {   
+                    }
+            };
+            worker.execute();
 	}
 
 	private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
 		System.err.println("<<<Browse sample file: [Your Workspace]/csse3002-java/src/sampleData/sample.crvf>>>");
 		String recentDir = getRecentDir(txfRecentFile.getText());
 		File selectedFile = chooseFile(recentDir);
@@ -265,9 +165,9 @@ public class LaunchMode extends javax.swing.JFrame {
 			this.setEnabled(false);
 			lblStatus.setText("");
 			txfRecentFile.setText(selectedFile.getAbsolutePath());
-			PlaybackMode playbackMode = new PlaybackMode(this, selectedFile);
+			this.setCurrentFrame(new PlaybackMode(this, selectedFile));
 			this.setVisible(false);
-			playbackMode.setVisible(true);
+			this.getCurrentFrame().setVisible(true);
 		} 
 	}
 
@@ -343,6 +243,11 @@ public class LaunchMode extends javax.swing.JFrame {
 			return null;
 		}
 	}
+	
+	public void setFeedback(String s) {
+		lblStatus.setText(s);
+		lblStatus.updateUI();
+	}
 
 	/** Get the file extension
 	 * @return file extension (lower case), otherwise null */
@@ -368,82 +273,40 @@ public class LaunchMode extends javax.swing.JFrame {
 		}
 		return recentDir;
 	}
-
-	/**
-	 * Saves the data received from the crinkle to a .crvf file
-	 */
-	private void saveData() {
-		String filePath = "";
-		PrintWriter writer = null;
-		System.out.println("Size of stored array = " + dataArray.size());
-		sfc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-		int status = sfc.showSaveDialog(LaunchMode.this);
-		System.out.println("status =" + status);
-		if (status == JFileChooser.APPROVE_OPTION) {
-			filePath = sfc.getSelectedFile().getAbsolutePath();
-			// add file extension ".crvf" to file path
-			filePath += ".";
-			filePath += CrinkleViewer.FILE_EXTENSION;
-			File fileToSave = new File(filePath);
-			txfRecentFile.setText(filePath);
-			System.out.println("Saving file as: " + filePath);
-			try {
-				writer = new PrintWriter(fileToSave);
-			} catch (FileNotFoundException e) {
-				System.out.println("file not found");
-				e.printStackTrace();
-			}
-			for (int i = 0; i < dataArray.size(); i++) {
-				//save each line
-				writer.println(dataArray.get(i));
-				writer.flush();
-			}
-			writer.close();
-		}
+	
+	/** Set text for txfRecentFile field */
+	public void setTxfRecentFile(String string) {
+		txfRecentFile.setText(string);
 	}
 
+
 	/**
-	 * Establishes a link to the Crinkle device on the specified port
-	 * @return
+	 * @return the currentFrame
 	 */
-	private boolean connect() {
-		boolean connected = false;
-		String port = "";
-		int count = 100;
-		portList = link.getPortList();
-		lblStatus.setText("Connecting");
-		try {
-			if (portList != null && portList.size() > 0) {
-				//String port = comboPorts.getSelectedItem().toString();
-				for (int i = 0; i < portList.size(); i++) {
-					port = portList.get(i);
-					if (port.startsWith("/dev/cu.usbmodem") || port.startsWith("COM")) {
-						connected = link.connect(port);
-						//Check to see if Crinkle connected on port
-						link.writeSerial("$_CHECK_$");
-						//see if response received
-						try {
-							Thread.sleep(1500);
-						} catch (InterruptedException e) {
-							 Thread.currentThread().interrupt();
-						}
-						if (connectedFlag) {
-							lblStatus.setText("Connected");
-							return true;
-						}
-					}
-				}
-				lblStatus.setText("Crinkle not connected");
-				System.out.println("Crinkle not connected");
-				connected = false;
-			} else {
-				lblStatus.setText("Crinkle not connected");
-				System.out.println("Crinkle not connected");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+	public VisualizingFrame getCurrentFrame() {
+		return currentFrame;
+	}
+
+
+	/**
+	 * @param currentFrame the currentFrame to set
+	 */
+	public void setCurrentFrame(VisualizingFrame currentFrame) {
+		final LaunchMode that = this;
+		this.currentFrame = currentFrame;
+		currentFrame.addWindowListener(new WindowAdapter() {
+          public void windowClosed(WindowEvent e) {
+              that.destroyFrame();
+              that.setFeedback("");
+          }
+        });
+	}
+	
+	public void destroyFrame() {
+		if(currentFrame != null) {
+			currentFrame.destroy();
+			currentFrame = null;
 		}
-		return connected;
 	}
 
 }
