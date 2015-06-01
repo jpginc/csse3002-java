@@ -11,7 +11,7 @@ import data.SensorReading;
 import de.jreality.geometry.Primitives;
 import de.jreality.scene.IndexedFaceSet;
 import visualiser.Canvas;
-import visualiser.JaggeredCanvas;
+import visualiser.JaggedCanvas;
 
 
 
@@ -21,7 +21,7 @@ public class TestJaggeredCanvas {
 	@Test
 	public void testCanvas1() {
 		try {
-			Canvas sampleCanvas = new JaggeredCanvas(8*24);
+			Canvas sampleCanvas = new JaggedCanvas(8*24);
 			List<Integer> listInt = createArray(3,100,2,25,6);
 			List<Integer> zero = createArray(0,0,0,0,0);
 			SensorReading sampleReading = new SensorReading(listInt, zero);
@@ -33,14 +33,14 @@ public class TestJaggeredCanvas {
 	
 	@Test(expected=Exception.class)
 	public void testCanvas2() {
-		Canvas sampleCanvas = new JaggeredCanvas(8*24);
+		Canvas sampleCanvas = new JaggedCanvas(8*24);
 		sampleCanvas.appendCache(null);
 
 	}
 	
 	@Test
 	public void testPreviousPosition() {
-		JaggeredCanvas sampleCanvas = new JaggeredCanvas(8*24);
+		JaggedCanvas sampleCanvas = new JaggedCanvas(8*24);
 		List<Integer> zero = createArray(0,0,0,0,0);
 		List<Integer> listInt1 = createArray(3,100,2,25,6);
 		SensorReading sampleReading1 = new SensorReading(listInt1, zero);

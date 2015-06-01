@@ -7,10 +7,6 @@ import java.lang.reflect.Method;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
-/**
- *
- * @author ToanHo
- */
 public class CrinkleViewer {
 
 	public static final String FILE_EXTENSION = "crvf"; 

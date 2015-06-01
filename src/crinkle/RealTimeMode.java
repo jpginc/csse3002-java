@@ -22,10 +22,6 @@ import org.zu.ardulink.RawDataListener;
 import data.MovementData;
 import visualiser.Visualiser;
 
-/**
- *
- * @author ToanHo
- */
 public class RealTimeMode extends VisualizingFrame {
 
 	private JButton btnReceive;
@@ -42,40 +38,40 @@ public class RealTimeMode extends VisualizingFrame {
 	private boolean connectedFlag = false;
 
 	MovementData realtimeData;
-	
+
 	RawDataListener listener = new RawDataListener() {
-			@Override
-			public void parseInput(String id, int numBytes, int[] message) {
-				String received = "";
-				for (int i = 0; i < numBytes; i++) {
-					received += (char) message[i];
-				}
-				System.out.println(received.trim());
-				//load the recieved data into the realtime data object
-				if ("$_STOP_$".equals(received.trim())) {
-					if(dataArray.size() < 10) {
-						//too small
-						return;
-					}
-					System.out.println("Saving data");
-					saveData();
-					dataArray.clear();
-				} else if ("$_YES_$".equals(received.trim())) {
-					connectedFlag = true;
-				} else if ("$_START_$".equals(received.trim())) {
-				} else if (!("$_START_$".equals(received.trim()))) {
-					if(! connectedFlag || realtimeData == null) {
-						//TODO fix the crinkle _STOP_ thing
-						//the crinkle is still sending data from the last time it was connected
-                        return;
-					}
-                    lblStatus.setText("Receiving Data");
-					dataArray.add(received.trim());
-					realtimeData.recieve(received.trim());
-				}
+		@Override
+		public void parseInput(String id, int numBytes, int[] message) {
+			String received = "";
+			for (int i = 0; i < numBytes; i++) {
+				received += (char) message[i];
 			}
-		};
-	
+			System.out.println(received.trim());
+			//load the recieved data into the realtime data object
+			if ("$_STOP_$".equals(received.trim())) {
+				if(dataArray.size() < 10) {
+					//too small
+					return;
+				}
+				System.out.println("Saving data");
+				saveData();
+				dataArray.clear();
+			} else if ("$_YES_$".equals(received.trim())) {
+				connectedFlag = true;
+			} else if ("$_START_$".equals(received.trim())) {
+			} else if (!("$_START_$".equals(received.trim()))) {
+				if(! connectedFlag || realtimeData == null) {
+					//fix the crinkle _STOP_ thing
+					//the crinkle is still sending data from the last time it was connected
+					return;
+				}
+				lblStatus.setText("Receiving Data");
+				dataArray.add(received.trim());
+				realtimeData.recieve(received.trim());
+			}
+		}
+	};
+
 	/**
 	 * Creates new form PlaybackMode
 	 */
@@ -85,7 +81,7 @@ public class RealTimeMode extends VisualizingFrame {
 		setVisualiser(new Visualiser());
 	}
 
-	
+
 	/**
 	 * This constructor creates a player that displays the data in real time
 	 * @param launchMode
@@ -95,7 +91,7 @@ public class RealTimeMode extends VisualizingFrame {
 		super(launchMode);
 		initComponents();
 		System.out.println("in constructor");
-		//TODO the third paramater to new Visualiser needs to be the selected index of 
+		//the third parameter to new Visualizer needs to be the selected index of 
 		//the drop down box
 		realtimeData = new MovementData();
 		setVisualiser(new Visualiser(realtimeData, this, 0));
@@ -105,7 +101,7 @@ public class RealTimeMode extends VisualizingFrame {
 
 		//Add data received from crinkle to data array or store the data as a file
 		link.addRawDataListener(listener);
-		
+
 		boolean status = connect();
 		if(status == true) {
 			launchMode.setVisible(false);
@@ -116,7 +112,7 @@ public class RealTimeMode extends VisualizingFrame {
 			this.dispose();
 		}
 	}
-	
+
 	/**
 	 * This method is called from within the constructor to initialize the form.
 	 * WARNING: Do NOT modify this code. The content of this method is always
@@ -131,12 +127,12 @@ public class RealTimeMode extends VisualizingFrame {
 		btnStop = new javax.swing.JButton();
 		lblStatus = new javax.swing.JLabel();
 		lblDesc = new javax.swing.JLabel();
-		cbStyle = new javax.swing.JComboBox(new String[] {"Jagged", "Round", "Jagged Greyscale"});
+		cbStyle = new javax.swing.JComboBox(new String[] {"Jagged", "Jagged Greyscale", "Round"});
 		lblDesc.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 		lblDesc.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 		lblDesc.setPreferredSize(new java.awt.Dimension(175, 16));
 		lblDesc.setText("Select Visualisation Style");
-		
+
 		lblStatus.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 		lblStatus.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 		lblStatus.setPreferredSize(new java.awt.Dimension(175, 16));
@@ -155,7 +151,7 @@ public class RealTimeMode extends VisualizingFrame {
 				btnReceiveActionPerformed(evt);
 			}
 		});
-		
+
 		btnStop.setText("Cancel");
 		btnStop.setPreferredSize(new java.awt.Dimension(80, 40));
 		btnStop.addActionListener(new java.awt.event.ActionListener() {
@@ -163,12 +159,12 @@ public class RealTimeMode extends VisualizingFrame {
 				btnStopActionPerformed(evt);
 			}
 		});
-        cbStyle.setPreferredSize(new java.awt.Dimension(120, 25));
+		cbStyle.setPreferredSize(new java.awt.Dimension(120, 25));
 		cbStyle.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				cbStyleActionPerformed(evt);
 			}
-			
+
 		});
 
 		pnlRealTime.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
@@ -180,7 +176,7 @@ public class RealTimeMode extends VisualizingFrame {
 		addComponentToPnlLeft(pnlRealTime);
 	}
 
-    private void cbStyleActionPerformed(ActionEvent evt) {
+	private void cbStyleActionPerformed(ActionEvent evt) {
 		int visualiseMode = cbStyle.getSelectedIndex();
 		removeComponentFromPnlViewer(visualiser.getViewerComponent()); 
 		setVisualiser(new Visualiser(realtimeData, this, visualiseMode));
@@ -188,7 +184,7 @@ public class RealTimeMode extends VisualizingFrame {
 	}
 
 
-	
+
 	private void btnStopActionPerformed(ActionEvent evt) {
 		if(btnStop.getText().equals("Cancel")) {
 			launchMode.setEnabled(true);
@@ -209,7 +205,7 @@ public class RealTimeMode extends VisualizingFrame {
 		lblDesc.setText("Visualisation style locked");
 		if (link.isConnected()) {
 			link.writeSerial("$_TRANSMIT_$");
-            lblStatus.setText("Move Crinkle to start data transfer");
+			lblStatus.setText("Move Crinkle to start data transfer");
 			btnReceive.setEnabled(false);
 			btnStop.setEnabled(true);
 		} else {
@@ -218,8 +214,8 @@ public class RealTimeMode extends VisualizingFrame {
 			this.dispose();
 		}
 	}
-	
-	
+
+
 	/**
 	 * Saves the data received from the crinkle to a .crvf file
 	 */
@@ -283,15 +279,15 @@ public class RealTimeMode extends VisualizingFrame {
 						try {
 							Thread.sleep(1500);
 						} catch (InterruptedException e) {
-							 Thread.currentThread().interrupt();
+							Thread.currentThread().interrupt();
 						}
 						if (connectedFlag) {
 							//if the arduino wasn't stopped before the program closed last time it will
 							//still be transmitting. Stop it now
-                            dataArray.clear();
+							dataArray.clear();
 							link.writeSerial("$_STOP_$");
 							lblStatus.setText("Connected");
-                            dataArray.clear();
+							dataArray.clear();
 							return true;
 						}
 					}
@@ -308,7 +304,7 @@ public class RealTimeMode extends VisualizingFrame {
 		}
 		return connected;
 	}
-	
+
 	/**
 	 * call when the window is dispatched
 	 */
@@ -324,7 +320,7 @@ public class RealTimeMode extends VisualizingFrame {
 		realtimeData = null;
 		//not really necessary i don't think 
 		if(getVisualiser() != null) {
-            getVisualiser().destroy();
+			getVisualiser().destroy();
 		}
 		setVisualiser(null);
 	}
