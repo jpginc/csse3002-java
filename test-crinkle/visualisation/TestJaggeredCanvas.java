@@ -8,8 +8,6 @@ import java.util.List;
 import org.junit.Test;
 
 import data.SensorReading;
-import de.jreality.geometry.Primitives;
-import de.jreality.scene.IndexedFaceSet;
 import visualiser.Canvas;
 import visualiser.JaggeredCanvas;
 
