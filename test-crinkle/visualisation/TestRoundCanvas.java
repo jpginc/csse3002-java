@@ -53,10 +53,15 @@ public class TestRoundCanvas {
 	@Test
 	public void testPrevious() {
 		RoundCanvas sampleCanvas = new RoundCanvas(8*24);
-		List<Integer> listInt = createArray(3,100,2,25,6);
+		List<Integer> listInt1 = createArray(3,100,2,25,6);
+		List<Integer> listInt2 = createArray(5,45,12,623,4);
 		List<Integer> zero = createArray(0,0,0,0,0);
-		SensorReading sampleReading = new SensorReading(listInt, zero);
-		sampleCanvas.appendCache(sampleReading);
+		SensorReading sampleReading1 = new SensorReading(listInt1, zero);
+		SensorReading sampleReading2 = new SensorReading(listInt2, zero);
+		sampleCanvas.appendCache(sampleReading1);
+		assertEquals(8*24, sampleCanvas.getHistroyIndex());
+		sampleCanvas.appendCache(sampleReading2);
+		assertEquals(8*24*2, sampleCanvas.getHistroyIndex());
 		assertTrue(sampleCanvas.previous(8*24));
 		assertFalse(sampleCanvas.previous(8*24+1));
 	}
