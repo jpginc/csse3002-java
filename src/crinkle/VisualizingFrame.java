@@ -19,16 +19,16 @@ import visualiser.Visualiser;
 public class VisualizingFrame extends javax.swing.JFrame {
 
 	private JPanel pnlViewer;
-	private JPanel pnlLeft; // contain pnlPlayback;
+	private JPanel pnlLeft; // contain pnlPlayback or pnlRealTime
 	private JPanel pnlRight; // contain pnlViewer;
 
 	protected LaunchMode launchMode;
 	protected Visualiser visualiser;
-	
+
 	public VisualizingFrame() {
 		initComponents();
 	}
-	
+
 	public VisualizingFrame(LaunchMode launchMode) {
 		initComponents();
 		this.launchMode = launchMode;
@@ -73,7 +73,7 @@ public class VisualizingFrame extends javax.swing.JFrame {
 		pnlLeft.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
 		pnlRight.setLayout(new BorderLayout());
 		pnlRight.add(pnlViewer);
-		
+
 		pnlViewer.setLayout(new BorderLayout());
 
 		setSize(960, 720);
@@ -92,17 +92,17 @@ public class VisualizingFrame extends javax.swing.JFrame {
 		pnlViewer.add(component);
 		validate();
 	}
-	
+
 	protected void removeComponentFromPnlViewer(Component component) {
 		pnlViewer.remove(component);
 		validate();
 	}
-	
+
 	protected void addComponentToPnlLeft(Component component) {
 		pnlLeft.add(component);
 		validate();
 	}
-	
+
 	protected void removeComponentFromPnlLef(Component component) {
 		pnlLeft.add(component);
 		validate();
@@ -115,7 +115,7 @@ public class VisualizingFrame extends javax.swing.JFrame {
 	public void setVisualiser(Visualiser visualiser) {
 		this.visualiser = visualiser;
 	}
-	
+
 	/**
 	 * called when the window is destoryed
 	 */

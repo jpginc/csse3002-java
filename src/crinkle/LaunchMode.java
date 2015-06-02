@@ -7,11 +7,6 @@ import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -22,18 +17,8 @@ import javax.swing.UIManager;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileView;
 
-import org.zu.ardulink.Link;
-import org.zu.ardulink.RawDataListener;
-
-import data.MovementData;
-
-/**
- *
- * @author ToanHo
- */
 public class LaunchMode extends javax.swing.JFrame {
 
-	//private javax.swing.JButton btnSync;
 	private javax.swing.JButton btnOpen;
 	private javax.swing.JSeparator jSeparator1;
 	private javax.swing.JLabel lblRecentFile;
@@ -67,7 +52,6 @@ public class LaunchMode extends javax.swing.JFrame {
 			ex.printStackTrace();;
 		}
 
-		//btnSync = new javax.swing.JButton();
 		jSeparator1 = new javax.swing.JSeparator();
 		txfRecentFile = new javax.swing.JTextField();
 		btnOpen = new javax.swing.JButton();
@@ -76,9 +60,6 @@ public class LaunchMode extends javax.swing.JFrame {
 		pnlTop = new JLabel();
 		pnlBottom = new JLabel();
 		btnConnect = new javax.swing.JButton();
-/*		btnReceive = new javax.swing.JButton();
-		btnStop = new javax.swing.JButton();
-		btnConnect = new javax.swing.JButton();*/
 
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -138,23 +119,23 @@ public class LaunchMode extends javax.swing.JFrame {
 	}
 
 	private void btnConnectActionPerformed(java.awt.event.ActionEvent evt) {
-			setFeedback("Attempting to connect crinkle...");
-			this.setEnabled(false);
-			final LaunchMode that = this;
-            // allows the feedback message to be drawn
-            SwingWorker worker = new SwingWorker<String,Void>() {
-            	@Override
-                protected String doInBackground() throws Exception {
-                    that.setCurrentFrame(new RealTimeMode(that));
-                    return null;
-            	}
-                    
-                    @Override
-                    protected void done()
-                    {   
-                    }
-            };
-            worker.execute();
+		setFeedback("Attempting to connect crinkle...");
+		this.setEnabled(false);
+		final LaunchMode that = this;
+		// allows the feedback message to be drawn
+		SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
+			@Override
+			protected String doInBackground() throws Exception {
+				that.setCurrentFrame(new RealTimeMode(that));
+				return null;
+			}
+
+			@Override
+			protected void done()
+			{   
+			}
+		};
+		worker.execute();
 	}
 
 	private void btnOpenActionPerformed(java.awt.event.ActionEvent evt) {
@@ -243,7 +224,7 @@ public class LaunchMode extends javax.swing.JFrame {
 			return null;
 		}
 	}
-	
+
 	public void setFeedback(String s) {
 		lblStatus.setText(s);
 		lblStatus.updateUI();
@@ -273,7 +254,7 @@ public class LaunchMode extends javax.swing.JFrame {
 		}
 		return recentDir;
 	}
-	
+
 	/** Set text for txfRecentFile field */
 	public void setTxfRecentFile(String string) {
 		txfRecentFile.setText(string);
@@ -295,13 +276,13 @@ public class LaunchMode extends javax.swing.JFrame {
 		final LaunchMode that = this;
 		this.currentFrame = currentFrame;
 		currentFrame.addWindowListener(new WindowAdapter() {
-          public void windowClosed(WindowEvent e) {
-              that.destroyFrame();
-              that.setFeedback("");
-          }
-        });
+			public void windowClosed(WindowEvent e) {
+				that.destroyFrame();
+				that.setFeedback("");
+			}
+		});
 	}
-	
+
 	public void destroyFrame() {
 		if(currentFrame != null) {
 			currentFrame.destroy();

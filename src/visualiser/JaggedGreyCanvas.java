@@ -6,11 +6,11 @@ import data.SensorReading;
 import static de.jreality.shader.CommonAttributes.*;
 import de.jreality.scene.Appearance;
 
-public class JaggeredGreyCanvas extends JaggeredCanvas {
+public class JaggedGreyCanvas extends JaggedCanvas {
 
-	public JaggeredGreyCanvas(int maxStepsPerMutation) {
+	public JaggedGreyCanvas(int maxStepsPerMutation) {
 		super(maxStepsPerMutation);
-        Appearance ap = world.getAppearance();
+		Appearance ap = world.getAppearance();
 		double[] rgb = colorHistory.get(0);
 		Color newColor = new Color((int) rgb[0], (int) rgb[1], (int) rgb[2]);
 		ap.setAttribute(POLYGON_SHADER+"."+DIFFUSE_COLOR, newColor);
@@ -23,16 +23,15 @@ public class JaggeredGreyCanvas extends JaggeredCanvas {
 			prevCachedPoint = generatePoint(prevCachedPoint, reading.getFlex1(), 
 					reading.getAccel().getX(), reading.getAccel().getY(), reading.getFlex2());
 		}
-        pointIndex++;
+		pointIndex++;
 		if(pointIndex == pointMax) {
 			pointIndex = 0;
 		}
 		prevCachedPoint = cachedPoints[pointIndex];
 	}
-	
+
 	private double[] generatePoint(double[] prev, double x, double y,
 			double z, double modifier) {
-		//System.out.println("y " + y + " mod " + modifier) ;
 		double[] point = {prev[0] + ((x * modifier) / maxStepsPerMutation),
 				prev[1] + ((y * modifier) / maxStepsPerMutation), 
 				prev[2] + ((z * modifier) / maxStepsPerMutation), 
@@ -46,12 +45,12 @@ public class JaggeredGreyCanvas extends JaggeredCanvas {
 	 * @param reading
 	 */
 	public void appendCacheOffline(SensorReading reading) {
-        for(int i = 0; i < maxStepsPerMutation; i++) {
+		for(int i = 0; i < maxStepsPerMutation; i++) {
 			prevCachedPoint = generatePoint(prevCachedPoint, reading.getFlex1(), 
 					reading.getAccel().getX(), reading.getAccel().getY(), reading.getFlex2());
-            setPoint(historyIndex++);
+			setPoint(historyIndex++);
 		}
-        pointIndex++;
+		pointIndex++;
 		if(pointIndex == pointMax) {
 			pointIndex = 0;
 		}
@@ -59,7 +58,7 @@ public class JaggeredGreyCanvas extends JaggeredCanvas {
 	}
 
 	/* (non-Javadoc)
-	 * @see visualiser.JaggeredCanvas#setColor(int)
+	 * @see visualiser.JaggedCanvas#setColor(int)
 	 */
 	@Override
 	protected void setColor(int index) {

@@ -19,13 +19,12 @@ public class GenericCanvas {
 		JRViewer jrViewer = JRViewer.createJRViewer(world);
 		jrViewer.startupLocal();
 		viewer = jrViewer.getViewer();
-		
-		//setup the canvas to allow mousewheel zoom
+
+		//setup the canvas to allow mouse wheel zoom
 		viewer.getSceneRoot().addTool(new ClickWheelCameraZoomTool());
 	}
 
 	public Viewer getViewer() {
-		//System.out.println("here");
 		return viewer;
 	}
 
