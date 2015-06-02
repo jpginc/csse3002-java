@@ -46,11 +46,11 @@ public class TestJaggeredCanvas {
 		sampleCanvas.appendCache(sampleReading1);
 		sampleCanvas.appendCache(sampleReading2);
 
-		assertTrue(sampleCanvas.next(maxPlaySpeed));
-		assertTrue(sampleCanvas.next(maxPlaySpeed));
-		assertTrue(sampleCanvas.previous(maxPlaySpeed));
-		assertTrue(sampleCanvas.previous(maxPlaySpeed));
-		assertFalse(sampleCanvas.previous(maxPlaySpeed));
+		assertTrue(sampleCanvas.next(8*24));
+		assertTrue(sampleCanvas.next(8*24));
+		assertTrue(sampleCanvas.previous(8*24));
+		assertTrue(sampleCanvas.previous(8*24));
+		assertFalse(sampleCanvas.previous(8*24));
 
 	}
 	

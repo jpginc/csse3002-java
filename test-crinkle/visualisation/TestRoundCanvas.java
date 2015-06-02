@@ -1,55 +1,64 @@
 package visualisation;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
 
-import visualiser.JaggedGreyCanvas;
 import data.SensorReading;
+import visualiser.RoundCanvas;
 
-public class TestJaggedGreyCanvas {
-	
+public class TestRoundCanvas {
+
 	@Test
 	public void testCanvas1() {
 		try {
-			JaggedGreyCanvas sampleCanvas = new JaggedGreyCanvas(8*24);
+			RoundCanvas sampleCanvas = new RoundCanvas(8*24);
 			List<Integer> listInt = createArray(3,100,2,25,6);
 			List<Integer> zero = createArray(0,0,0,0,0);
 			SensorReading sampleReading = new SensorReading(listInt, zero);
 			sampleCanvas.appendCache(sampleReading);
 		} catch(Exception e) {
 			fail("Should not have thrown any exception.");
-		}
+		}	
 	}
 	
 	@Test(expected=Exception.class)
 	public void testCanvas2() {
-		JaggedGreyCanvas sampleCanvas = new JaggedGreyCanvas(8*24);
+		RoundCanvas sampleCanvas = new RoundCanvas(8*24);
 		sampleCanvas.appendCache(null);
-
 	}
 	
 	@Test
 	public void testAppendCacheOffline1() {
 		try {
-			JaggedGreyCanvas sampleCanvas = new JaggedGreyCanvas(8*24);
-			List<Integer> tempArr1 = createArray(123, 568, 890, 678, 555);
+			RoundCanvas sampleCanvas = new RoundCanvas(8*24);
+			List<Integer> listInt = createArray(3,100,2,25,6);
 			List<Integer> zero = createArray(0,0,0,0,0);
-			SensorReading sampleReading = new SensorReading(tempArr1, zero);
+			SensorReading sampleReading = new SensorReading(listInt, zero);
 			sampleCanvas.appendCacheOffline(sampleReading);
-		} catch (Exception e) {
+		} catch(Exception e) {
 			fail("Should not have thrown any exception.");
-		}
-		
+		}	
 	}
 	
 	@Test(expected=Exception.class)
 	public void testAppendCacheOffline2() {
-		JaggedGreyCanvas sampleCanvas = new JaggedGreyCanvas(8*24);
+		RoundCanvas sampleCanvas = new RoundCanvas(8*24);
 		sampleCanvas.appendCacheOffline(null);
+	}
+	
+	@Test
+	public void testPrevious() {
+		RoundCanvas sampleCanvas = new RoundCanvas(8*24);
+		List<Integer> listInt = createArray(3,100,2,25,6);
+		List<Integer> zero = createArray(0,0,0,0,0);
+		SensorReading sampleReading = new SensorReading(listInt, zero);
+		sampleCanvas.appendCache(sampleReading);
+		assertTrue(sampleCanvas.previous(8*24));
+		assertFalse(sampleCanvas.previous(8*24+1));
 	}
 	
 	private List<Integer> createArray(int one, int two, int three, int four, int five) {
