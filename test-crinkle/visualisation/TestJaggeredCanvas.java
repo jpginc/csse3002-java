@@ -14,7 +14,6 @@ import visualiser.JaggedCanvas;
 
 
 public class TestJaggeredCanvas {
-	private int maxPlaySpeed = 8;
 	
 	@Test
 	public void testCanvas1() {
