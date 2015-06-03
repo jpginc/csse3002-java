@@ -1,6 +1,6 @@
 package visualisation;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +50,37 @@ public class TestJaggedGreyCanvas {
 	public void testAppendCacheOffline2() {
 		JaggedGreyCanvas sampleCanvas = new JaggedGreyCanvas(8*24);
 		sampleCanvas.appendCacheOffline(null);
+	}
+	
+	@Test
+	public void testNext() {
+		JaggedGreyCanvas sampleCanvas = new JaggedGreyCanvas(8*24);
+		List<Integer> tempArr1 = createArray(123, 568, 890, 678, 555);
+		List<Integer> zero = createArray(0,0,0,0,0);
+		SensorReading sampleReading = new SensorReading(tempArr1, zero);
+		sampleCanvas.appendCache(sampleReading);
+		assertTrue(sampleCanvas.next(8*24));
+		assertTrue(sampleCanvas.next(8*24));
+		assertFalse(sampleCanvas.next(8*24));
+	}
+	
+	@Test
+	public void testPrevious() {
+		JaggedGreyCanvas sampleCanvas = new JaggedGreyCanvas(8*24);
+		List<Integer> tempArr1 = createArray(123, 568, 890, 678, 555);
+		List<Integer> tempArr2 = createArray(564, 562, 214, 13, 569);
+		List<Integer> zero = createArray(0,0,0,0,0);
+		SensorReading sampleReading1 = new SensorReading(tempArr1, zero);
+		SensorReading sampleReading2 = new SensorReading(tempArr2, zero);
+		sampleCanvas.appendCache(sampleReading1);
+		sampleCanvas.appendCache(sampleReading2);
+		assertTrue(sampleCanvas.next(8*24));
+		assertTrue(sampleCanvas.next(8*24));
+		assertTrue(sampleCanvas.next(8*24));
+		assertFalse(sampleCanvas.next(8*24));
+		assertTrue(sampleCanvas.previous(8*24));
+		assertTrue(sampleCanvas.previous(8*24));
+		assertFalse(sampleCanvas.previous(8*24));
 	}
 	
 	private List<Integer> createArray(int one, int two, int three, int four, int five) {

@@ -58,13 +58,21 @@ public class TestRoundCanvas {
 		List<Integer> zero = createArray(0,0,0,0,0);
 		SensorReading sampleReading1 = new SensorReading(listInt1, zero);
 		SensorReading sampleReading2 = new SensorReading(listInt2, zero);
-		sampleCanvas.appendCache(sampleReading1);
+		sampleCanvas.appendCacheOffline(sampleReading1);
 		assertEquals(8*24, sampleCanvas.getHistroyIndex());
-		sampleCanvas.appendCache(sampleReading2);
+		sampleCanvas.appendCacheOffline(sampleReading2);
 		assertEquals(8*24*2, sampleCanvas.getHistroyIndex());
+		sampleCanvas.reset();
+		assertTrue(sampleCanvas.next(8*24));
+		assertTrue(sampleCanvas.next(8*24));
+		assertTrue(sampleCanvas.next(8*24));
+		assertFalse(sampleCanvas.next(8*24));
 		assertTrue(sampleCanvas.previous(8*24));
-		assertFalse(sampleCanvas.previous(8*24+1));
+		assertTrue(sampleCanvas.previous(8*24));
+		assertFalse(sampleCanvas.previous(8*24));
 	}
+	
+	
 	
 	private List<Integer> createArray(int one, int two, int three, int four, int five) {
 		List<Integer> arr = new ArrayList<Integer>();
