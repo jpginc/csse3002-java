@@ -16,10 +16,6 @@ import javax.swing.UIManager;
 import data.MovementData;
 import visualiser.Visualiser;
 
-/**
- *
- * @author ToanHo
- */
 public class PlaybackMode extends VisualizingFrame {
 
 	private JButton btnForward;
@@ -36,7 +32,7 @@ public class PlaybackMode extends VisualizingFrame {
 
 	private boolean isPlay = false; // default false
 	private File crinkleViewerFile;
-	
+
 	private MovementData movementData;
 
 	/**
@@ -59,7 +55,7 @@ public class PlaybackMode extends VisualizingFrame {
 		initPlaybackButtons();
 		this.validate();
 	}
-	
+
 	/**
 	 * This constructor creates a player that displays the data in real time
 	 * @param launchMode
@@ -77,7 +73,7 @@ public class PlaybackMode extends VisualizingFrame {
 		lblStatus.setText("In Realtime mode");
 		this.validate();	
 	}
-	
+
 	private void disableAllButtons() {
 		btnForward.setEnabled(false);
 		btnRewind.setEnabled(false);
@@ -110,7 +106,7 @@ public class PlaybackMode extends VisualizingFrame {
 		pnlPlaybackTop = new javax.swing.JPanel();
 		pnlPlaybackMiddle = new javax.swing.JPanel();
 		pnlPlaybackBottom = new javax.swing.JPanel();
-		cbStyle = new javax.swing.JComboBox(new String[] {"Jagged", "Round", "Jaggered Greyscale"});
+		cbStyle = new javax.swing.JComboBox(new String[] {"Jagged", "Jagged Greyscale", "Round", });
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setTitle("Crinkle Viewer");
@@ -118,7 +114,7 @@ public class PlaybackMode extends VisualizingFrame {
 
 		pnlPlayback.setBorder(BorderFactory.createTitledBorder("Playback"));
 		pnlPlayback.setPreferredSize(new java.awt.Dimension(210, 190));
-		
+
 		btnRewind.setIcon(new ImageIcon(getClass().getResource(CrinkleViewer.REWIND_ICON)));
 		btnRewind.setPreferredSize(new java.awt.Dimension(40, 40));
 		btnRewind.addActionListener(new java.awt.event.ActionListener() {
@@ -142,19 +138,19 @@ public class PlaybackMode extends VisualizingFrame {
 				btnForwardActionPerformed(evt);
 			}
 		});
-		
+
 		lblStatus.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 		lblStatus.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 		lblStatus.setPreferredSize(new java.awt.Dimension(175, 16));
-		
+
 		lblStyle.setText("Style: ");
-		
+
 		cbStyle.setPreferredSize(new java.awt.Dimension(120, 25));
 		cbStyle.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				cbStyleActionPerformed(evt);
 			}
-			
+
 		});
 
 		btnSnapshot.setIcon(new ImageIcon(getClass().getResource(CrinkleViewer.CAMERA_ICON))); // NOI18N
@@ -179,7 +175,7 @@ public class PlaybackMode extends VisualizingFrame {
 
 		pnlPlaybackMiddle.add(lblStyle);
 		pnlPlaybackMiddle.add(cbStyle);
-		
+
 		pnlPlaybackBottom.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 5));
 		pnlPlaybackBottom.add(lblStatus);
 		pnlPlaybackBottom.add(btnRewind);
@@ -207,7 +203,7 @@ public class PlaybackMode extends VisualizingFrame {
 	private void updateLabel(int speed) {
 		lblStatus.setText(speed + "x Speed");
 	}
-	
+
 	private void btnRewindActionPerformed(ActionEvent evt) {
 		updateLabel(visualiser.rewind());
 		setBtnPlayIcon(CrinkleViewer.PAUSE_ICON);
@@ -227,7 +223,7 @@ public class PlaybackMode extends VisualizingFrame {
 		btnPlay.setEnabled(true);
 		btnRewind.setEnabled(true);
 	}
-	
+
 	private void cbStyleActionPerformed(ActionEvent evt) {
 		int visualiseMode = cbStyle.getSelectedIndex();
 		initPlaybackButtons();
@@ -235,7 +231,7 @@ public class PlaybackMode extends VisualizingFrame {
 		setVisualiser(new Visualiser(crinkleViewerFile, this, visualiseMode));
 		addComponentToPnlViewer(visualiser.getViewerComponent());
 	}
-	
+
 	public void setBtnForwardEnabled(boolean b) {
 		btnForward.setEnabled(b);
 	}
@@ -251,11 +247,11 @@ public class PlaybackMode extends VisualizingFrame {
 	public void setBtnPlayIcon(String icon) {
 		btnPlay.setIcon(new ImageIcon(getClass().getResource(icon)));
 	}
-	
+
 	public void setIsPlay(boolean b) {
 		this.isPlay = b;
 	}
-	
+
 	public void setLblStatus(String status) {
 		this.lblStatus.setText(status);
 	}
@@ -276,8 +272,8 @@ public class PlaybackMode extends VisualizingFrame {
 	public void destroy() {
 		//not really necessary i don't think 
 		if(getVisualiser() != null) {
-		
-            getVisualiser().destroy();
+
+			getVisualiser().destroy();
 		}
 		setVisualiser(null);
 	}

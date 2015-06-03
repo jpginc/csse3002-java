@@ -19,8 +19,8 @@ import de.jreality.util.ImageUtility;
 public class Visualiser implements MovementListener{
 
 	// the different types of canvases
-	public static int JAGGAREDCANVAS = 0;
-	public static int ROUNTCANVAS = 1;
+	public static int JAGGEDCANVAS = 0;
+	public static int ROUNDCANVAS = 1;
 
 
 	private VisualizingFrame visualizingFrame;
@@ -60,11 +60,11 @@ public class Visualiser implements MovementListener{
 	}
 
 	/**
-	 * creates a Visualiser that displays the visualisation in real time
+	 * creates a Visualizer that displays the visualization in real time
 	 * @param m
 	 *  the movement data to listen to
 	 * @param p
-	 *  the playback gui
+	 *  the playback GUI 
 	 * @param canvasType
 	 *  the type of canvas to use
 	 */
@@ -80,7 +80,7 @@ public class Visualiser implements MovementListener{
 	 * @param crinkleViewerFile
 	 * 	the file to use for the movement data
 	 * @param visualizingFrame
-	 * 	they playback gui
+	 * 	they playback GUI
 	 * @param canvasType
 	 * 	the type of canvas to use
 	 */
@@ -98,28 +98,23 @@ public class Visualiser implements MovementListener{
 	private void setCanvasFromType(int type) {
 		switch (type) {
 		case 0:
-			canvas = new JaggeredCanvas(maxPlaySpeed * fps);
+			canvas = new JaggedCanvas(maxPlaySpeed * fps);
 			break;
-			/*
 		case 1:
-			canvas = new RodCanvas(maxPlaySpeed *fps);
-			break;
-			*/
-		case 1:
-			canvas = new RoundCanvas(maxPlaySpeed *fps);
+			canvas = new JaggedGreyCanvas(maxPlaySpeed *fps);
 			break;
 		case 2:
-			canvas = new JaggeredGreyCanvas(maxPlaySpeed *fps);
+			canvas = new RoundCanvas(maxPlaySpeed *fps);
 			break;
 		default:
-			canvas = new JaggeredCanvas(maxPlaySpeed * fps);
+			canvas = new JaggedCanvas(maxPlaySpeed * fps);
 			break;
 		}	
 	}
 
 	/** Load data**/
 	public void Load(MovementData movementData) {
-		canvas = new JaggeredCanvas(maxPlaySpeed * fps);
+		canvas = new JaggedCanvas(maxPlaySpeed * fps);
 		currentMovementData = movementData;
 		initialise(0);
 	}
@@ -167,7 +162,7 @@ public class Visualiser implements MovementListener{
 		if(! playing) {
 			if(! startTimer()) {
 				//TODO
-				//the play button was pushed but it's the end of the visualisation 
+				//the play button was pushed but it's the end of the visualization 
 				//should we start from the beginning again?
 			}
 		}
@@ -175,7 +170,7 @@ public class Visualiser implements MovementListener{
 	}
 
 	/**
-	 * starts the visualsation playing in just above realtime speed
+	 * starts the visualization playing in just above real time speed
 	 * 
 	 * @return
 	 */
@@ -230,7 +225,7 @@ public class Visualiser implements MovementListener{
 	}
 
 	/**
-	 * stops the visualisation
+	 * stops the visualization
 	 */
 	public void pause() {
 		timer.cancel();

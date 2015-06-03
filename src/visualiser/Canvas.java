@@ -9,7 +9,7 @@ public interface Canvas {
 	 * 
 	 * This function accepts a sensor reading and breaks it up into small steps
 	 * these steps are cached. you should cache all sensor readings before starting
-	 * the visualisation.
+	 * the visualization.
 	 * 
 	 * @param reading
 	 * the sensor reading to add to the cached points, must be a valid SensorReading
@@ -25,7 +25,7 @@ public interface Canvas {
 	 * the number of steps to mutate
 	 * @return
 	 * 	True if a mutation has occurred
-	 *  False if all mutations have occurred ie the end of the visualisation is reached
+	 *  False if all mutations have occurred i.e. the end of the visualization is reached
 	 */
 	public abstract boolean next(int steps);
 
@@ -36,7 +36,7 @@ public interface Canvas {
 	 * the number of steps to mutate
 	 * @return
 	 * 	True if a mutation has occurred
-	 *  False if all mutations have occurred ie the start of the visualisation is reached
+	 *  False if all mutations have occurred i.e. the start of the visualization is reached
 	 */
 	public abstract boolean previous(int steps);
 
@@ -47,7 +47,7 @@ public interface Canvas {
 	public abstract int getHistroyIndex();
 
 	public abstract int getPointIndex();
-	
+
 	public abstract void reset();
 
 }
