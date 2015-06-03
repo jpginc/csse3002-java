@@ -13,7 +13,8 @@ public class RoundCanvas extends JaggedCanvas {
 		super(maxStepsPerMutation);
 		//the 
 		double[] temp = pointHistory.remove(0);
-		generatePoint(temp, temp[0], temp[1], temp[3]);
+		pointHistory.add(new double[] {temp[0], temp[1], temp[2], temp[3], temp[0], temp[1], temp[2]});
+		//generatePoint(temp, temp[0], temp[1], temp[3]);
 	}
 
 
@@ -53,6 +54,7 @@ public class RoundCanvas extends JaggedCanvas {
 	@Override
 	public boolean previous(int steps) {
 		for(int i = 0; i < steps; i++) {
+			setPoint(historyIndex, true);
 			historyIndex--;
 			if(historyIndex < 0) {
 				cachedPoints = originalSphere.clone();
@@ -60,7 +62,6 @@ public class RoundCanvas extends JaggedCanvas {
 				setColor(0);
 				return false;
 			}
-			setPoint(historyIndex, true);
 		}
 		setColor(historyIndex);
 		reDraw();
@@ -83,13 +84,14 @@ public class RoundCanvas extends JaggedCanvas {
 	 *  the next position of the point
 	 */
 	protected double[] generatePoint(double[] prev, double x, double y, double z) {
+		double[] rewindPoint = pointHistory.get(pointHistory.size() - 1) ;
 		double[] point = {prev[0] + (x / maxStepsPerMutation),
 				prev[1] + (y / maxStepsPerMutation),
 				prev[2] + (z / maxStepsPerMutation),
 				pointIndex,
-				prev[1], 
-				prev[2], 
-				prev[3]
+				rewindPoint[0], 
+				rewindPoint[1], 
+				rewindPoint[2]
 		};
 		pointHistory.add(point);
 		return point;
@@ -101,12 +103,22 @@ public class RoundCanvas extends JaggedCanvas {
 	 *  the part of the history we are up to 
 	 */
 	protected void setPoint(int historyIndex, boolean isBack) {
-		double [] toSet = pointHistory.get(historyIndex);
-		int index = (int) toSet[3];
-		if(index == pointMax) {
-			index = 0;
+		double [] pointPos = null;
+		double [] toSet;
+
+		int index = (int) pointHistory.get(historyIndex)[3];
+		if(historyIndex % maxStepsPerMutation == 1) {
+			if(historyIndex < maxStepsPerMutation * pointMax) {
+				pointPos = originalSphere[index];
+			} else {
+                toSet = pointHistory.get(historyIndex - (maxStepsPerMutation * pointMax));
+                pointPos = new double[] {toSet[4], toSet[5], toSet[6]};
+			}
+		} else {
+            toSet = pointHistory.get(historyIndex);
+            pointPos = new double[] {toSet[4], toSet[5], toSet[6]};
 		}
-		double [] pointPos = {toSet[4], toSet[5], toSet[6]};
+			
 		cachedPoints[index] = pointPos;
 	}
 
