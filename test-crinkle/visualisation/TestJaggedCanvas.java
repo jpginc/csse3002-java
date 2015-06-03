@@ -13,7 +13,7 @@ import visualiser.JaggedCanvas;
 
 
 
-public class TestJaggeredCanvas {
+public class TestJaggedCanvas {
 	
 	@Test
 	public void testCanvas1() {
@@ -55,7 +55,18 @@ public class TestJaggeredCanvas {
 	
 	@Test
 	public void testNextPosition() {
+		JaggedCanvas sampleCanvas = new JaggedCanvas(8*24);
+		List<Integer> zero = createArray(0,0,0,0,0);
+		List<Integer> listInt1 = createArray(3,100,2,25,6);
+		SensorReading sampleReading1 = new SensorReading(listInt1, zero);
+		SensorReading sampleReading2 = new SensorReading(listInt1, zero);
+		sampleCanvas.appendCache(sampleReading1);
+		sampleCanvas.appendCache(sampleReading2);
 		
+		assertTrue(sampleCanvas.next(8*24));
+		assertTrue(sampleCanvas.next(8*24));
+		assertTrue(sampleCanvas.next(8*24));
+		assertFalse(sampleCanvas.next(8*24));
 	}
 	
 	
