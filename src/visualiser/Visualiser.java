@@ -229,8 +229,8 @@ public class Visualiser implements MovementListener{
 	 */
 	public void pause() {
 		timer.cancel();
-		timer = new Timer();
 		playing = false;
+		timer = new Timer();
 	}
 
 	/**
@@ -240,6 +240,9 @@ public class Visualiser implements MovementListener{
 	 * 	the new speed
 	 */
 	public int fastForward() {
+		if(isReverse) {
+			currentSpeed = playSpeed;
+		}
 		currentSpeed = Math.min(currentSpeed * 2, maxPlaySpeed);
 		isReverse = false;
 		if(! playing) {
@@ -254,6 +257,9 @@ public class Visualiser implements MovementListener{
 	 *  the new speed
 	 */
 	public int rewind() {
+		if(! isReverse) {
+			currentSpeed = playSpeed;
+		}
 		currentSpeed = Math.min(currentSpeed * 2, maxPlaySpeed);
 		isReverse = true;
 		if(! playing) {
