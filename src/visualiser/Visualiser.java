@@ -98,13 +98,13 @@ public class Visualiser implements MovementListener{
 	private void setCanvasFromType(int type) {
 		switch (type) {
 		case 0:
-			canvas = new JaggedCanvas(maxPlaySpeed * fps);
+			canvas = new RoundCanvas(maxPlaySpeed *fps);
 			break;
 		case 1:
 			canvas = new JaggedGreyCanvas(maxPlaySpeed *fps);
 			break;
 		case 2:
-			canvas = new RoundCanvas(maxPlaySpeed *fps);
+			canvas = new JaggedCanvas(maxPlaySpeed * fps);
 			break;
 		default:
 			canvas = new JaggedCanvas(maxPlaySpeed * fps);
