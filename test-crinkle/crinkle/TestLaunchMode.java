@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class TestLaunchMode {
-	private javax.swing.JLabel lblStatus;
 	
 	@Test
 	public void testFrame1() {
