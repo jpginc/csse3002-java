@@ -102,7 +102,7 @@ public class RoundCanvas extends JaggedCanvas {
 	 */
 	protected void setPoint(int historyIndex, boolean isBack) {
 		double [] toSet = pointHistory.get(historyIndex);
-		int index = (int) (toSet[3] + 1);
+		int index = (int) toSet[3];
 		if(index == pointMax) {
 			index = 0;
 		}
